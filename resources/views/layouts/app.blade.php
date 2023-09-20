@@ -4,11 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-    {{-- <title>{{ $setting->nama_website }}</title> --}}
-    <title>Website Order</title>
+    <title>{{ $setting->nama_website }}</title>
 
     <!-- Favicon -->
-    {{-- <link href="{{ url($setting->favicon) }}" rel="icon"> --}}
+    <link href="{{ url($setting->favicon) }}" rel="icon">
     
     {{-- CSS --}}
     @yield('css')
