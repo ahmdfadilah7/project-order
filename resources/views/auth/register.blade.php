@@ -10,17 +10,17 @@
     <link href="{{ url($setting->favicon) }}" rel="icon">
 
     <!-- General CSS Files -->
-    <link rel="stylesheet" href="{{ asset('assets/admin/modules/bootstrap/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/admin/modules/fontawesome/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/modules/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/modules/fontawesome/css/all.min.css') }}">
     
     <!-- CSS Libraries -->
-    <link rel="stylesheet" href="{{ asset('assets/admin/modules/summernote/summernote-bs4.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/admin/modules/jquery-selectric/selectric.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/admin/modules/izitoast/css/iziToast.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/modules/summernote/summernote-bs4.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/modules/jquery-selectric/selectric.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/modules/izitoast/css/iziToast.min.css') }}">
     
     <!-- Template CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/admin/css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/admin/css/components.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/components.css') }}">
     
 </head>
 
@@ -147,29 +147,29 @@
     </div>
 
     <!-- General JS Scripts -->
-    <script src="{{ asset('assets/admin/modules/jquery.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/modules/popper.js') }}"></script>
-    <script src="{{ asset('assets/admin/modules/tooltip.js') }}"></script>
-    <script src="{{ asset('assets/admin/modules/bootstrap/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/modules/nicescroll/jquery.nicescroll.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/modules/moment.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/js/stisla.js') }}"></script>
+    <script src="{{ asset('assets/modules/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/modules/popper.js') }}"></script>
+    <script src="{{ asset('assets/modules/tooltip.js') }}"></script>
+    <script src="{{ asset('assets/modules/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/modules/nicescroll/jquery.nicescroll.min.js') }}"></script>
+    <script src="{{ asset('assets/modules/moment.min.js') }}"></script>
+    <script src="{{ asset('assets/js/stisla.js') }}"></script>
 
     <!-- JS Libraies -->
-    <script src="{{ asset('assets/admin/modules/cleave-js/dist/cleave.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/modules/summernote/summernote-bs4.js') }}"></script>
-    <script src="{{ asset('assets/admin/modules/upload-preview/assets/js/jquery.uploadPreview.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/modules/jquery-pwstrength/jquery.pwstrength.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/modules/jquery-selectric/jquery.selectric.min.js') }}"></script>
+    <script src="{{ asset('assets/modules/cleave-js/dist/cleave.min.js') }}"></script>
+    <script src="{{ asset('assets/modules/summernote/summernote-bs4.js') }}"></script>
+    <script src="{{ asset('assets/modules/upload-preview/assets/js/jquery.uploadPreview.min.js') }}"></script>
+    <script src="{{ asset('assets/modules/jquery-pwstrength/jquery.pwstrength.min.js') }}"></script>
+    <script src="{{ asset('assets/modules/jquery-selectric/jquery.selectric.min.js') }}"></script>
     
     <!-- Page Specific JS File -->
-    <script src="{{ asset('assets/admin/js/page/features-post-create.js') }}"></script>
-    <script src="{{ asset('assets/admin/js/page/auth-register.js') }}"></script>
-    <script src="{{ asset('assets/admin/modules/izitoast/js/iziToast.min.js') }}"></script>
+    <script src="{{ asset('assets/js/page/features-post-create.js') }}"></script>
+    <script src="{{ asset('assets/js/page/auth-register.js') }}"></script>
+    <script src="{{ asset('assets/modules/izitoast/js/iziToast.min.js') }}"></script>
 
     <!-- Template JS File -->
-    <script src="{{ asset('assets/admin/js/scripts.js') }}"></script>
-    <script src="{{ asset('assets/admin/js/custom.js') }}"></script>
+    <script src="{{ asset('assets/js/scripts.js') }}"></script>
+    <script src="{{ asset('assets/js/custom.js') }}"></script>
     <script type="text/javascript">
         @if (Session::has('errors'))
             @foreach ($errors->all() as $errors)
