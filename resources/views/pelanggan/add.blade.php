@@ -6,11 +6,11 @@
 
     <div class="section-header">
         <div class="section-header-back">
-            <a href="{{ route('admin.penjoki') }}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+            <a href="{{ route('admin.pelanggan') }}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
         </div>
-        <h1>Penjoki</h1>
+        <h1>Pelanggan</h1>
         <div class="section-header-breadcrumb">
-            <div class="breadcrumb-item"><a href="{{ route('admin.penjoki') }}">Penjoki</a></div>
+            <div class="breadcrumb-item"><a href="{{ route('admin.pelanggan') }}">Pelanggan</a></div>
             <div class="breadcrumb-item active">Tambah</div>
         </div>
     </div>
@@ -19,10 +19,10 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h4>Tambah Penjoki</h4>
+                    <h4>Tambah Pelanggan</h4>
                 </div>
                 <div class="card-body">
-                    {!! Form::open(['method' => 'post', 'route' => ['admin.penjoki.store'], 'enctype' => 'multipart/form-data']) !!}
+                    {!! Form::open(['method' => 'post', 'route' => ['admin.pelanggan.store'], 'enctype' => 'multipart/form-data']) !!}
                     <div class="form-group row mb-4">
                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Nama Lengkap</label>
                         <div class="col-sm-12 col-md-7">
@@ -35,6 +35,20 @@
                         <div class="col-sm-12 col-md-7">
                             <input type="number" name="no_telp" class="form-control" value="{{ old('no_telp') }}">
                             <i class="text-danger">{{ $errors->first('no_telp') }}</i>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Jurusan</label>
+                        <div class="col-sm-12 col-md-7">
+                            <input type="text" name="jurusan" class="form-control" value="{{ old('jurusan') }}">
+                            <i class="text-danger">{{ $errors->first('jurusan') }}</i>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Daerah</label>
+                        <div class="col-sm-12 col-md-7">
+                            <input type="text" name="daerah" class="form-control" value="{{ old('daerah') }}">
+                            <i class="text-danger">{{ $errors->first('daerah') }}</i>
                         </div>
                     </div>
                     <div class="form-group row mb-4">

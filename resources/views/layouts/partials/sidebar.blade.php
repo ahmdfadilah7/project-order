@@ -10,7 +10,7 @@
             <a href="{{ route('admin.dashboard') }}"><img src="{{ url($setting->logo) }}" width="50"></a>
         </div>
         <ul class="sidebar-menu">
-            
+
             @if(Auth::user()->role == 'admin')
 
                 <li class="menu-header">Dashboard</li>
@@ -18,14 +18,16 @@
 
                 <li class="menu-header">Page</li>
                 <li @if(Request::segment(2)=='penjoki') class="active" @endif><a class="nav-link" href="{{ route('admin.penjoki') }}"><i class="fas fa-users"></i> <span>Penjoki</span></a></li>
-                
+                <li @if(Request::segment(2)=='penjoki') class="active" @endif><a class="nav-link" href="{{ route('admin.pelanggan') }}"><i class="fas fa-users"></i> <span>Pelanggan    </span></a></li>
+
+
                 <li class="menu-header">Settings</li>
                 <li @if(Request::segment(2)=='setting') class="active" @endif><a href="{{ route('admin.setting') }}" class="nav-link"><i class="fas ion-ios-gear"></i> <span>Setting Website</span></a></li>
 
             @elseif(Auth::user()->role == 'penjoki')
 
                 <li class="menu-header">Dashboard</li>
-                <li @if(Request::segment(2)=='dashboard') class="active" @endif><a class="nav-link" href="{{ route('petani.dashboard') }}"><i class="fas fa-fire"></i> <span>Dashboard</span></a></li>                
+                <li @if(Request::segment(2)=='dashboard') class="active" @endif><a class="nav-link" href="{{ route('petani.dashboard') }}"><i class="fas fa-fire"></i> <span>Dashboard</span></a></li>
 
             @endif
 

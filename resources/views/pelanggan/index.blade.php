@@ -5,9 +5,9 @@
 @section('content')
 
     <div class="section-header">
-        <h1>Penjoki</h1>
+        <h1>Pelanggan</h1>
         <div class="section-header-breadcrumb">
-            <div class="breadcrumb-item active"><a href="{{ route('admin.penjoki') }}">Penjoki</a></div>
+            <div class="breadcrumb-item active"><a href="{{ route('admin.pelanggan') }}">Pelanggan</a></div>
         </div>
     </div>
 
@@ -15,8 +15,8 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header justify-content-between">
-                    <h4>Penjoki</h4>
-                    <a href="{{ route('admin.penjoki.add') }}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Tambah</a>
+                    <h4>Pelanggan</h4>
+                    <a href="{{ route('admin.pelanggan.add') }}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Tambah</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -53,7 +53,7 @@
                 serverSide: true,
                 'ordering': 'true',
                 ajax: {
-                    url: "{{ route('admin.penjoki.list') }}",
+                    url: "{{ route('admin.pelanggan.list') }}",
                     data: function(d) {}
                 },
                 columns: [

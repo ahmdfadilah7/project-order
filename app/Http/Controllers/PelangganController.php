@@ -12,57 +12,55 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Yajra\DataTables\Facades\DataTables;
 
-class PenjokiController extends Controller
+class PelangganController extends Controller
 {
-    // Menampilkan halaman penjoki
-    public function index()
-    {
+    // Menampilkan halaman pelanggan
+    public function index() {
         $setting = Setting::first();
 
-        return view('penjoki.index', compact('setting'));
+        return view('pelanggan.index', compact('setting'));
     }
 
-    // Proses menampilkan data penjoki dengan datatables
-    public function listData()
-    {
-        $data = User::where('role', 'penjoki');
+    // Proses menampilkan data pelanggan dengan datatables
+    public function listData() {
+        $data = User::where('role', 'pelanggan');
         $datatables = DataTables::of($data)
             ->addIndexColumn()
-            ->addColumn('no_telp', function($row) {
-                $no_telp = $row->profile->no_telp;
-                return $no_telp;
+            ->addColumn('no_tlp', function($row) {
+                $no_tlp = $row->profile->no_tlp;
+                return $no_tlp;
             })
             ->addColumn('action', function($row) {
-                $btn = '<a href="'.route('admin.penjoki.edit', $row->id).'" class="btn btn-primary btn-sm mr-2">
-                        <i class="fas fa-edit"></i>
+                $btn = '<a href="'.route('admin.pelanggan.edit', $row->id).'" class="btn btn-primary btn-sm mr-2">
+                            <i class=""fas fa-edit></i>
+                        </a>';
+                $btn .= '<a href="'.route('admin.pelanggan.delete', $row->id).'" class="btn btn-danger btn-sm">
+                        <i class=""fas fa-edit></i>
                     </a>';
-                $btn .= '<a href="'.route('admin.penjoki.delete', $row->id).'" class="btn btn-danger btn-sm">
-                    <i class="fas fa-trash"></i>
-                </a>';
 
                 return $btn;
             })
-            ->rawColumns(['action', 'no_telp'])
+            ->rawColumns(['action', 'no_tlp'])
             ->make(true);
 
         return $datatables;
     }
 
-    // Menampilkan halaman tambah penjoki
-    public function create()
-    {
+    // Menampilkan halaman tambah pelanggan
+    public function create() {
         $setting = Setting::first();
 
-        return view('penjoki.add', compact('setting'));
+        return view('pelanggan.add', compact('setting'));
     }
 
-    // Proses menambahkan penjoki
-    public function store(Request $request)
-    {
+    // Proses menambahkan pelanggan
+    public function store(Request $request) {
         $validator = Validator::make($request->all(), [
             'nama_lengkap' => 'required',
             'email' => 'required|email|unique:users,email',
             'no_telp' => 'required|numeric|unique:profiles,no_telp',
+            'jurusan' => 'required',
+            'daerah' => 'required',
             'tempat_lahir' => 'required',
             'tanggal_lahir' => 'required',
             'jenis_kelamin' => 'required',
@@ -78,7 +76,7 @@ class PenjokiController extends Controller
         $user = new User;
         $user->name = $request->get('nama_lengkap');
         $user->email = $request->get('email');
-        $user->role = 'penjoki';
+        $user->role = 'pelanggan';
         $user->password = Hash::make($request->get('password'));
         $user->save();
 
@@ -90,31 +88,33 @@ class PenjokiController extends Controller
         Profile::create([
             'user_id' => $user->id,
             'no_telp' => $request->get('no_telp'),
+            'jurusan' => $request->get('jurusan'),
+            'daerah' => $request->get('daerah'),
             'tmpt_lahir' => $request->get('tempat_lahir'),
             'tgl_lahir' => $request->get('tanggal_lahir'),
             'jns_kelamin' => $request->get('jenis_kelamin'),
             'foto' => $fotoNama
         ]);
 
-        return redirect()->route('admin.penjoki')->with('berhasil', 'Berhasil menambahkan penjoki.');
+        return redirect()->route('admin.pelanggan')->with('berhasil', 'Berhasil menambahkan pelanggan.');
     }
 
-    // Menampilkan halaman edit penjoki
-    public function edit($id)
-    {
+    // Menampilkan halaman edit pelanggan
+    public function edit($id) {
         $setting = Setting::first();
         $user = User::find($id);
 
-        return view('penjoki.edit', compact('setting', 'user'));
+        return view('pelanggan.edit', compact('setting', 'user'));
     }
 
-    // Proses edit penjoki
-    public function update(Request $request, $id)
-    {
+    // Proses edit pelanggan
+    public function update(Request $request, $id) {
         $validator = Validator::make($request->all(), [
             'nama_lengkap' => 'required',
             'email' => 'required|email',
             'no_telp' => 'required|numeric',
+            'jurusan' => 'required',
+            'daerah' => 'required',
             'tempat_lahir' => 'required',
             'tanggal_lahir' => 'required',
             'jenis_kelamin' => 'required',
@@ -143,6 +143,8 @@ class PenjokiController extends Controller
 
         $profile = Profile::where('user_id', $id)->first();
         $profile->no_telp = $request->get('no_telp');
+        $profile->jurusan = $request->get('jurusan');
+        $profile->daerah = $request->get('daerah');
         $profile->tmpt_lahir = $request->get('tempat_lahir');
         $profile->tgl_lahir = $request->get('tanggal_lahir');
         $profile->jns_kelamin = $request->get('jenis_kelamin');
@@ -153,17 +155,16 @@ class PenjokiController extends Controller
         }
         $profile->save();
 
-        return redirect()->route('admin.penjoki')->with('berhasil', 'Berhasil mengupdate penjoki.');
+        return redirect()->route('admin.pelanggan')->with('berhasil', 'Berhasil mengupdate pelanggan.');
     }
 
-    // Proses menghapus penjoki
-    public function destroy($id)
-    {
+    // Proses menghapus pelanggan
+    public function destroy($id) {
         $user = User::find($id);
         File::delete($user->profile->foto);
 
         $user->delete();
 
-        return redirect()->route('admin.penjoki')->with('berhasil', 'Berhasil menghapus penjoki.');
+        return redirect()->route('admin.pelanggan')->with('berhasil', 'Berhasil menghapus pelanggan.');
     }
 }
