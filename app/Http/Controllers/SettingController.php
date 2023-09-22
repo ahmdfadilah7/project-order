@@ -49,7 +49,7 @@ class SettingController extends Controller
             })
             ->rawColumns(['action', 'logo', 'favicon', 'bg_login', 'bg_register'])
             ->make(true);
-        
+
         return $datatables;
     }
 
@@ -98,7 +98,7 @@ class SettingController extends Controller
         }
         if ($request->favicon <> '') {
             $setting->favicon = $faviconNama;
-        }        
+        }
         $setting->save();
 
         return redirect()->route('admin.setting')->with('berhasil', 'Berhasil mengupdate setting.');

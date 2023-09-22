@@ -26,9 +26,9 @@ class PelangganController extends Controller
         $data = User::where('role', 'pelanggan');
         $datatables = DataTables::of($data)
             ->addIndexColumn()
-            ->addColumn('no_tlp', function($row) {
-                $no_tlp = $row->profile->no_tlp;
-                return $no_tlp;
+            ->addColumn('no_telp', function($row) {
+                $no_telp = $row->profile->no_telp;
+                return $no_telp;
             })
             ->addColumn('action', function($row) {
                 $btn = '<a href="'.route('admin.pelanggan.edit', $row->id).'" class="btn btn-primary btn-sm mr-2">
@@ -40,7 +40,7 @@ class PelangganController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action', 'no_tlp'])
+            ->rawColumns(['action', 'no_telp'])
             ->make(true);
 
         return $datatables;
