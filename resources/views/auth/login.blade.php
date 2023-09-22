@@ -63,9 +63,9 @@
                                 <form method="POST" action="{{ route('prosesLogin') }}">
                                     @csrf
                                     <div class="form-group">
-                                        <label for="username">Username</label>
-                                        <input id="username" type="text" class="form-control" name="username" tabindex="1" required autofocus>
-                                        <i class="text-danger">{{ $errors->first('username') }}</i>
+                                        <label for="email">Email</label>
+                                        <input id="email" type="email" class="form-control" name="email" tabindex="1" required autofocus value="{{ old('email') }}">
+                                        <i class="text-danger">{{ $errors->first('email') }}</i>
                                     </div>
 
                                     <div class="form-group">
