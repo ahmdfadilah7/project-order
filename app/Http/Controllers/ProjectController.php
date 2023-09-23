@@ -14,8 +14,9 @@ class ProjectController extends Controller
     // Menampilkan halaman project
     public function index() {
         $setting = Setting::first();
+        $project = Project::whereDay('deadline', date('d'))->get();
 
-        return view('project.index', compact('setting'));
+        return view('project.index', compact('setting', 'project'));
     }
 
     // Menampilkan data project dengan datatables
@@ -28,16 +29,16 @@ class ProjectController extends Controller
                 return $name;
             })
             ->addColumn('action', function($row) {
-                $btn = '<a href="'.route('admin.project.edit', $row->id).'" class="btn btn-primary btn-sm mr-2">
+                $btn = '<a href="'.route('admin.project.edit', $row->id).'" class="btn btn-primary btn-sm mr-2 mb-2">
                         <i class="fas fa-edit"></i>
                     </a>';
-                $btn .= '<a href="'.route('admin.project.delete', $row->id).'" class="btn btn-danger btn-sm mr-2">
+                $btn .= '<a href="'.route('admin.project.delete', $row->id).'" class="btn btn-danger btn-sm mr-2 mb-2">
                     <i class="fas fa-trash"></i>
                 </a>';
 
                 return $btn;
             })
-            ->rawColumns(['action', 'name'])
+            ->rawColumns(['action'])
             ->make(true);
 
         return $datatables;

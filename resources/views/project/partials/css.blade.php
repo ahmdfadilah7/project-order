@@ -8,7 +8,6 @@
 <link rel="stylesheet" href="{{ asset('assets/modules/jqvmap/dist/jqvmap.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/modules/summernote/summernote-bs4.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/modules/select2/dist/css/select2.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/modules/jquery-selectric/selectric.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/modules/izitoast/css/iziToast.min.css') }}">

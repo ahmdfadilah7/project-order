@@ -9,11 +9,11 @@
     <!-- Favicon -->
     <link href="{{ url($setting->favicon) }}" rel="icon">
     
+    @yield('script_css')
+
     {{-- CSS --}}
     @yield('css')
     {{-- End CSS --}}
-
-    @yield('script_css')
 
     <!-- Start GA -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>

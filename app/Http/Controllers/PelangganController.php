@@ -31,11 +31,11 @@ class PelangganController extends Controller
                 return $no_telp;
             })
             ->addColumn('action', function($row) {
-                $btn = '<a href="'.route('admin.pelanggan.edit', $row->id).'" class="btn btn-primary btn-sm mr-2">
-                            <i class=""fas fa-edit></i>
+                $btn = '<a href="'.route('admin.pelanggan.edit', $row->id).'" class="btn btn-primary btn-sm mr-2 mb-2">
+                            <i class="fas fa-edit"></i>
                         </a>';
-                $btn .= '<a href="'.route('admin.pelanggan.delete', $row->id).'" class="btn btn-danger btn-sm">
-                        <i class=""fas fa-edit></i>
+                $btn .= '<a href="'.route('admin.pelanggan.delete', $row->id).'" class="btn btn-danger btn-sm mr-2 mb-2">
+                        <i class="fas fa-trash"></i>
                     </a>';
 
                 return $btn;

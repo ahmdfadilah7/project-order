@@ -16,8 +16,14 @@
                 <li class="menu-header">Dashboard</li>
                 <li @if(Request::segment(2)=='dashboard') class="active" @endif><a class="nav-link" href="{{ route('admin.dashboard') }}"><i class="fas fa-fire"></i> <span>Dashboard</span></a></li>
 
+                <li class="menu-header">Transaksi</li>
+                <li @if(Request::segment(2)=='order') class="active" @endif><a class="nav-link" href="{{ route('admin.order') }}"><i class="fas fa-clipboard"></i> <span>Order</span></a></li>
+
                 <li class="menu-header">Page</li>
                 <li @if(Request::segment(2)=='project') class="active" @endif><a class="nav-link" href="{{ route('admin.project') }}"><i class="fas fa-file"></i> <span>Project</span></a></li>
+                <li @if(Request::segment(2)=='jenis') class="active" @endif><a class="nav-link" href="{{ route('admin.jenis') }}"><i class="fas fa-file"></i> <span>Jenis</span></a></li>
+
+                <li class="menu-header">Management User</li>
                 <li @if(Request::segment(2)=='penjoki') class="active" @endif><a class="nav-link" href="{{ route('admin.penjoki') }}"><i class="fas fa-users"></i> <span>Penjoki</span></a></li>
                 <li @if(Request::segment(2)=='pelanggan') class="active" @endif><a class="nav-link" href="{{ route('admin.pelanggan') }}"><i class="fas fa-users"></i> <span>Pelanggan</span></a></li>
 
@@ -29,6 +35,11 @@
 
                 <li class="menu-header">Dashboard</li>
                 <li @if(Request::segment(2)=='dashboard') class="active" @endif><a class="nav-link" href="{{ route('petani.dashboard') }}"><i class="fas fa-fire"></i> <span>Dashboard</span></a></li>
+            
+            @elseif(Auth::user()->role == 'pelanggan')
+
+                <li class="menu-header">Dashboard</li>
+                <li @if(Request::segment(2)=='dashboard') class="active" @endif><a class="nav-link" href="{{ route('pelanggan.dashboard') }}"><i class="fas fa-fire"></i> <span>Dashboard</span></a></li>
 
             @endif
 

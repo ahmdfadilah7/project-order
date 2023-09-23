@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@include('layouts.partials.css')
-@include('layouts.partials.js')
+@include('project.partials.css')
+@include('project.partials.js')
 
 @section('content')
 
@@ -27,7 +27,7 @@
                     <div class="form-group row mb-4">
                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Pelanggan</label>
                         <div class="col-sm-12 col-md-7">
-                            <select name="name" class="form-control selectric">
+                            <select name="name" class="form-control select2">
                                 <option value="">- Pilih -</option>
                                 @foreach ($user as $row)
                                     <option value="{{ $row->id }}" @if($project->user_id==$row->id) selected @endif>{{ $row->name }}</option>
@@ -46,7 +46,7 @@
                     <div class="form-group row mb-4">
                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Deskripsi</label>
                         <div class="col-sm-12 col-md-7">
-                            <input type="text" name="deskripsi" class="form-control" value="{{ $project->deskripsi }}">
+                            <textarea name="deskripsi" class="form-control summernote-simple" id="deskripsi" rows="10">{{ $project->deskripsi }}</textarea>
                             <i class="text-danger">{{ $errors->first('deskripsi') }}</i>
                         </div>
                     </div>

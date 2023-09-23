@@ -5,9 +5,9 @@
 @section('content')
 
     <div class="section-header">
-        <h1>Project</h1>
+        <h1>Order</h1>
         <div class="section-header-breadcrumb">
-            <div class="breadcrumb-item active"><a href="{{ route('admin.project') }}">Project</a></div>
+            <div class="breadcrumb-item active"><a href="{{ route('admin.order') }}">Order</a></div>
         </div>
     </div>
 
@@ -15,8 +15,8 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header justify-content-between">
-                    <h4>Project</h4>
-                    <a href="{{ route('admin.project.add') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Tambah</a>
+                    <h4>Order</h4>
+                    <a href="{{ route('admin.order.add') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Tambah</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -26,10 +26,11 @@
                                     <th class="text-center">
                                         #
                                     </th>
-                                    <th>Nama Pelanggan</th>
-                                    <th>Judul</th>
-                                    <th>Deskripsi</th>
-                                    <th>Deadline</th>
+                                    <th>Penjoki</th>
+                                    <th>Project</th>
+                                    <th>Jenis</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -48,29 +49,13 @@
 @section('script')
 
     <script>
-        $(document).ready(function(){
-            notif();
-            setInterval(notif, 1000 * 60);
-        });
-
-        function notif() {
-            @foreach ($project as $row)
-                iziToast.warning({
-                    title: 'Warning',
-                    message: '{{ $row->user->name.' '.$row->judul }} sudah deadline',
-                    position: 'topRight'
-                });
-            @endforeach
-        }
-
-
         $(function() {
             $('#table-1').dataTable({
                 processing: true,
                 serverSide: true,
                 'ordering': 'true',
                 ajax: {
-                    url: "{{ route('admin.project.list') }}",
+                    url: "{{ route('admin.order.list') }}",
                     data: function(d) {}
                 },
                 columns: [
@@ -81,20 +66,24 @@
                         searchable: false
                     },
                     {
-                        data: 'name',
-                        name: 'name'
+                        data: 'penjoki',
+                        name: 'penjoki'
                     },
                     {
-                        data: 'judul',
-                        name: 'judul'
+                        data: 'project',
+                        name: 'project'
                     },
                     {
-                        data: 'deskripsi',
-                        name: 'deskripsi'
+                        data: 'jenis',
+                        name: 'jenis'
                     },
                     {
-                        data: 'deadline',
-                        name: 'deadline'
+                        data: 'total',
+                        name: 'total'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
                     },
                     {
                         data: 'action',

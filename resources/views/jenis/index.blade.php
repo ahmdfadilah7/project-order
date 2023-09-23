@@ -5,9 +5,9 @@
 @section('content')
 
     <div class="section-header">
-        <h1>Project</h1>
+        <h1>Jenis</h1>
         <div class="section-header-breadcrumb">
-            <div class="breadcrumb-item active"><a href="{{ route('admin.project') }}">Project</a></div>
+            <div class="breadcrumb-item active"><a href="{{ route('admin.jenis') }}">Jenis</a></div>
         </div>
     </div>
 
@@ -15,8 +15,8 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header justify-content-between">
-                    <h4>Project</h4>
-                    <a href="{{ route('admin.project.add') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Tambah</a>
+                    <h4>Jenis</h4>
+                    <a href="{{ route('admin.jenis.add') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Tambah</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -26,10 +26,7 @@
                                     <th class="text-center">
                                         #
                                     </th>
-                                    <th>Nama Pelanggan</th>
                                     <th>Judul</th>
-                                    <th>Deskripsi</th>
-                                    <th>Deadline</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -48,29 +45,13 @@
 @section('script')
 
     <script>
-        $(document).ready(function(){
-            notif();
-            setInterval(notif, 1000 * 60);
-        });
-
-        function notif() {
-            @foreach ($project as $row)
-                iziToast.warning({
-                    title: 'Warning',
-                    message: '{{ $row->user->name.' '.$row->judul }} sudah deadline',
-                    position: 'topRight'
-                });
-            @endforeach
-        }
-
-
         $(function() {
             $('#table-1').dataTable({
                 processing: true,
                 serverSide: true,
                 'ordering': 'true',
                 ajax: {
-                    url: "{{ route('admin.project.list') }}",
+                    url: "{{ route('admin.jenis.list') }}",
                     data: function(d) {}
                 },
                 columns: [
@@ -81,20 +62,8 @@
                         searchable: false
                     },
                     {
-                        data: 'name',
-                        name: 'name'
-                    },
-                    {
                         data: 'judul',
                         name: 'judul'
-                    },
-                    {
-                        data: 'deskripsi',
-                        name: 'deskripsi'
-                    },
-                    {
-                        data: 'deadline',
-                        name: 'deadline'
                     },
                     {
                         data: 'action',

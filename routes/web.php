@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\JenisController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PenjokiController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\ProjectController;
@@ -26,9 +28,17 @@ Route::get('register', [AuthController::class, 'register'])->name('register');
 Route::post('prosesLogin', [AuthController::class, 'proses_login'])->name('prosesLogin');
 Route::post('prosesRegister', [AuthController::class, 'proses_register'])->name('prosesRegister');
 
-Route::group(['middleware' => ['auth:admin', 'role:admin']], function () {
+Route::group(['middleware' => ['xss', 'auth:admin', 'role:admin']], function () {
 
     Route::get('admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+    Route::get('admin/order', [OrderController::class, 'index'])->name('admin.order');
+    Route::get('admin/order/getListData', [OrderController::class, 'listData'])->name('admin.order.list');
+    Route::get('admin/order/add', [OrderController::class, 'create'])->name('admin.order.add');
+    Route::post('admin/order/store', [OrderController::class, 'store'])->name('admin.order.store');
+    Route::get('admin/order/{id}', [OrderController::class, 'edit'])->name('admin.order.edit');
+    Route::put('admin/order/update/{id}', [OrderController::class, 'update'])->name('admin.order.update');
+    Route::get('admin/order/delete/{id}', [OrderController::class, 'destroy'])->name('admin.order.delete');
 
     Route::get('admin/pelanggan', [PelangganController::class, 'index'])->name('admin.pelanggan');
     Route::get('admin/pelanggan/getListData', [PelangganController::class, 'listData'])->name('admin.pelanggan.list');
@@ -54,6 +64,13 @@ Route::group(['middleware' => ['auth:admin', 'role:admin']], function () {
     Route::put('admin/project/update/{id}', [ProjectController::class, 'update'])->name('admin.project.update');
     Route::get('admin/project/delete/{id}', [ProjectController::class, 'destroy'])->name('admin.project.delete');
 
+    Route::get('admin/jenis', [JenisController::class, 'index'])->name('admin.jenis');
+    Route::get('admin/jenis/getListData', [JenisController::class, 'listData'])->name('admin.jenis.list');
+    Route::get('admin/jenis/add', [JenisController::class, 'create'])->name('admin.jenis.add');
+    Route::post('admin/jenis/store', [JenisController::class, 'store'])->name('admin.jenis.store');
+    Route::get('admin/jenis/{id}', [JenisController::class, 'edit'])->name('admin.jenis.edit');
+    Route::put('admin/jenis/update/{id}', [JenisController::class, 'update'])->name('admin.jenis.update');
+    Route::get('admin/jenis/delete/{id}', [JenisController::class, 'destroy'])->name('admin.jenis.delete');
 
     Route::get('admin/setting', [SettingController::class, 'index'])->name('admin.setting');
     Route::get('admin/setting/getListData', [SettingController::class, 'listData'])->name('admin.setting.list');
@@ -62,13 +79,13 @@ Route::group(['middleware' => ['auth:admin', 'role:admin']], function () {
 
 });
 
-Route::group(['middleware' => ['auth:penjoki', 'role:penjoki']], function() {
+Route::group(['middleware' => ['xss', 'auth:penjoki', 'role:penjoki']], function() {
 
     Route::get('penjoki/dashboard', [DashboardController::class, 'index'])->name('penjoki.dashboard');
 
 });
 
-Route::group(['middleware' => ['auth:pelanggan', 'role:pelanggan']], function() {
+Route::group(['middleware' => ['xss', 'auth:pelanggan', 'role:pelanggan']], function() {
 
     Route::get('pelanggan/dashboard', [DashboardController::class, 'index'])->name('pelanggan.dashboard');
 

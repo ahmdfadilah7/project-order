@@ -33,10 +33,10 @@ class PenjokiController extends Controller
                 return $no_telp;
             })
             ->addColumn('action', function($row) {
-                $btn = '<a href="'.route('admin.penjoki.edit', $row->id).'" class="btn btn-primary btn-sm mr-2">
+                $btn = '<a href="'.route('admin.penjoki.edit', $row->id).'" class="btn btn-primary btn-sm mr-2 mb-2">
                         <i class="fas fa-edit"></i>
                     </a>';
-                $btn .= '<a href="'.route('admin.penjoki.delete', $row->id).'" class="btn btn-danger btn-sm">
+                $btn .= '<a href="'.route('admin.penjoki.delete', $row->id).'" class="btn btn-danger btn-sm mr-2 mb-2">
                     <i class="fas fa-trash"></i>
                 </a>';
 
