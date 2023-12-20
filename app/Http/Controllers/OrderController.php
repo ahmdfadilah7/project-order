@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\AllHelper;
+use App\Models\Group;
 use App\Models\Jenis;
 use App\Models\Order;
 use App\Models\Project;
 use App\Models\Setting;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Yajra\DataTables\Facades\DataTables;
 
 class OrderController extends Controller
@@ -33,6 +36,9 @@ class OrderController extends Controller
             ->addColumn('project', function($row) {
                 return $row->project->judul.' - '.$row->project->user->name;
             })
+            ->addColumn('deadline', function($row) {
+                return Carbon::parse($row->project->deadline)->format('d M Y');
+            })
             ->addColumn('jenis', function($row) {
                 return $row->jenis->judul;
             })
@@ -48,19 +54,29 @@ class OrderController extends Controller
                 return $status;
             })
             ->addColumn('action', function($row) {
-                $btn = '<a href="'.route('admin.order.edit', $row->id).'" class="btn btn-primary btn-sm mr-2 mb-2">
-                            <i class="fas fa-edit"></i>
-                        </a>';
+                $btn = '<a href="'.route('admin.order.detail', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2">
+                        <i class="fas fa-eye"></i>
+                    </a>';
                 $btn .= '<a href="'.route('admin.order.delete', $row->id).'" class="btn btn-danger btn-sm mr-2 mb-2">
                         <i class="fas fa-trash"></i>
                     </a>';
 
                 return $btn;
             })
-            ->rawColumns(['action', 'total', 'status'])
+            ->rawColumns(['action', 'total', 'status', 'deadline'])
             ->make(true);
 
         return $datatables;
+    }
+
+    // Detail Order
+    public function show($id)
+    {
+        $setting = Setting::first();
+
+        $order = Order::find($id);
+
+        return view('order.detail', compact('setting', 'order'));
     }
 
     // Menampilkan halaman tambah order
@@ -88,6 +104,16 @@ class OrderController extends Controller
             $errors = $validator->errors();
             return back()->with('errors', $errors)->withInput($request->all());
         }
+
+        $project = Project::find($request->project);
+        
+        $nama_group = 'CL-'.substr($project->user->name, 0, 1).date('m').strtoupper(Str::random(3));
+        
+        $group = new Group;
+        $group->name = $nama_group;
+        $group->pelanggan_id = $project->user_id;
+        $group->penjoki_id = $request->penjoki;
+        $group->save();
 
         Order::create([
             'user_id' => $request->get('penjoki'),

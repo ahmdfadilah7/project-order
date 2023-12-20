@@ -28,6 +28,10 @@ class ProjectController extends Controller
                 $name = $row->user->name;
                 return $name;
             })
+            ->addColumn('deskripsi', function($row) {
+                $desk = substr($row->deskripsi,0, 200);
+                return $desk;
+            })
             ->addColumn('action', function($row) {
                 $btn = '<a href="'.route('admin.project.edit', $row->id).'" class="btn btn-primary btn-sm mr-2 mb-2">
                         <i class="fas fa-edit"></i>
@@ -38,7 +42,7 @@ class ProjectController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action', 'deskripsi'])
             ->make(true);
 
         return $datatables;

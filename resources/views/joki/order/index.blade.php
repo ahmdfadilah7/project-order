@@ -7,7 +7,7 @@
     <div class="section-header">
         <h1>Order</h1>
         <div class="section-header-breadcrumb">
-            <div class="breadcrumb-item active"><a href="{{ route('admin.order') }}">Order</a></div>
+            <div class="breadcrumb-item active"><a href="{{ route('penjoki.order') }}">Order</a></div>
         </div>
     </div>
 
@@ -16,7 +16,6 @@
             <div class="card">
                 <div class="card-header justify-content-between">
                     <h4>Order</h4>
-                    <a href="{{ route('admin.order.add') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Tambah</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -26,10 +25,8 @@
                                     <th class="text-center">
                                         #
                                     </th>
-                                    <th>Penjoki</th>
                                     <th>Project</th>
                                     <th>Jenis</th>
-                                    <th>Total</th>
                                     <th>Deadline</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
@@ -56,7 +53,7 @@
                 serverSide: true,
                 'ordering': 'true',
                 ajax: {
-                    url: "{{ route('admin.order.list') }}",
+                    url: "{{ route('penjoki.order.list') }}",
                     data: function(d) {}
                 },
                 columns: [
@@ -67,20 +64,12 @@
                         searchable: false
                     },
                     {
-                        data: 'penjoki',
-                        name: 'penjoki'
-                    },
-                    {
                         data: 'project',
                         name: 'project'
                     },
                     {
                         data: 'jenis',
                         name: 'jenis'
-                    },
-                    {
-                        data: 'total',
-                        name: 'total'
                     },
                     {
                         data: 'deadline',
@@ -95,7 +84,7 @@
                         name: 'action',
                         orderable: false,
                         searchable: false
-                    }
+                    },
                 ]
             });
         });

@@ -2,10 +2,20 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FileProjectController;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\JenisController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\Pelanggan\DashboardController as PelangganDashboardController;
+use App\Http\Controllers\Pelanggan\FileProjectController as PelangganFileProjectController;
+use App\Http\Controllers\Pelanggan\GroupController as PelangganGroupController;
 use App\Http\Controllers\PenjokiController;
 use App\Http\Controllers\PelangganController;
+use App\Http\Controllers\Penjoki\DashboardController as PenjokiDashboardController;
+use App\Http\Controllers\Penjoki\FileProjectController as PenjokiFileProjectController;
+use App\Http\Controllers\Penjoki\GroupController as PenjokiGroupController;
+use App\Http\Controllers\Penjoki\OrderController as PenjokiOrderController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Route;
@@ -28,13 +38,21 @@ Route::get('register', [AuthController::class, 'register'])->name('register');
 Route::post('prosesLogin', [AuthController::class, 'proses_login'])->name('prosesLogin');
 Route::post('prosesRegister', [AuthController::class, 'proses_register'])->name('prosesRegister');
 
-Route::group(['middleware' => ['xss', 'auth:admin', 'role:admin']], function () {
+Route::group(['middleware' => ['auth:admin', 'role:admin']], function () {
 
     Route::get('admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+    Route::get('notif/group/chat/{id}', [NotificationController::class, 'group'])->name('notif.group');
+
+    Route::get('admin/group', [GroupController::class, 'index'])->name('admin.group');
+    Route::get('admin/group/chat/{id}', [GroupController::class, 'chat'])->name('admin.group.chat');
+    Route::get('admin/group/receive/{id}', [GroupController::class, 'receive'])->name('admin.group.receive');
+    Route::post('admin/group/chatadd', [GroupController::class, 'store'])->name('admin.group.chatadd');
 
     Route::get('admin/order', [OrderController::class, 'index'])->name('admin.order');
     Route::get('admin/order/getListData', [OrderController::class, 'listData'])->name('admin.order.list');
     Route::get('admin/order/add', [OrderController::class, 'create'])->name('admin.order.add');
+    Route::get('admin/order/detail/{id}', [OrderController::class, 'show'])->name('admin.order.detail');
     Route::post('admin/order/store', [OrderController::class, 'store'])->name('admin.order.store');
     Route::get('admin/order/{id}', [OrderController::class, 'edit'])->name('admin.order.edit');
     Route::put('admin/order/update/{id}', [OrderController::class, 'update'])->name('admin.order.update');
@@ -64,6 +82,10 @@ Route::group(['middleware' => ['xss', 'auth:admin', 'role:admin']], function () 
     Route::put('admin/project/update/{id}', [ProjectController::class, 'update'])->name('admin.project.update');
     Route::get('admin/project/delete/{id}', [ProjectController::class, 'destroy'])->name('admin.project.delete');
 
+    Route::get('admin/fileproject/getListData/{id}', [FileProjectController::class, 'listData'])->name('admin.fileproject.list');
+    Route::post('admin/fileproject/store', [FileProjectController::class, 'store'])->name('admin.fileproject.store');
+    Route::get('admin/fileproject/delete/{id}', [FileProjectController::class, 'destroy'])->name('admin.fileproject.delete');
+
     Route::get('admin/jenis', [JenisController::class, 'index'])->name('admin.jenis');
     Route::get('admin/jenis/getListData', [JenisController::class, 'listData'])->name('admin.jenis.list');
     Route::get('admin/jenis/add', [JenisController::class, 'create'])->name('admin.jenis.add');
@@ -81,12 +103,43 @@ Route::group(['middleware' => ['xss', 'auth:admin', 'role:admin']], function () 
 
 Route::group(['middleware' => ['xss', 'auth:penjoki', 'role:penjoki']], function() {
 
-    Route::get('penjoki/dashboard', [DashboardController::class, 'index'])->name('penjoki.dashboard');
+    Route::get('penjoki/dashboard', [PenjokiDashboardController::class, 'index'])->name('penjoki.dashboard');
+
+    Route::get('notif/group/chat/{id}', [NotificationController::class, 'group'])->name('notif.group');
+
+    Route::get('penjoki/group', [PenjokiGroupController::class, 'index'])->name('penjoki.group');
+    Route::get('penjoki/group/chat/{id}', [PenjokiGroupController::class, 'chat'])->name('penjoki.group.chat');
+    Route::get('penjoki/group/receive/{id}', [PenjokiGroupController::class, 'receive'])->name('penjoki.group.receive');
+    Route::post('penjoki/group/chatadd', [PenjokiGroupController::class, 'store'])->name('penjoki.group.chatadd');
+
+    Route::get('penjoki/order', [PenjokiOrderController::class, 'index'])->name('penjoki.order');
+    Route::get('penjoki/order/getListData', [PenjokiOrderController::class, 'listData'])->name('penjoki.order.list');
+    Route::get('penjoki/order/add', [PenjokiOrderController::class, 'create'])->name('penjoki.order.add');
+    Route::get('penjoki/order/detail/{id}', [PenjokiOrderController::class, 'show'])->name('penjoki.order.detail');
+    Route::post('penjoki/order/store', [PenjokiOrderController::class, 'store'])->name('penjoki.order.store');
+    Route::get('penjoki/order/{id}', [PenjokiOrderController::class, 'edit'])->name('penjoki.order.edit');
+    Route::put('penjoki/order/update/{id}', [PenjokiOrderController::class, 'update'])->name('penjoki.order.update');
+    Route::get('penjoki/order/delete/{id}', [PenjokiOrderController::class, 'destroy'])->name('penjoki.order.delete');
+
+    Route::get('penjoki/fileproject/getListData/{id}', [PenjokiFileProjectController::class, 'listData'])->name('penjoki.fileproject.list');
+    Route::post('penjoki/fileproject/store', [PenjokiFileProjectController::class, 'store'])->name('penjoki.fileproject.store');
+    Route::get('penjoki/fileproject/delete/{id}', [PenjokiFileProjectController::class, 'destroy'])->name('penjoki.fileproject.delete');
 
 });
 
 Route::group(['middleware' => ['xss', 'auth:pelanggan', 'role:pelanggan']], function() {
 
-    Route::get('pelanggan/dashboard', [DashboardController::class, 'index'])->name('pelanggan.dashboard');
+    Route::get('pelanggan/dashboard', [PelangganDashboardController::class, 'index'])->name('pelanggan.dashboard');
+
+    Route::get('notif/group/chat/{id}', [NotificationController::class, 'group'])->name('notif.group');
+
+    Route::get('pelanggan/group', [PelangganGroupController::class, 'index'])->name('pelanggan.group');
+    Route::get('pelanggan/group/chat/{id}', [PelangganGroupController::class, 'chat'])->name('pelanggan.group.chat');
+    Route::get('pelanggan/group/receive/{id}', [PelangganGroupController::class, 'receive'])->name('pelanggan.group.receive');
+    Route::post('pelanggan/group/chatadd', [PelangganGroupController::class, 'store'])->name('pelanggan.group.chatadd');
+
+    Route::get('pelanggan/fileproject/getListData/{id}', [PelangganFileProjectController::class, 'listData'])->name('pelanggan.fileproject.list');
+    Route::post('pelanggan/fileproject/store', [PelangganFileProjectController::class, 'store'])->name('pelanggan.fileproject.store');
+    Route::get('pelanggan/fileproject/delete/{id}', [PelangganFileProjectController::class, 'destroy'])->name('pelanggan.fileproject.delete');
 
 });

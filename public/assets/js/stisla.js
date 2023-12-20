@@ -211,8 +211,9 @@
   $.chatCtrl = function(element, chat) {
     var chat = $.extend({
       position: 'chat-right',
+      name: '',
       text: '',
-      time: moment(new Date().toISOString()).format('hh:mm'),
+      time: '',
       picture: '',
       type: 'text', // or typing
       timeout: 0,
@@ -223,7 +224,7 @@
         element = '<div class="chat-item '+chat.position+'" style="display:none">' +
                   '<img src="'+chat.picture+'">' +
                   '<div class="chat-details">' +
-                  '<div class="chat-text">'+chat.text+'</div>' +
+                  '<div class="chat-text"><b>'+chat.name+'</b><br>'+chat.text+'</div>' +
                   '<div class="chat-time">'+chat.time+'</div>' +
                   '</div>' +
                   '</div>',
@@ -251,9 +252,11 @@
       target.find('.chat-content .chat-item').each(function() {
         target_height += $(this).outerHeight();
       });
+      var scrollBottom = target_height + $(window).height();
       setTimeout(function() {
-        target.find('.chat-content').scrollTop(target_height, -1);
+        target.find('.chat-content').scrollTop(scrollBottom);
       }, 100);
+      console.log(scrollBottom)
       chat.onShow.call(this, append_element);
   }
 })(jQuery, this, 0);

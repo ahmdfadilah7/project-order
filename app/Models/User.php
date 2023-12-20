@@ -61,4 +61,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
+
+    public function chat(): HasMany
+    {
+        return $this->hasMany(ChatGroup::class);
+    }
 }

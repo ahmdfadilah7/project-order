@@ -33,23 +33,45 @@
 <script src="{{ asset('assets/js/scripts.js') }}"></script>
 <script src="{{ asset('assets/js/custom.js') }}"></script>
 <script>
-    @if (Session::has('berhasil'))
-        iziToast.success({
-            title: 'Success',
-            message: '{{ session("berhasil") }}',
-            position: 'topRight'
-        });
-    @endif
+    $(document).ready(function () {
 
-    @if (Session::has('errors'))
-        @foreach ($errors->all() as $errors)
-        iziToast.error({
-            title: 'Error',
-            message: '{{ $errors }}',
-            position: 'topRight'
+        const pusher = new Pusher('{{ config('broadcasting.connections.pusher.key') }}', { cluster: 'ap1' });
+        const channel = pusher.subscribe('public');
+
+        channel.bind('chat', function (data) {
+            var user_id = '{{ Auth::user()->id }}';
+
+            if (user_id != data.message.user_id) {
+                var url = "{{ url('notif/group/chat') }}/" + data.message.group_id;
+                $.get(url, function (data) {
+                    iziToast.success({
+                        title: 'Success',
+                        message: data,
+                        position: 'topRight'
+                    });
+                });
+            }
         });
-        @endforeach
-    @endif
+        
+        @if (Session::has('berhasil'))
+            iziToast.success({
+                title: 'Success',
+                message: '{{ session("berhasil") }}',
+                position: 'topRight'
+            });
+        @endif
+    
+        @if (Session::has('errors'))
+            @foreach ($errors->all() as $errors)
+            iziToast.error({
+                title: 'Error',
+                message: '{{ $errors }}',
+                position: 'topRight'
+            });
+            @endforeach
+        @endif
+
+    })
 </script>
 
 @endsection

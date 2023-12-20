@@ -21,4 +21,6 @@
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/components.css') }}">
 
+<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+
 @endsection
