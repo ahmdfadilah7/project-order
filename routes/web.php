@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\ActivitiesController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileProjectController;
@@ -11,8 +10,10 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Pelanggan\DashboardController as PelangganDashboardController;
 use App\Http\Controllers\Pelanggan\FileProjectController as PelangganFileProjectController;
 use App\Http\Controllers\Pelanggan\GroupController as PelangganGroupController;
+use App\Http\Controllers\Pelanggan\OrderController as PelangganOrderController;
 use App\Http\Controllers\PenjokiController;
 use App\Http\Controllers\PelangganController;
+use App\Http\Controllers\Penjoki\ActivitiesController;
 use App\Http\Controllers\Penjoki\DashboardController as PenjokiDashboardController;
 use App\Http\Controllers\Penjoki\FileProjectController as PenjokiFileProjectController;
 use App\Http\Controllers\Penjoki\GroupController as PenjokiGroupController;
@@ -125,7 +126,8 @@ Route::group(['middleware' => ['xss', 'auth:penjoki', 'role:penjoki']], function
     Route::get('penjoki/fileproject/getListData/{id}', [PenjokiFileProjectController::class, 'listData'])->name('penjoki.fileproject.list');
     Route::post('penjoki/fileproject/store', [PenjokiFileProjectController::class, 'store'])->name('penjoki.fileproject.store');
     Route::get('penjoki/fileproject/delete/{id}', [PenjokiFileProjectController::class, 'destroy'])->name('penjoki.fileproject.delete');
-    // activities 
+
+    // activities
     Route::get('penjoki/fileproject/activitiesTable/{id}', [ActivitiesController::class, 'activitiesTable'])->name('penjoki.fileproject.activity-table');
     Route::post('penjoki/fileproject/activity-store', [ActivitiesController::class, 'store'])->name('penjoki.fileproject.activity-store');
 
@@ -136,6 +138,11 @@ Route::group(['middleware' => ['xss', 'auth:pelanggan', 'role:pelanggan']], func
     Route::get('pelanggan/dashboard', [PelangganDashboardController::class, 'index'])->name('pelanggan.dashboard');
 
     Route::get('notif/group/chat/{id}', [NotificationController::class, 'group'])->name('notif.group');
+
+    Route::get('pelanggan/order', [PelangganOrderController::class, 'index'])->name('pelanggan.order');
+    Route::get('pelanggan/order/getListData', [PelangganOrderController::class, 'listData'])->name('pelanggan.order.list');
+    Route::get('pelanggan/order/detail/{id}', [PelangganOrderController::class, 'show'])->name('pelanggan.order.detail');
+    Route::get('pelanggan/order/activities/{id}', [PelangganOrderController::class, 'activity'])->name('pelanggan.order.activities');
 
     Route::get('pelanggan/group', [PelangganGroupController::class, 'index'])->name('pelanggan.group');
     Route::get('pelanggan/group/chat/{id}', [PelangganGroupController::class, 'chat'])->name('pelanggan.group.chat');

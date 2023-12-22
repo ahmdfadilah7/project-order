@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Penjoki;
 
+use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use Carbon\Carbon;
 use Illuminate\Http\Request;

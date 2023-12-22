@@ -52,6 +52,10 @@
                     {{-- End Content --}}
 
                 </section>
+
+                {{-- Modal --}}
+                @yield('modal')
+                {{-- End Modal --}}
             </div>
 
             {{-- Footer --}}

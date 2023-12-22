@@ -31,7 +31,7 @@ class Project extends Model
 
     public function activity(): HasOne
     {
-        return $this->hasOne(Activity::class);
+        return $this->hasOne(Activity::class)->orderBy('created_at', 'desc');
     }
 
 }
