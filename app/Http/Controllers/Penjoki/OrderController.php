@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Penjoki;
 
 use App\Helpers\AllHelper;
 use App\Http\Controllers\Controller;
+use App\Models\Activity;
 use App\Models\Order;
+use App\Models\Project;
 use App\Models\Setting;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -63,6 +65,10 @@ class OrderController extends Controller
 
         $order = Order::find($id);
 
-        return view('joki.order.detail', compact('setting', 'order'));
+        $activity = Activity::where('project_id', $id)
+                          ->orderBy('created_at', 'desc')
+                          ->first();
+
+        return view('joki.order.detail', compact('setting', 'order', 'activity'));
     }
 }
