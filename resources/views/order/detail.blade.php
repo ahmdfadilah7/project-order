@@ -83,7 +83,9 @@
     
 @endsection
 
-@include('order.partials.fileproject')
+@section('modal')
+    @include('order.partials.fileproject')
+@endsection
 
 @section('script')
 

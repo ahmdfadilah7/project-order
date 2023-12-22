@@ -65,7 +65,7 @@ class OrderController extends Controller
 
         $order = Order::find($id);
 
-        $activity = Activity::where('project_id', $id)
+        $activity = Activity::where('order_id', $id)
                           ->orderBy('created_at', 'desc')
                           ->first();
 

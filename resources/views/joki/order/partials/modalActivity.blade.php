@@ -11,7 +11,7 @@
                 {!! Form::open(['method' => 'post', 'route' => ['penjoki.fileproject.activity-store']]) !!}
                 <div class="mb-3">
                     <label for="floatingTextarea2">Judul Aktivitas</label>
-                    <input type="hidden" name="project_id" value={{ $order->project_id }} />
+                    <input type="hidden" name="order_id" value={{ $order->id }} />
                     <textarea class="form-control" placeholder="Sedang mengerjakan.." id="floatingTextarea2" row="4"
                         style="resize: none;" name="judul_aktivitas"></textarea>
                 </div>

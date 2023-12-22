@@ -31,6 +31,7 @@
                                     <th>Jenis</th>
                                     <th>Total</th>
                                     <th>Deadline</th>
+                                    <th>Progress</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -85,6 +86,12 @@
                     {
                         data: 'deadline',
                         name: 'deadline'
+                    },
+                    {
+                        data: 'progress',
+                        name: 'progress',
+                        orderable: false,
+                        searchable: false
                     },
                     {
                         data: 'status',

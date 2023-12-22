@@ -32,6 +32,9 @@ class OrderController extends Controller
         $data = Order::whereIn('project_id', $project_id)->get();
         $datatables = DataTables::of($data)
             ->addIndexColumn()
+            ->addColumn('penjoki', function($row) {
+                return $row->user->name;
+            })
             ->addColumn('project', function($row) {
                 return $row->project->judul.' - '.$row->project->user->name;
             })
@@ -50,9 +53,9 @@ class OrderController extends Controller
                 return $status;
             })
             ->addColumn('progress', function($row) {
-                    if ($row->project->activity <> '') {
+                    if ($row->activity <> '') {
                         $btn = '<a href="'.route('pelanggan.order.activities', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2">
-                                <i class="fas fa-eye"></i> '.$row->project->activity->judul_aktivitas.'
+                                <i class="fas fa-eye"></i> '.$row->activity->judul_aktivitas.'
                             </a>';
                     } else {
                         $btn = '<span class="badge badge-danger">Belum ada progress</span>';
@@ -80,7 +83,7 @@ class OrderController extends Controller
 
         $order = Order::find($id);
 
-        $activity = Activity::where('project_id', $id)
+        $activity = Activity::where('order_id', $id)
                           ->orderBy('created_at', 'desc')
                           ->first();
 
@@ -94,7 +97,7 @@ class OrderController extends Controller
 
         $order = Order::find($id);
 
-        $activity = Activity::where('project_id', $id)
+        $activity = Activity::where('order_id', $id)
                           ->orderBy('created_at', 'desc')
                           ->get();
 

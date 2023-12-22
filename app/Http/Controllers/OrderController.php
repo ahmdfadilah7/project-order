@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\AllHelper;
+use App\Models\Activity;
 use App\Models\Group;
 use App\Models\Jenis;
 use App\Models\Order;
@@ -45,6 +46,17 @@ class OrderController extends Controller
             ->addColumn('total', function($row) {
                 return AllHelper::rupiah($row->total);
             })
+            ->addColumn('progress', function($row) {
+                if ($row->activity <> '') {
+                    $btn = '<a href="'.route('admin.order.activities', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2">
+                            <i class="fas fa-eye"></i> '.$row->activity->judul_aktivitas.'
+                        </a>';
+                } else {
+                    $btn = '<span class="badge badge-danger">Belum ada progress</span>';
+                }
+
+            return $btn;
+        })
             ->addColumn('status', function($row) {
                 if ($row->status == 0) {
                     $status = '<span class="badge badge-warning">Belum dibayar</span>';
@@ -63,7 +75,7 @@ class OrderController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action', 'total', 'status', 'deadline'])
+            ->rawColumns(['action', 'progress', 'total', 'status', 'deadline'])
             ->make(true);
 
         return $datatables;
@@ -77,6 +89,20 @@ class OrderController extends Controller
         $order = Order::find($id);
 
         return view('order.detail', compact('setting', 'order'));
+    }
+
+    // Activity 
+    public function activity($id)
+    {
+        $setting = Setting::first();
+
+        $order = Order::find($id);
+
+        $activity = Activity::where('order_id', $id)
+                          ->orderBy('created_at', 'desc')
+                          ->get();
+
+        return view('order.activities', compact('setting', 'order', 'activity'));
     }
 
     // Menampilkan halaman tambah order

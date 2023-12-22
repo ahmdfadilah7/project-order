@@ -15,7 +15,7 @@ class ActivitiesController extends Controller
     // actvities table
     public function activitiesTable($id)
     {
-        $data = Activity::where('project_id', $id)
+        $data = Activity::where('order_id', $id)
             ->where('user_id', Auth::guard('penjoki')->user()->id)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -51,11 +51,11 @@ class ActivitiesController extends Controller
 
         $activities = new Activity;
         $activities->user_id = $user_id;
-        $activities->project_id = $request->project_id;
+        $activities->order_id = $request->order_id;
         $activities->judul_aktivitas = $request->judul_aktivitas;
         $activities->status = $request->status !== null ? $request->status : 0; 
         $activities->save();
 
-        return redirect()->route('penjoki.order.detail', $request->project_id)->with('berhasil', $message);
+        return redirect()->route('penjoki.order.detail', $activities->order->project_id)->with('berhasil', $message);
     }
 }

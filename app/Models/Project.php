@@ -29,9 +29,5 @@ class Project extends Model
         return $this->hasMany(Order::class);
     }
 
-    public function activity(): HasOne
-    {
-        return $this->hasOne(Activity::class)->orderBy('created_at', 'desc');
-    }
 
 }

@@ -34,4 +34,9 @@ class Order extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
+    public function activity(): HasOne
+    {
+        return $this->hasOne(Activity::class)->orderBy('created_at', 'desc');
+    }
 }

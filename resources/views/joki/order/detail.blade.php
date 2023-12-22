@@ -157,7 +157,7 @@
                 serverSide: true,
                 'ordering': 'true',
                 ajax: {
-                    url: "{{ route('penjoki.fileproject.activity-table', $order->project_id) }}",
+                    url: "{{ route('penjoki.fileproject.activity-table', $order->id) }}",
                 },
                 columns: [{
                         data: 'DT_RowIndex',
