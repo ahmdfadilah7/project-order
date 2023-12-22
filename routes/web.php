@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivitiesController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileProjectController;
@@ -124,6 +125,9 @@ Route::group(['middleware' => ['xss', 'auth:penjoki', 'role:penjoki']], function
     Route::get('penjoki/fileproject/getListData/{id}', [PenjokiFileProjectController::class, 'listData'])->name('penjoki.fileproject.list');
     Route::post('penjoki/fileproject/store', [PenjokiFileProjectController::class, 'store'])->name('penjoki.fileproject.store');
     Route::get('penjoki/fileproject/delete/{id}', [PenjokiFileProjectController::class, 'destroy'])->name('penjoki.fileproject.delete');
+    // activities 
+    Route::get('penjoki/fileproject/activitiesTable/{id}', [ActivitiesController::class, 'activitiesTable'])->name('penjoki.fileproject.activity-table');
+    Route::post('penjoki/fileproject/activity-store', [ActivitiesController::class, 'store'])->name('penjoki.fileproject.activity-store');
 
 });
 

@@ -3,7 +3,6 @@
 @include('layouts.partials.js')
 
 @section('content')
-
     <div class="section-header">
         <h1>Order</h1>
         <div class="section-header-breadcrumb">
@@ -42,7 +41,8 @@
                             <td>{!! $order->project->deskripsi !!}</td>
                         </tr>
                     </table>
-                    <a href="{{ route('penjoki.order') }}" class="btn btn-primary btn-sm"><i class="fa fa-arrow-left"></i> Kembali</a>
+                    <a href="{{ route('penjoki.order') }}" class="btn btn-primary btn-sm"><i class="fa fa-arrow-left"></i>
+                        Kembali</a>
                 </div>
             </div>
         </div>
@@ -51,7 +51,8 @@
             <div class="card">
                 <div class="card-header justify-content-between">
                     <h4>File Project</h4>
-                    <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#staticBackdrop"><i class="fa fa-plus"></i> Tambah</a>
+                    {!! $activity->status === 0 ? '<a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#staticBackdrop"><i
+                        class="fa fa-plus"></i> Tambah</a>' : '' !!}
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -76,12 +77,39 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header justify-content-between">
+                    <h4>Activities</h4>
+                   {!! $activity->status === 0 ? '<button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                   data-target="#modalActivity"><i class="fa fa-plus"></i> Tambah</button>' : '' !!}
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="table-activities">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">#</th>
+                                    <th>Tanggal Aktivitas</th>
+                                    <th>Judul Aktivitas</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @include('joki.order.partials.fileproject')
+@include('joki.order.partials.modalactivity')
 
 @section('script')
-
     <script>
         $(function() {
             $('#table-1').dataTable({
@@ -92,8 +120,7 @@
                     url: "{{ route('penjoki.fileproject.list', $order->project_id) }}",
                     data: function(d) {}
                 },
-                columns: [
-                    {
+                columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
                         orderable: false,
@@ -115,7 +142,30 @@
                     }
                 ]
             });
+
+            $('#table-activities').dataTable({
+                processing: true,
+                serverSide: true,
+                'ordering': 'true',
+                ajax: {
+                    url: "{{ route('penjoki.fileproject.activity-table', $order->project_id) }}",
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'tanggal_aktivitas',
+                        name: 'tanggal_aktivitas',
+                    },
+                    {
+                        data: 'judul_aktivitas',
+                        name: 'judul_aktivitas'
+                    }
+                ]
+            })
         });
     </script>
-
 @endsection
