@@ -17,10 +17,18 @@
                 <div class="activities">
 
                     @foreach($activity as $key => $row)
+                        @php
+                            $icon = 'ion-arrow-down-c';
+                        @endphp
+                        @if($key == 0)
+                            @php
+                                $icon = 'ion-android-radio-button-on';
+                            @endphp
+                        @endif
                         
                         <div class="activity">
                             <div class="activity-icon bg-primary text-white shadow-primary">
-                                <i class="ion-arrow-up-c"></i>
+                                <i class="{{ $icon }}"></i>
                             </div>
                             <div class="activity-detail">
                                 <div class="mb-2">

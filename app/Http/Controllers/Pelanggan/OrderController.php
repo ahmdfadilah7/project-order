@@ -83,11 +83,7 @@ class OrderController extends Controller
 
         $order = Order::find($id);
 
-        $activity = Activity::where('order_id', $id)
-                          ->orderBy('created_at', 'desc')
-                          ->first();
-
-        return view('customer.order.detail', compact('setting', 'order', 'activity'));
+        return view('customer.order.detail', compact('setting', 'order'));
     }
 
     // Activity 
@@ -98,7 +94,7 @@ class OrderController extends Controller
         $order = Order::find($id);
 
         $activity = Activity::where('order_id', $id)
-                          ->orderBy('created_at', 'desc')
+                          ->orderBy('created_at', 'asc')
                           ->get();
 
         return view('customer.order.activities', compact('setting', 'order', 'activity'));
