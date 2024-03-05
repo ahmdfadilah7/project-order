@@ -53,10 +53,10 @@ class OrderController extends Controller
                         </a>';
                 } else {
                     $btn = '<span class="badge badge-danger">Belum ada progress</span>';
-                }
+                    }
 
-            return $btn;
-        })
+                return $btn;
+            })
             ->addColumn('status', function($row) {
                 if ($row->status == 0) {
                     $status = '<span class="badge badge-warning">Belum dibayar</span>';

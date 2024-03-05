@@ -25,7 +25,6 @@
                                     <th class="text-center">
                                         #
                                     </th>
-                                    <th>Penjoki</th>
                                     <th>Project</th>
                                     <th>Jenis</th>
                                     <th>Deadline</th>
@@ -64,10 +63,6 @@
                         name: 'DT_RowIndex',
                         orderable: false,
                         searchable: false
-                    },
-                    {
-                        data: 'penjoki',
-                        name: 'penjoki'
                     },
                     {
                         data: 'project',

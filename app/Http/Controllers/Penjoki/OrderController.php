@@ -45,6 +45,15 @@ class OrderController extends Controller
                 }
                 return $status;
             })
+            ->addColumn('progress', function($row) {
+                if ($row->activity <> '') {
+                    $btn = '<span class="badge badge-info">'.$row->activity->judul_aktivitas.'</span>';
+                } else {
+                    $btn = '<span class="badge badge-danger">Belum ada progress</span>';
+                    }
+
+                return $btn;
+            })
             ->addColumn('action', function($row) {
                 $btn = '<a href="'.route('penjoki.order.detail', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2">
                         <i class="fas fa-eye"></i>
@@ -52,7 +61,7 @@ class OrderController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action', 'total', 'status', 'deadline'])
+            ->rawColumns(['action', 'total', 'status', 'progress', 'deadline'])
             ->make(true);
 
         return $datatables;

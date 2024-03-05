@@ -28,7 +28,7 @@
                                     <th>Project</th>
                                     <th>Jenis</th>
                                     <th>Deadline</th>
-                                    <th>Status</th>
+                                    <th>Progress</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -76,8 +76,8 @@
                         name: 'deadline'
                     },
                     {
-                        data: 'status',
-                        name: 'status'
+                        data: 'progress',
+                        name: 'progress'
                     },
                     {
                         data: 'action',

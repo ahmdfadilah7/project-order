@@ -8,9 +8,9 @@
         <div class="section-header-back">
             <a href="{{ route('admin.penjoki') }}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
         </div>
-        <h1>Penjoki</h1>
+        <h1>Karyawan</h1>
         <div class="section-header-breadcrumb">
-            <div class="breadcrumb-item"><a href="{{ route('admin.penjoki') }}">Penjoki</a></div>
+            <div class="breadcrumb-item"><a href="{{ route('admin.penjoki') }}">Karyawan</a></div>
             <div class="breadcrumb-item active">Edit</div>
         </div>
     </div>
@@ -19,7 +19,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h4>Edit Penjoki</h4>
+                    <h4>Edit Karyawan</h4>
                 </div>
                 <div class="card-body">
                     {!! Form::model($user, ['method' => 'post', 'route' => ['admin.penjoki.update', $user->id], 'enctype' => 'multipart/form-data']) !!}

@@ -32,7 +32,11 @@ class GroupController extends Controller
 
         $chat = array();
         foreach($chatgroup as $row) {
+
             $name = $row->user->name;
+            if ($row->user->role == 'pelanggan') {
+                $name = "Anonimous";
+            }
             $time = Carbon::parse($row->created_at)->format('H:i');
 
             if ($row->user->role == 'admin') {
@@ -75,6 +79,9 @@ class GroupController extends Controller
         $chat = ChatGroup::find($id);
 
         $name = $chat->user->name;
+        if ($chat->user->role == 'pelanggan') {
+            $name = 'Anonimous';
+        }
         $time = Carbon::parse($chat->created_at)->format('H:i');
 
         if ($chat->user->role == 'admin') {

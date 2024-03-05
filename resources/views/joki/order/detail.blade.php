@@ -13,7 +13,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-4 col-sm-12">
+        <div class="col-md-6 col-sm-12">
             <div class="card">
                 <div class="card-header justify-content-between">
                     <h4>Detail Project</h4>
@@ -47,7 +47,7 @@
             </div>
         </div>
 
-        <div class="col-md-8 col-sm-12">
+        <div class="col-md-6 col-sm-12">
             <div class="card">
                 <div class="card-header justify-content-between">
                     <h4>File Project</h4>
