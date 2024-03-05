@@ -26,7 +26,7 @@
                                     <th class="text-center">
                                         #
                                     </th>
-                                    <th>Penjoki</th>
+                                    <th>Karyawan</th>
                                     <th>Project</th>
                                     <th>Jenis</th>
                                     <th>Total</th>

@@ -2,8 +2,7 @@
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
             <a href="{{ route('admin.dashboard') }}">
-                <img src="{{ url($setting->logo) }}" width="50">
-                <p>{{ $setting->nama_website }}</p>
+                <img src="{{ url($setting->logo) }}" class="mt-3 pb-2" width="150">
             </a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
@@ -20,14 +19,14 @@
                 <li @if(Request::segment(2)=='order') class="active" @endif><a class="nav-link" href="{{ route('admin.order') }}"><i class="fas fa-clipboard"></i> <span>Order</span></a></li>
 
                 <li class="menu-header">Chatting</li>
-                <li @if(Request::segment(2)=='group') class="active" @endif><a class="nav-link" href="{{ route('admin.group') }}"><i class="fas fa-file"></i> <span>Group</span></a></li>
+                <li @if(Request::segment(2)=='group') class="active" @endif><a class="nav-link" href="{{ route('admin.group') }}"><i class="ion ion-chatbubbles"></i> <span>Group</span></a></li>
 
                 <li class="menu-header">Page</li>
                 <li @if(Request::segment(2)=='project') class="active" @endif><a class="nav-link" href="{{ route('admin.project') }}"><i class="fas fa-file"></i> <span>Project</span></a></li>
                 <li @if(Request::segment(2)=='jenis') class="active" @endif><a class="nav-link" href="{{ route('admin.jenis') }}"><i class="fas fa-file"></i> <span>Jenis Order</span></a></li>
 
                 <li class="menu-header">Management User</li>
-                <li @if(Request::segment(2)=='penjoki') class="active" @endif><a class="nav-link" href="{{ route('admin.penjoki') }}"><i class="fas fa-users"></i> <span>Penjoki</span></a></li>
+                <li @if(Request::segment(2)=='penjoki') class="active" @endif><a class="nav-link" href="{{ route('admin.penjoki') }}"><i class="fas fa-users"></i> <span>Karyawan</span></a></li>
                 <li @if(Request::segment(2)=='pelanggan') class="active" @endif><a class="nav-link" href="{{ route('admin.pelanggan') }}"><i class="fas fa-users"></i> <span>Pelanggan</span></a></li>
 
 
@@ -43,7 +42,7 @@
                 <li @if(Request::segment(2)=='order') class="active" @endif><a class="nav-link" href="{{ route('penjoki.order') }}"><i class="fas fa-clipboard"></i> <span>Order</span></a></li>
 
                 <li class="menu-header">Chatting</li>
-                <li @if(Request::segment(2)=='group') class="active" @endif><a class="nav-link" href="{{ route('penjoki.group') }}"><i class="fas fa-file"></i> <span>Group</span></a></li>
+                <li @if(Request::segment(2)=='group') class="active" @endif><a class="nav-link" href="{{ route('penjoki.group') }}"><i class="ion ion-chatbubbles"></i> <span>Group</span></a></li>
             
             @elseif(Auth::user()->role == 'pelanggan')
 
@@ -54,7 +53,7 @@
                 <li @if(Request::segment(2)=='order') class="active" @endif><a class="nav-link" href="{{ route('pelanggan.order') }}"><i class="fas fa-clipboard"></i> <span>Order</span></a></li>
 
                 <li class="menu-header">Chatting</li>
-                <li @if(Request::segment(2)=='group') class="active" @endif><a class="nav-link" href="{{ route('pelanggan.group') }}"><i class="fas fa-file"></i> <span>Group</span></a></li>
+                <li @if(Request::segment(2)=='group') class="active" @endif><a class="nav-link" href="{{ route('pelanggan.group') }}"><i class="ion ion-chatbubbles"></i> <span>Group</span></a></li>
 
             @endif
 

@@ -5,9 +5,9 @@
 @section('content')
 
     <div class="section-header">
-        <h1>Penjoki</h1>
+        <h1>Karyawan</h1>
         <div class="section-header-breadcrumb">
-            <div class="breadcrumb-item active"><a href="{{ route('admin.penjoki') }}">Penjoki</a></div>
+            <div class="breadcrumb-item active"><a href="{{ route('admin.penjoki') }}">Karyawan</a></div>
         </div>
     </div>
 
@@ -15,7 +15,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header justify-content-between">
-                    <h4>Penjoki</h4>
+                    <h4>Karyawan</h4>
                     <a href="{{ route('admin.penjoki.add') }}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Tambah</a>
                 </div>
                 <div class="card-body">

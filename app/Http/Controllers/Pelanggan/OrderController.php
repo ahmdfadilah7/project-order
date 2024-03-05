@@ -64,9 +64,14 @@ class OrderController extends Controller
                 return $btn;
             })
             ->addColumn('action', function($row) {
-                $btn = '<a href="'.route('pelanggan.order.detail', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2">
+                $btn = '<a href="'.route('pelanggan.order.detail', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2" title="Lihat">
                         <i class="fas fa-eye"></i>
                     </a>';
+                if ($row->status == 0) {
+                    $btn .= '<a href="'.route('pelanggan.order.detail', $row->id).'" class="btn btn-success btn-sm mr-2 mb-2" title="Bayar">
+                            <i class="fas fa-money-bill"></i>
+                        </a>';
+                }
 
                 return $btn;
             })
