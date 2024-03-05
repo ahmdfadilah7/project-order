@@ -70,6 +70,7 @@
             $('body').on('click', '#group-chat', function() {
                 var userURL = $(this).data('url');
                 $.get(userURL, function(data) {
+                    $('#mychatbox .chat-content').empty();
                     document.getElementById('mychatbox').style.display = 'block';
 
                     $('#groupId').val(data.groupid);
