@@ -70,6 +70,35 @@
             });
             @endforeach
         @endif
+        
+
+        // Inside your Javascript file
+        function startTime() {
+            var today = new Date();
+            var h = today.getHours();
+            var m = today.getMinutes();
+            var s = today.getSeconds();
+            m = checkTime(m);
+            s = checkTime(s);
+            var text = "Selamat Pagi {{ Auth::user()->name }}, Jadilah yang terbaik dari yang terbaik."
+            if (h >= 12) {
+               var text = "Selamat Siang {{ Auth::user()->name }}, Jangan lupa makan dan istirahat sejenak."
+            } else if (h >= 15) {
+                var text = "Selamat Sore {{ Auth::user()->name }}, Kebahagiaan itu ada, jika kamu mau menjemputnya."
+            } else if (h >= 19) {
+                var text = "Selamat Malam {{ Auth::user()->name }}, Seberat apapun hal yang dihadapi jangan pernah menyerah."
+            }
+            var emoji = "&#128513;"
+
+            document.getElementById('time').innerHTML =
+            h + ":" + m + " " + text + " " + emoji;
+            var t = setTimeout(startTime, 500);
+        }
+        function checkTime(i) {
+            if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+            return i;
+        }
+        setInterval(startTime, 1000);
 
     })
 </script>

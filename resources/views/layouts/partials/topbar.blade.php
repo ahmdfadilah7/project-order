@@ -2,6 +2,7 @@
     <div class="mr-auto">
         <ul class="navbar-nav mr-3">
             <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
+            <li><div class="nav-link nav-link-lg"><span id="time"></span></div></li>
         </ul>
     </div>
     <ul class="navbar-nav navbar-right">
