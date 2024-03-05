@@ -132,6 +132,18 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .fab {
 .lead {
   line-height: 34px; }
 
+#time {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+@media (max-width: 1280px) {
+  #time {
+    font-size: 10px;
+    word-spacing: 0;
+  }
+}
+
 @media (max-width: 575.98px) {
   .lead {
     font-size: 17px;
