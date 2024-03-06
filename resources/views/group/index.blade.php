@@ -25,9 +25,14 @@
                                     data-url="{{ route('admin.group.chat', $row->id) }}" class="media">
                                     <figure class="avatar mr-2 bg-warning text-white" data-initial="GP"></figure>
                                     <div class="media-body">
-                                        <div class="mt-2 mb-1 font-weight-bold">{{ $row->name }}</div>
-                                        {{-- <div class="text-success text-small font-600-bold"><i class="fas fa-circle"></i> Online
-                                    </div> --}}
+                                        <div class="mb-1 font-weight-bold">{{ $row->name }}</div>
+                                        <div class="text-dark text-small font-600-bold">
+                                            {{-- <i class="fas fa-circle"></i> Online --}}
+                                            @php
+                                                $chat = App\Models\ChatGroup::where('group_id', $row->id)->latest('created_at')->first();
+                                                echo $chat->user->name.': '.$chat->message;
+                                            @endphp
+                                        </div>
                                     </div>
                                 </a>
                             </li>
