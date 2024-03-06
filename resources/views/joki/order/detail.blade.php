@@ -115,7 +115,7 @@
 
 @section('modal')
     @include('joki.order.partials.fileproject')
-    @include('joki.order.partials.modalactivity')
+    @include('joki.order.partials.modalActivity')
 @endsection
 
 @section('script')

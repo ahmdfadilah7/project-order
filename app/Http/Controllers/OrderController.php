@@ -151,4 +151,12 @@ class OrderController extends Controller
 
         return redirect()->route('admin.order')->with('berhasil', 'Berhasil menambahkan order baru.');
     }
+
+    public function destroy($id) 
+    {
+        $order = Order::find($id);
+        $order->delete();
+
+        return redirect()->route('admin.order')->with('berhasil', 'Berhasil menghapus order.');
+    }
 }

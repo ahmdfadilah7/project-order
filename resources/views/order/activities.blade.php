@@ -16,11 +16,19 @@
             <div class="col-12">
                 <div class="activities">
 
+                    @php
+                        $totalactivity = count($activity);
+                    @endphp
                     @foreach($activity as $key => $row)
                         @php
                             $icon = 'ion-arrow-down-c';
                         @endphp
                         @if($key == 0)
+                            @php
+                                $icon = 'ion-android-radio-button-on';
+                            @endphp
+                        @endif
+                        @if(++$key === $totalactivity)
                             @php
                                 $icon = 'ion-android-radio-button-on';
                             @endphp
