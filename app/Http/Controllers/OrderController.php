@@ -7,6 +7,7 @@ use App\Models\Activity;
 use App\Models\Group;
 use App\Models\Jenis;
 use App\Models\Order;
+use App\Models\Payment;
 use App\Models\Project;
 use App\Models\Setting;
 use App\Models\User;
@@ -22,8 +23,10 @@ class OrderController extends Controller
     public function index()
     {
         $setting = Setting::first();
+        
+        $status = array('DP 50%', 'LUNAS');
 
-        return view('order.index', compact('setting'));
+        return view('order.index', compact('setting', 'status'));
     }
 
     // Proses menampilkan data order dengan datatables
@@ -53,7 +56,28 @@ class OrderController extends Controller
                         </a>';
                 } else {
                     $btn = '<span class="badge badge-danger">Belum ada progress</span>';
+                }
+
+                return $btn;
+            })
+            ->addColumn('payment', function($row) {
+                if ($row->payment <> '') {
+                    if ($row->payment->status == 1) {
+                        $btn = '<a href="'.route('admin.order.detailPayment', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2">
+                                <i class="fas fa-eye"></i> DP 50%
+                            </a>';
+                    } elseif ($row->payment->status == 2) {
+                        $btn = '<a href="'.route('admin.order.detailPayment', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2">
+                                <i class="fas fa-eye"></i> LUNAS
+                            </a>';
+                    } else {
+                        $btn = '<a href="'.route('admin.order.detailPayment', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2">
+                                <i class="fas fa-eye"></i> Menunggu Konfirmasi
+                            </a>';
                     }
+                } else {
+                    $btn = '<span class="badge badge-danger">Belum ada pembayaran</span>';
+                }
 
                 return $btn;
             })
@@ -66,19 +90,70 @@ class OrderController extends Controller
                 return $status;
             })
             ->addColumn('action', function($row) {
-                $btn = '<a href="'.route('admin.order.detail', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2">
+                $btn = '<a href="'.route('admin.order.detail', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2" title="Lihat">
                         <i class="fas fa-eye"></i>
                     </a>';
-                $btn .= '<a href="'.route('admin.order.delete', $row->id).'" class="btn btn-danger btn-sm mr-2 mb-2">
+                if ($row->payment->status <> 2) {
+                    $btn .= '<a onClick="getOrder('.$row->id.')" href="#" class="btn btn-success btn-sm mr-2 mb-2" title="Bayar">
+                            <i class="fas fa-money-bill"></i>
+                        </a>';
+                }
+                $btn .= '<a href="'.route('admin.order.delete', $row->id).'" class="btn btn-danger btn-sm mr-2 mb-2" title="Hapus">
                         <i class="fas fa-trash"></i>
                     </a>';
 
                 return $btn;
             })
-            ->rawColumns(['action', 'progress', 'total', 'status', 'deadline'])
+            ->rawColumns(['action', 'progress', 'payment', 'total', 'status', 'deadline'])
             ->make(true);
 
         return $datatables;
+    }
+
+    // get order
+    public function getOrder($id)
+    {
+        $order = Order::find($id);
+
+        return json_encode($order);
+    }
+
+    // Proses Payment
+    public function payment(Request $request) 
+    {
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|mimes:png,jpg,jpeg,svg',
+            'status' => 'required'
+        ],
+        [
+            'required' => ':attribute wajib diisi!!!',
+            'mimes' => ':attribute harus berformat .png, .jpg, .jpeg'
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return back()->with('errors', $errors);
+        }
+
+        $file = $request->file('file');
+        $namafile = 'BuktiPembayaran'.Str::random(5).'.'.$file->extension();
+        $file->move(public_path('images/bukti_pembayaran/'), $namafile);
+        $fileNama = 'images/bukti_pembayaran/'.$namafile;
+
+        $payment = new Payment;
+        $payment->order_id = $request->order_id;
+        $payment->file = $fileNama;
+        $payment->status = $request->status;
+        $payment->save();
+
+        $countpayment = Payment::where('order_id', $request->order_id)->count();
+        if ($countpayment < 1) {
+            $order = Order::find($request->order_id);
+            $order->status = 1;
+            $order->save();
+        }
+
+        return redirect()->route('admin.order')->with('berhasil', 'Berhasil menambahkan pembayaran');
     }
 
     // Detail Order
@@ -103,6 +178,16 @@ class OrderController extends Controller
                           ->get();
 
         return view('order.activities', compact('setting', 'order', 'activity'));
+    }
+
+    // Detail Payment
+    public function show_payment($id)
+    {
+        $setting = Setting::first();
+
+        $order = Order::find($id);
+
+        return view('order.detailpayment', compact('setting', 'order'));
     }
 
     // Menampilkan halaman tambah order
@@ -152,6 +237,7 @@ class OrderController extends Controller
         return redirect()->route('admin.order')->with('berhasil', 'Berhasil menambahkan order baru.');
     }
 
+    // Proses menghapus order
     public function destroy($id) 
     {
         $order = Order::find($id);

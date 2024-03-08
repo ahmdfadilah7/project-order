@@ -39,4 +39,9 @@ class Order extends Model
     {
         return $this->hasOne(Activity::class)->orderBy('created_at', 'desc');
     }
+
+    public function payment(): HasOne
+    {
+        return $this->hasOne(Payment::class)->orderBy('created_at', 'desc');
+    }
 }

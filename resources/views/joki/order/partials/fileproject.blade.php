@@ -12,7 +12,7 @@
                 {!! Form::open(['method' => 'post', 'route' => ['penjoki.fileproject.store'], 'enctype' => 'multipart/form-data']) !!}
                     <div class="form-group">
                         <label>Project</label>
-                        <input type="hidden" name="project_id" value="{{ $order->project_id }}">
+                        <input type="hidden" name="order_id" value="{{ $order->id }}">
                         <input type="text" name="project" class="form-control" value="{{ $order->project->judul }}" readonly>
                     </div>
                     <div class="form-group">

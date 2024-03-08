@@ -28,9 +28,9 @@
                                 $icon = 'ion-android-radio-button-on';
                             @endphp
                         @endif
-                        @if(++$key === $totalactivity)
+                        @if($row->status == 1)
                             @php
-                                $icon = 'ion-android-radio-button-on';
+                                $icon = 'ion-android-checkmark-circle';
                             @endphp
                         @endif
                         

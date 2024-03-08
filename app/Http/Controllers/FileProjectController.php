@@ -13,7 +13,7 @@ use Yajra\DataTables\Facades\DataTables;
 class FileProjectController extends Controller
 {
     public function listData($id) {
-        $data = FileProject::where('project_id', $id)->get();
+        $data = FileProject::where('order_id', $id)->get();
         $datatables = DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('file', function($row) {
@@ -58,12 +58,12 @@ class FileProjectController extends Controller
         $fileName = 'file/'.$namafile;
 
         $fileproject = new FileProject;
-        $fileproject->project_id = $request->project_id;
+        $fileproject->order_id = $request->order_id;
         $fileproject->file = $fileName;
         $fileproject->keterangan = $request->keterangan;
         $fileproject->save();
 
-        return redirect()->route('admin.order.detail', $request->project_id)->with('berhasil', 'Berhasil menambahkan file project.');
+        return redirect()->route('admin.order.detail', $request->order_id)->with('berhasil', 'Berhasil menambahkan file project.');
     }
 
     public function destroy($id)
@@ -73,6 +73,6 @@ class FileProjectController extends Controller
 
         File::delete($fileproject->file);
 
-        return redirect()->route('admin.order.detail', $fileproject->project_id)->with('berhasil', 'Berhasil menghapus file project.');
+        return redirect()->route('admin.order.detail', $fileproject->order_id)->with('berhasil', 'Berhasil menghapus file project.');
     }
 }

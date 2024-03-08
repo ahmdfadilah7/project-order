@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdministratorController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileProjectController;
@@ -54,11 +55,14 @@ Route::group(['middleware' => ['auth:admin', 'role:admin']], function () {
     Route::post('admin/group/chatadd', [GroupController::class, 'store'])->name('admin.group.chatadd');
 
     Route::get('admin/order', [OrderController::class, 'index'])->name('admin.order');
+    Route::get('admin/order/get_order/{id}', [OrderController::class, 'getOrder'])->name('admin.order.get_order');
     Route::get('admin/order/getListData', [OrderController::class, 'listData'])->name('admin.order.list');
     Route::get('admin/order/add', [OrderController::class, 'create'])->name('admin.order.add');
     Route::get('admin/order/detail/{id}', [OrderController::class, 'show'])->name('admin.order.detail');
+    Route::get('admin/order/detailPayment/{id}', [OrderController::class, 'show_payment'])->name('admin.order.detailPayment');
     Route::get('admin/order/activities/{id}', [OrderController::class, 'activity'])->name('admin.order.activities');
     Route::post('admin/order/store', [OrderController::class, 'store'])->name('admin.order.store');
+    Route::post('admin/order/payment', [OrderController::class, 'payment'])->name('admin.order.payment');
     Route::get('admin/order/{id}', [OrderController::class, 'edit'])->name('admin.order.edit');
     Route::put('admin/order/update/{id}', [OrderController::class, 'update'])->name('admin.order.update');
     Route::get('admin/order/delete/{id}', [OrderController::class, 'destroy'])->name('admin.order.delete');
@@ -70,6 +74,14 @@ Route::group(['middleware' => ['auth:admin', 'role:admin']], function () {
     Route::get('admin/pelanggan/{id}', [PelangganController::class, 'edit'])->name('admin.pelanggan.edit');
     Route::put('admin/pelanggan/update/{id}', [PelangganController::class, 'update'])->name('admin.pelanggan.update');
     Route::get('admin/pelanggan/delete/{id}', [PelangganController::class, 'destroy'])->name('admin.pelanggan.delete');
+
+    Route::get('admin/administrator', [AdministratorController::class, 'index'])->name('admin.administrator');
+    Route::get('admin/administrator/getListData', [AdministratorController::class, 'listData'])->name('admin.administrator.list');
+    Route::get('admin/administrator/add', [AdministratorController::class, 'create'])->name('admin.administrator.add');
+    Route::post('admin/administrator/store', [AdministratorController::class, 'store'])->name('admin.administrator.store');
+    Route::get('admin/administrator/{id}', [AdministratorController::class, 'edit'])->name('admin.administrator.edit');
+    Route::put('admin/administrator/update/{id}', [AdministratorController::class, 'update'])->name('admin.administrator.update');
+    Route::get('admin/administrator/delete/{id}', [AdministratorController::class, 'destroy'])->name('admin.administrator.delete');
 
     Route::get('admin/penjoki', [PenjokiController::class, 'index'])->name('admin.penjoki');
     Route::get('admin/penjoki/getListData', [PenjokiController::class, 'listData'])->name('admin.penjoki.list');
@@ -137,6 +149,9 @@ Route::group(['middleware' => ['xss', 'auth:pelanggan', 'role:pelanggan']], func
     Route::get('pelanggan/dashboard', [PelangganDashboardController::class, 'index'])->name('pelanggan.dashboard');
 
     Route::get('pelanggan/order', [PelangganOrderController::class, 'index'])->name('pelanggan.order');
+    Route::get('pelanggan/order/get_order/{id}', [PelangganOrderController::class, 'getOrder'])->name('pelanggan.order.get_order');
+    Route::get('pelanggan/order/detailPayment/{id}', [PelangganOrderController::class, 'show_payment'])->name('pelanggan.order.detailPayment');
+    Route::post('pelanggan/order/payment', [PelangganOrderController::class, 'payment'])->name('pelanggan.order.payment');
     Route::get('pelanggan/order/getListData', [PelangganOrderController::class, 'listData'])->name('pelanggan.order.list');
     Route::get('pelanggan/order/detail/{id}', [PelangganOrderController::class, 'show'])->name('pelanggan.order.detail');
     Route::get('pelanggan/order/activities/{id}', [PelangganOrderController::class, 'activity'])->name('pelanggan.order.activities');

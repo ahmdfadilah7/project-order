@@ -71,4 +71,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Activity::class);
     }
+
+    public function access(): HasOne
+    {
+        return $this->hasOne(UserAccess::class);
+    }
 }

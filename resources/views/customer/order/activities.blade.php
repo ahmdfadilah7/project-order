@@ -38,7 +38,7 @@
                                 <div class="mb-2">
                                     <span class="text-job">{{ \Carbon\Carbon::parse($row->created_at)->diffForHumans() }}</span>
                                     <span class="bullet"></span>
-                                    <a class="text-job" href="#">{{ $row->user->name }}</a>
+                                    <a class="text-job" href="#">Anonimous</a>
                                 </div>
                                 <p>{{ $row->judul_aktivitas }}</p>
                             </div>

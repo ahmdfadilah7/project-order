@@ -21,17 +21,22 @@
                 <li class="menu-header">Chatting</li>
                 <li @if(Request::segment(2)=='group') class="active" @endif><a class="nav-link" href="{{ route('admin.group') }}"><i class="ion ion-chatbubbles"></i> <span>Group</span></a></li>
 
-                <li class="menu-header">Page</li>
-                <li @if(Request::segment(2)=='project') class="active" @endif><a class="nav-link" href="{{ route('admin.project') }}"><i class="fas fa-file"></i> <span>Project</span></a></li>
-                <li @if(Request::segment(2)=='jenis') class="active" @endif><a class="nav-link" href="{{ route('admin.jenis') }}"><i class="fas fa-file"></i> <span>Jenis Order</span></a></li>
+                @if(Auth::user()->access->access <> 'Admin QC')
+                
+                    <li class="menu-header">Page</li>
+                    <li @if(Request::segment(2)=='project') class="active" @endif><a class="nav-link" href="{{ route('admin.project') }}"><i class="fas fa-file"></i> <span>Project</span></a></li>
+                    <li @if(Request::segment(2)=='jenis') class="active" @endif><a class="nav-link" href="{{ route('admin.jenis') }}"><i class="fas fa-file"></i> <span>Jenis Order</span></a></li>
 
-                <li class="menu-header">Management User</li>
-                <li @if(Request::segment(2)=='penjoki') class="active" @endif><a class="nav-link" href="{{ route('admin.penjoki') }}"><i class="fas fa-users"></i> <span>Karyawan</span></a></li>
-                <li @if(Request::segment(2)=='pelanggan') class="active" @endif><a class="nav-link" href="{{ route('admin.pelanggan') }}"><i class="fas fa-users"></i> <span>Pelanggan</span></a></li>
+                    <li class="menu-header">Management User</li>
+                    <li @if(Request::segment(2)=='penjoki') class="active" @endif><a class="nav-link" href="{{ route('admin.penjoki') }}"><i class="fas fa-users"></i> <span>Karyawan</span></a></li>
+                    <li @if(Request::segment(2)=='pelanggan') class="active" @endif><a class="nav-link" href="{{ route('admin.pelanggan') }}"><i class="fas fa-users"></i> <span>Pelanggan</span></a></li>
+                    <li @if(Request::segment(2)=='administrator') class="active" @endif><a class="nav-link" href="{{ route('admin.administrator') }}"><i class="fas fa-users"></i> <span>Administrator</span></a></li>
 
+                    <li class="menu-header">Settings</li>
+                    <li @if(Request::segment(2)=='setting') class="active" @endif><a href="{{ route('admin.setting') }}" class="nav-link"><i class="fas ion-ios-gear"></i> <span>Setting Website</span></a></li>
+                    
+                @endif
 
-                <li class="menu-header">Settings</li>
-                <li @if(Request::segment(2)=='setting') class="active" @endif><a href="{{ route('admin.setting') }}" class="nav-link"><i class="fas ion-ios-gear"></i> <span>Setting Website</span></a></li>
 
             @elseif(Auth::user()->role == 'penjoki')
 

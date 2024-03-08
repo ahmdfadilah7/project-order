@@ -144,6 +144,12 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .fab {
   }
 }
 
+@media (max-width: 540px) {
+  #time {
+    display: none;
+  }
+}
+
 @media (max-width: 575.98px) {
   .lead {
     font-size: 17px;

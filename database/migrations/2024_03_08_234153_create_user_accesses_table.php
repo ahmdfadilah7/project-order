@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('file_projects', function (Blueprint $table) {
+        Schema::create('user_accesses', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('order_id');
-            $table->longText('file');
-            $table->longText('keterangan')->nullable();
+            $table->unsignedBigInteger('user_id');
+            $table->string('access');
             $table->timestamps();
-            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('file_projects');
+        Schema::dropIfExists('user_accesses');
     }
 };

@@ -32,6 +32,7 @@
                                     <th>Total</th>
                                     <th>Deadline</th>
                                     <th>Progress</th>
+                                    <th>Pembayaran</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -46,6 +47,10 @@
         </div>
     </div>
 
+@endsection
+
+@section('modal')
+    @include('order.partials.payment')
 @endsection
 
 @section('script')
@@ -94,6 +99,12 @@
                         searchable: false
                     },
                     {
+                        data: 'payment',
+                        name: 'payment',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
                         data: 'status',
                         name: 'status'
                     },
@@ -106,6 +117,19 @@
                 ]
             });
         });
+
+        function getOrder(id) {
+            var url = '{{ url("admin/order/get_order") }}/' + id;
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    $('#paymentModal').modal('show');
+                    $('#orderId').val(data.id);
+                }
+            })
+        }
     </script>
 
 @endsection

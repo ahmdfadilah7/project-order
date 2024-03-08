@@ -5,9 +5,9 @@
 @section('content')
 
     <div class="section-header">
-        <h1>Order</h1>
+        <h1>Administrator</h1>
         <div class="section-header-breadcrumb">
-            <div class="breadcrumb-item active"><a href="{{ route('pelanggan.order') }}">Order</a></div>
+            <div class="breadcrumb-item active"><a href="{{ route('admin.administrator') }}">Administrator</a></div>
         </div>
     </div>
 
@@ -15,7 +15,8 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header justify-content-between">
-                    <h4>Order</h4>
+                    <h4>Administrator</h4>
+                    <a href="{{ route('admin.administrator.add') }}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Tambah</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -25,12 +26,9 @@
                                     <th class="text-center">
                                         #
                                     </th>
-                                    <th>Project</th>
-                                    <th>Jenis</th>
-                                    <th>Deadline</th>
-                                    <th>Progress Project</th>
-                                    <th>Pembayaran</th>
-                                    <th>Status</th>
+                                    <th>Nama Lengkap</th>
+                                    <th>Email</th>
+                                    <th>Akses</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -46,10 +44,6 @@
 
 @endsection
 
-@section('modal')
-    @include('customer.order.partials.payment')
-@endsection
-
 @section('script')
 
     <script>
@@ -59,7 +53,7 @@
                 serverSide: true,
                 'ordering': 'true',
                 ajax: {
-                    url: "{{ route('pelanggan.order.list') }}",
+                    url: "{{ route('admin.administrator.list') }}",
                     data: function(d) {}
                 },
                 columns: [
@@ -70,55 +64,26 @@
                         searchable: false
                     },
                     {
-                        data: 'project',
-                        name: 'project'
+                        data: 'name',
+                        name: 'name'
                     },
                     {
-                        data: 'jenis',
-                        name: 'jenis'
+                        data: 'email',
+                        name: 'email'
                     },
                     {
-                        data: 'deadline',
-                        name: 'deadline'
-                    },
-                    {
-                        data: 'progress',
-                        name: 'progress',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'payment',
-                        name: 'payment',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'status',
-                        name: 'status'
+                        data: 'access',
+                        name: 'access'
                     },
                     {
                         data: 'action',
                         name: 'action',
                         orderable: false,
                         searchable: false
-                    },
+                    }
                 ]
             });
         });
-
-        function getOrder(id) {
-            var url = '{{ url("pelanggan/order/get_order") }}/' + id;
-            $.ajax({
-                url: url,
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    $('#paymentModal').modal('show');
-                    $('#orderId').val(data.id);
-                }
-            })
-        }
     </script>
 
 @endsection
