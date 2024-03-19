@@ -37,7 +37,7 @@ class GroupController extends Controller
             if ($row->user->role == 'pelanggan') {
                 $name = "Anonimous";
             }
-            $time = Carbon::parse($row->created_at)->format('H:i');
+            $time = Carbon::parse($row->created_at)->diffForHumans();
 
             if ($row->user->role == 'admin') {
                 $picture = url('images/avatar-5.png');
@@ -82,7 +82,7 @@ class GroupController extends Controller
         if ($chat->user->role == 'pelanggan') {
             $name = 'Anonimous';
         }
-        $time = Carbon::parse($chat->created_at)->format('H:i');
+        $time = Carbon::parse($chat->created_at)->diffForHumans();
 
         if ($chat->user->role == 'admin') {
             $picture = url('images/avatar-5.png');
@@ -135,7 +135,7 @@ class GroupController extends Controller
             broadcast(new MessageBroadcast($chat))->toOthers();
     
             $name = $chat->user->name;
-            $time = Carbon::parse($chat->created_at)->format('H:i');
+            $time = Carbon::parse($chat->created_at)->diffForHumans();
     
             if ($chat->user->role == 'admin') {
                 $picture = url('images/avatar-5.png');

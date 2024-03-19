@@ -22,11 +22,12 @@
                         @foreach ($group as $row)
                             <li>
                                 <a href="javascript:void(0)" id="group-chat"
-                                    data-url="{{ route('pelanggan.group.chat', $row->id) }}" class="media">
+                                    data-url="{{ route('pelanggan.group.chat', $row->id) }}" 
+                                    data-groupId="{{ $row->id }}" class="media">
                                     <figure class="avatar mr-2 bg-warning text-white" data-initial="GP"></figure>
                                     <div class="media-body">
                                         <div class="mb-1 font-weight-bold">{{ $row->name }}</div>
-                                        <div class="text-dark text-small font-600-bold">
+                                        <div class="text-dark text-small font-600-bold" id="infoChat{{ $row->id }}">
                                             {{-- <i class="fas fa-circle"></i> Online --}}
                                             @php
                                                 $chat = App\Models\ChatGroup::where('group_id', $row->id)->latest('created_at')->first();
@@ -78,6 +79,7 @@
             /* When click show user */
             $('body').on('click', '#group-chat', function() {
                 var userURL = $(this).data('url');
+                var groupID = $(this).data('groupId');
                 $.get(userURL, function(data) {
                     $('#mychatbox .chat-content').empty();
                     document.getElementById('mychatbox').style.display = 'block';
@@ -102,8 +104,15 @@
 
                 channel.bind('chat', function (data) {
                     var url = "{{ url('pelanggan/group/receive') }}/" + data.message.id
+                    if (groupID == data.message.group_id) {
+                        $.get(url, function (data) {
+                            $.chatCtrl('#mychatbox', data);
+                        });
+                    }
+
+                    var infoChatgroup = 'infoChat'+data.message.group_id
                     $.get(url, function (data) {
-                        $.chatCtrl('#mychatbox', data);
+                        document.getElementById(infoChatgroup).innerHTML = data.name + ': ' + data.text;
                     });
                 });
             });
