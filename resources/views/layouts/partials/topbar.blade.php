@@ -83,6 +83,14 @@
                     <a href="{{ route('admin.administrator.edit', Auth::user()->id) }}" class="dropdown-item has-icon">
                         <i class="far fa-user"></i> Profil
                     </a>
+                @elseif(Auth::user()->role == 'pelanggan')
+                    <a href="{{ route('pelanggan.profile') }}" class="dropdown-item has-icon">
+                        <i class="far fa-user"></i> Profil
+                    </a>
+                @elseif(Auth::user()->role == 'penjoki')
+                    <a href="{{ route('penjoki.profile') }}" class="dropdown-item has-icon">
+                        <i class="far fa-user"></i> Profil
+                    </a>
                 @endif
 
                 <div class="dropdown-divider"></div>

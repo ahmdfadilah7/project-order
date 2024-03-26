@@ -26,28 +26,28 @@
                     <div class="form-group row mb-4">
                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Nama Lengkap</label>
                         <div class="col-sm-12 col-md-7">
-                            <input type="text" name="nama_lengkap" class="form-control" value="{{ old('nama_lengkap') }}">
+                            <input type="text" name="nama_lengkap" class="form-control" value="{{ old('nama_lengkap') }}" autocomplete="off">
                             <i class="text-danger">{{ $errors->first('nama_lengkap') }}</i>
                         </div>
                     </div>
                     <div class="form-group row mb-4">
                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">No Telp</label>
                         <div class="col-sm-12 col-md-7">
-                            <input type="number" name="no_telp" class="form-control" value="{{ old('no_telp') }}">
+                            <input type="number" name="no_telp" class="form-control" value="{{ old('no_telp') }}" autocomplete="off">
                             <i class="text-danger">{{ $errors->first('no_telp') }}</i>
                         </div>
                     </div>
                     <div class="form-group row mb-4">
                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Tempat Lahir</label>
                         <div class="col-sm-12 col-md-7">
-                            <input type="text" name="tempat_lahir" class="form-control" value="{{ old('tempat_lahir') }}">
+                            <input type="text" name="tempat_lahir" class="form-control" value="{{ old('tempat_lahir') }}" autocomplete="off">
                             <i class="text-danger">{{ $errors->first('tempat_lahir') }}</i>
                         </div>
                     </div>
                     <div class="form-group row mb-4">
                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Tanggal Lahir</label>
                         <div class="col-sm-12 col-md-7">
-                            <input type="date" name="tanggal_lahir" class="form-control" value="{{ old('tanggal_lahir') }}">
+                            <input type="date" name="tanggal_lahir" class="form-control" value="{{ old('tanggal_lahir') }}" autocomplete="off">
                             <i class="text-danger">{{ $errors->first('tanggal_lahir') }}</i>
                         </div>
                     </div>
@@ -75,7 +75,7 @@
                     <div class="form-group row mb-4">
                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Email</label>
                         <div class="col-sm-12 col-md-7">
-                            <input type="email" name="email" class="form-control" value="{{ old('email') }}">
+                            <input type="email" name="email" class="form-control" value="{{ old('email') }}" autocomplete="off">
                             <i class="text-danger">{{ $errors->first('email') }}</i>
                         </div>
                     </div>

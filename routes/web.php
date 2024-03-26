@@ -12,6 +12,7 @@ use App\Http\Controllers\Pelanggan\DashboardController as PelangganDashboardCont
 use App\Http\Controllers\Pelanggan\FileProjectController as PelangganFileProjectController;
 use App\Http\Controllers\Pelanggan\GroupController as PelangganGroupController;
 use App\Http\Controllers\Pelanggan\OrderController as PelangganOrderController;
+use App\Http\Controllers\Pelanggan\ProfileController;
 use App\Http\Controllers\PenjokiController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\Penjoki\ActivitiesController;
@@ -19,6 +20,7 @@ use App\Http\Controllers\Penjoki\DashboardController as PenjokiDashboardControll
 use App\Http\Controllers\Penjoki\FileProjectController as PenjokiFileProjectController;
 use App\Http\Controllers\Penjoki\GroupController as PenjokiGroupController;
 use App\Http\Controllers\Penjoki\OrderController as PenjokiOrderController;
+use App\Http\Controllers\Penjoki\ProfileController as PenjokiProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Route;
@@ -121,6 +123,9 @@ Route::group(['middleware' => ['xss', 'auth:penjoki', 'role:penjoki']], function
 
     Route::get('penjoki/dashboard', [PenjokiDashboardController::class, 'index'])->name('penjoki.dashboard');
 
+    Route::get('penjoki/profile', [PenjokiProfileController::class, 'index'])->name('penjoki.profile');
+    Route::put('penjoki/profile/update/{id}', [PenjokiProfileController::class, 'update'])->name('penjoki.profile.update');
+
     Route::get('penjoki/group', [PenjokiGroupController::class, 'index'])->name('penjoki.group');
     Route::get('penjoki/group/chat/{id}', [PenjokiGroupController::class, 'chat'])->name('penjoki.group.chat');
     Route::get('penjoki/group/receive/{id}', [PenjokiGroupController::class, 'receive'])->name('penjoki.group.receive');
@@ -147,6 +152,9 @@ Route::group(['middleware' => ['xss', 'auth:penjoki', 'role:penjoki']], function
 Route::group(['middleware' => ['xss', 'auth:pelanggan', 'role:pelanggan']], function () {
 
     Route::get('pelanggan/dashboard', [PelangganDashboardController::class, 'index'])->name('pelanggan.dashboard');
+
+    Route::get('pelanggan/profile', [ProfileController::class, 'index'])->name('pelanggan.profile');
+    Route::put('pelanggan/profile/update/{id}', [ProfileController::class, 'update'])->name('pelanggan.profile.update');
 
     Route::get('pelanggan/order', [PelangganOrderController::class, 'index'])->name('pelanggan.order');
     Route::get('pelanggan/order/get_order/{id}', [PelangganOrderController::class, 'getOrder'])->name('pelanggan.order.get_order');
