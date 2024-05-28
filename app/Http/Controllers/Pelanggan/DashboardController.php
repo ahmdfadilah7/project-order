@@ -16,12 +16,9 @@ class DashboardController extends Controller
     public function index()
     {
         $setting = Setting::first();
-        $project = Project::where('user_id', Auth::guard('pelanggan')->user()->id)->get();
-        $order = array();
-        foreach ($project as $row) {
-            $order[] = Order::where('project_id', $row->id)->count();
-        }
-        $totalorder = array_sum($order);
+        $order = Order::where('pelanggan_id', Auth::guard('pelanggan')->user()->id)->count();
+        
+        $totalorder = $order;
         $totalproject = Project::count();
         $totalpenjoki = User::where('role', 'penjoki')->count();
         $totalpelanggan = User::where('role', 'pelanggan')->count();

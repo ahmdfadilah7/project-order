@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@include('layouts.partials.css')
-@include('layouts.partials.js')
+@include('group.partials.css')
+@include('group.partials.js')
 
 @section('content')
     <div class="section-header">
@@ -11,9 +11,56 @@
     </div>
 
     <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    {!! Form::open(['method' => 'post', 'route' => ['admin.group.store']]) !!}
+                        <div class="row">
+                            <div class="col-md-3 col-sm-12">
+                                <div class="form-group">
+                                    <label for="">Nama Group</label>
+                                    <input type="text" name="nama_group" class="form-control" placeholder="Nama Group" autocomplete="off">
+                                    <i class="text-danger">{{ $errors->first('nama_group') }}</i>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-12">
+                                <div class="form-group">
+                                    <label>Karyawan</label>
+                                    <select name="karyawan" class="form-control select2">
+                                        <option value="">- Pilih -</option>
+                                        @foreach ($penjoki as $row)
+                                            <option value="{{ $row->id }}" @if(old('karyawan')==$row->id) selected @endif>{{ $row->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <i class="text-danger">{{ $errors->first('karyawan') }}</i>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                                <div class="form-group">
+                                    <label>Pelanggan</label>
+                                    <select name="pelanggan" class="form-control select2">
+                                        <option value="">- Pilih -</option>
+                                        @foreach ($user as $row)
+                                            <option value="{{ $row->id }}" @if(old('pelanggan')==$row->id) selected @endif>{{ $row->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <i class="text-danger">{{ $errors->first('pelanggan') }}</i>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-12 pt-1">
+                                <button type="submit" class="btn btn-success mt-4"><i class="fa fa-save"></i> Tambah</button>
+                            </div>
+                        </div>
+                    {!! Form::close() !!}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-md-4">
             <div class="card">
-                <div class="card-header justify-content-between">
+                <div class="card-header d-flex justify-content-between">
                     <h4>Group</h4>
                 </div>
                 <div class="card-body">
@@ -31,7 +78,9 @@
                                             {{-- <i class="fas fa-circle"></i> Online --}}
                                             @php
                                                 $chat = App\Models\ChatGroup::where('group_id', $row->id)->latest('created_at')->first();
-                                                echo $chat->user->name.': '.$chat->message;
+                                                if ($chat <> '') {
+                                                    echo $chat->user->name.': '.$chat->message;
+                                                }
                                             @endphp
                                         </div>
                                     </div>
@@ -45,8 +94,9 @@
 
         <div class="col-md-8 col-sm-12">
             <div class="card chat-box" id="mychatbox" style="display: none;">
-                <div class="card-header">
+                <div class="card-header d-flex">
                     <h4 id="titleboxchat"></h4>
+                    <p id="membergroup"></p>
                 </div>
                 <div class="card-body chat-content">
                 </div>
@@ -67,6 +117,7 @@
 
 @section('script')
     <script>
+
         $(document).ready(function() {
 
             const pusher = new Pusher('{{ config('broadcasting.connections.pusher.key') }}', { cluster: 'ap1' });
@@ -82,6 +133,7 @@
 
                     $('#groupId').val(data.groupid);
                     $('#titleboxchat').html(data.title);
+                    $('#membergroup').html(data.member);
                     var chats = data.chat;
 
                     for (var i = 0; i < chats.length; i++) {

@@ -9,7 +9,7 @@
         <div class="section-header-breadcrumb">
             <div class="breadcrumb-item"><a href="{{ route('admin.order') }}">Order</a></div>
             <div class="breadcrumb-item">Detail Pembayaran</div>
-            <div class="breadcrumb-item active">{{ $order->project->judul }}</div>
+            <div class="breadcrumb-item active">{{ $order->judul }}</div>
         </div>
     </div>
 
@@ -29,17 +29,17 @@
                         <tr>
                             <th>Pelanggan</th>
                             <th width="20">:</th>
-                            <td>{{ $order->project->user->name }}</td>
+                            <td>{{ $order->pelanggan->name }}</td>
                         </tr>
                         <tr>
                             <th>Deadline</th>
                             <th width="20">:</th>
-                            <td>{{ \Carbon\Carbon::parse($order->project->deadline)->format('d M Y') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($order->deadline)->format('d M Y') }}</td>
                         </tr>
                         <tr>
                             <th>Judul</th>
                             <th width="20">:</th>
-                            <td>{{ $order->project->judul }}</td>
+                            <td>{{ $order->judul }}</td>
                         </tr>
                         <tr>
                             <th>Status Payment</th>
@@ -64,7 +64,7 @@
                                     @endphp
                                     @foreach($payment as $key => $row)
 
-                                        <div class="gallery-item" data-image="{{ url($row->file) }}" data-title="{{ $order->project->judul }}">
+                                        <div class="gallery-item" data-image="{{ url($row->file) }}" data-title="{{ $order->judul }}">
                                         </div>
 
                                     @endforeach

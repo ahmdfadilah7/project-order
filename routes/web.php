@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdministratorController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BobotController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileProjectController;
 use App\Http\Controllers\GroupController;
@@ -52,6 +53,7 @@ Route::group(['middleware' => ['auth:admin', 'role:admin']], function () {
     Route::get('admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
     Route::get('admin/group', [GroupController::class, 'index'])->name('admin.group');
+    Route::post('admin/group/store', [GroupController::class, 'store_group'])->name('admin.group.store');
     Route::get('admin/group/chat/{id}', [GroupController::class, 'chat'])->name('admin.group.chat');
     Route::get('admin/group/receive/{id}', [GroupController::class, 'receive'])->name('admin.group.receive');
     Route::post('admin/group/chatadd', [GroupController::class, 'store'])->name('admin.group.chatadd');
@@ -112,6 +114,14 @@ Route::group(['middleware' => ['auth:admin', 'role:admin']], function () {
     Route::get('admin/jenis/{id}', [JenisController::class, 'edit'])->name('admin.jenis.edit');
     Route::put('admin/jenis/update/{id}', [JenisController::class, 'update'])->name('admin.jenis.update');
     Route::get('admin/jenis/delete/{id}', [JenisController::class, 'destroy'])->name('admin.jenis.delete');
+
+    Route::get('admin/bobot', [BobotController::class, 'index'])->name('admin.bobot');
+    Route::get('admin/bobot/getListData', [BobotController::class, 'listData'])->name('admin.bobot.list');
+    Route::get('admin/bobot/add', [BobotController::class, 'create'])->name('admin.bobot.add');
+    Route::post('admin/bobot/store', [BobotController::class, 'store'])->name('admin.bobot.store');
+    Route::get('admin/bobot/{id}', [BobotController::class, 'edit'])->name('admin.bobot.edit');
+    Route::put('admin/bobot/update/{id}', [BobotController::class, 'update'])->name('admin.bobot.update');
+    Route::get('admin/bobot/delete/{id}', [BobotController::class, 'destroy'])->name('admin.bobot.delete');
 
     Route::get('admin/setting', [SettingController::class, 'index'])->name('admin.setting');
     Route::get('admin/setting/getListData', [SettingController::class, 'listData'])->name('admin.setting.list');

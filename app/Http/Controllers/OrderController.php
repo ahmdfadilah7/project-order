@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\AllHelper;
 use App\Models\Activity;
+use App\Models\Bobot;
 use App\Models\Group;
 use App\Models\Jenis;
 use App\Models\Order;
@@ -37,14 +38,17 @@ class OrderController extends Controller
             ->addColumn('penjoki', function($row) {
                 return $row->user->name;
             })
-            ->addColumn('project', function($row) {
-                return $row->project->judul.' - '.$row->project->user->name;
+            ->addColumn('pelanggan', function($row) {
+                return $row->pelanggan->name;
             })
             ->addColumn('deadline', function($row) {
-                return Carbon::parse($row->project->deadline)->format('d M Y');
+                return Carbon::parse($row->deadline)->format('d M Y');
             })
             ->addColumn('jenis', function($row) {
                 return $row->jenis->judul;
+            })
+            ->addColumn('bobot', function($row) {
+                return strtoupper($row->bobot->bobot);
             })
             ->addColumn('total', function($row) {
                 return AllHelper::rupiah($row->total);
@@ -55,7 +59,7 @@ class OrderController extends Controller
                             <i class="fas fa-eye"></i> '.$row->activity->judul_aktivitas.'
                         </a>';
                 } else {
-                    $btn = '<span class="badge badge-danger">Belum ada progress</span>';
+                    $btn = '<span class="badge badge-danger"><i class="fas fa-exclamation-triangle"></i> Belum ada progress</span>';
                 }
 
                 return $btn;
@@ -76,16 +80,16 @@ class OrderController extends Controller
                             </a>';
                     }
                 } else {
-                    $btn = '<span class="badge badge-danger">Belum ada pembayaran</span>';
+                    $btn = '<span class="badge badge-danger"><i class="fas fa-exclamation-triangle"></i> Belum ada pembayaran</span>';
                 }
 
                 return $btn;
             })
             ->addColumn('status', function($row) {
                 if ($row->status == 0) {
-                    $status = '<span class="badge badge-warning">Belum dibayar</span>';
+                    $status = '<span class="badge badge-warning"><i class="fas fa-exclamation-triangle"></i> Belum dibayar</span>';
                 } elseif ($row->status == 1) {
-                    $status = '<span class="badge badge-primary">Sedang diproses</span>';
+                    $status = '<span class="badge badge-primary"><i class="ion ion-load-a"></i> Sedang diproses</span>';
                 }
                 return $status;
             })
@@ -93,10 +97,16 @@ class OrderController extends Controller
                 $btn = '<a href="'.route('admin.order.detail', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2" title="Lihat">
                         <i class="fas fa-eye"></i>
                     </a>';
-                if ($row->payment->status <> 2) {
+                if ($row->payment == '') {
                     $btn .= '<a onClick="getOrder('.$row->id.')" href="#" class="btn btn-success btn-sm mr-2 mb-2" title="Bayar">
                             <i class="fas fa-money-bill"></i>
                         </a>';
+                } else {
+                    if ($row->payment->status <> 2) {
+                        $btn .= '<a onClick="getOrder('.$row->id.')" href="#" class="btn btn-success btn-sm mr-2 mb-2" title="Pelunasan">
+                            <i class="fas fa-money-bill"></i>
+                        </a>';
+                    }
                 }
                 $btn .= '<a href="'.route('admin.order.delete', $row->id).'" class="btn btn-danger btn-sm mr-2 mb-2" title="Hapus">
                         <i class="fas fa-trash"></i>
@@ -147,7 +157,7 @@ class OrderController extends Controller
         $payment->save();
 
         $countpayment = Payment::where('order_id', $request->order_id)->count();
-        if ($countpayment < 1) {
+        if ($countpayment > 0) {
             $order = Order::find($request->order_id);
             $order->status = 1;
             $order->save();
@@ -195,10 +205,11 @@ class OrderController extends Controller
     {
         $setting = Setting::first();
         $penjoki = User::where('role', 'penjoki')->orderBy('id', 'desc')->get();
-        $project = Project::orderBy('id', 'desc')->get();
+        $user = User::where('role', 'pelanggan')->get();
         $jenis = Jenis::orderBy('id', 'desc')->get();
+        $bobot = Bobot::orderBy('id', 'desc')->get();
 
-        return view('order.add', compact('setting', 'penjoki', 'project', 'jenis'));
+        return view('order.add', compact('setting', 'penjoki', 'jenis', 'bobot', 'user'));
     }
 
     // Proses menambahkan order
@@ -206,8 +217,12 @@ class OrderController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'penjoki' => 'required',
-            'project' => 'required',
+            'pelanggan' => 'required',
+            'judul' => 'required',
+            'deskripsi' => 'required',
+            'deadline' => 'required',
             'jenis' => 'required',
+            'bobot' => 'required',
             'total' => 'required',
         ]);
 
@@ -216,20 +231,15 @@ class OrderController extends Controller
             return back()->with('errors', $errors)->withInput($request->all());
         }
 
-        $project = Project::find($request->project);
-        
-        $nama_group = 'CL-'.substr($project->user->name, 0, 1).date('m').strtoupper(Str::random(3));
-        
-        $group = new Group;
-        $group->name = $nama_group;
-        $group->pelanggan_id = $project->user_id;
-        $group->penjoki_id = $request->penjoki;
-        $group->save();
-
         Order::create([
             'user_id' => $request->get('penjoki'),
-            'project_id' => $request->get('project'),
+            'pelanggan_id' => $request->pelanggan,
             'jenis_id' => $request->get('jenis'),
+            'bobot_id' => $request->get('bobot'),
+            'judul' => $request->judul,
+            'deskripsi' => $request->deskripsi,
+            'keterangan' => $request->keterangan,
+            'deadline' => $request->deadline,
             'total' => str_replace(',', '', $request->get('total')),
             'status' => 0
         ]);

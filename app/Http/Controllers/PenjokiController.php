@@ -25,7 +25,7 @@ class PenjokiController extends Controller
     // Proses menampilkan data penjoki dengan datatables
     public function listData()
     {
-        $data = User::where('role', 'penjoki');
+        $data = User::where('role', 'penjoki')->orderBy('name', 'asc');
         $datatables = DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('no_telp', function($row) {
@@ -63,10 +63,8 @@ class PenjokiController extends Controller
             'nama_lengkap' => 'required',
             'email' => 'required|email|unique:users,email',
             'no_telp' => 'required|numeric|unique:profiles,no_telp',
-            'tempat_lahir' => 'required',
-            'tanggal_lahir' => 'required',
             'jenis_kelamin' => 'required',
-            'foto' => 'required|mimes:jpg,jpeg,png,webp,svg',
+            'foto' => 'mimes:jpg,jpeg,png,webp,svg',
             'password' => 'required|min:8'
         ]);
 
@@ -82,10 +80,14 @@ class PenjokiController extends Controller
         $user->password = Hash::make($request->get('password'));
         $user->save();
 
-        $foto = $request->file('foto');
-        $namafoto = 'Profile-'.str_replace(' ', '-', $request->get('nama_lengkap')).Str::random(5).'.'.$foto->extension();
-        $foto->move(public_path('images/'), $namafoto);
-        $fotoNama = 'images/'.$namafoto;
+        if ($request->foto <> '') {
+            $foto = $request->file('foto');
+            $namafoto = 'Profile-'.str_replace(' ', '-', $request->get('nama_lengkap')).Str::random(5).'.'.$foto->extension();
+            $foto->move(public_path('images/'), $namafoto);
+            $fotoNama = 'images/'.$namafoto;
+        } else {
+            $fotoNama = NULL;
+        }
 
         Profile::create([
             'user_id' => $user->id,
@@ -96,7 +98,7 @@ class PenjokiController extends Controller
             'foto' => $fotoNama
         ]);
 
-        return redirect()->route('admin.penjoki')->with('berhasil', 'Berhasil menambahkan penjoki.');
+        return redirect()->route('admin.penjoki')->with('berhasil', 'Berhasil menambahkan karyawan.');
     }
 
     // Menampilkan halaman edit penjoki
@@ -115,9 +117,6 @@ class PenjokiController extends Controller
             'nama_lengkap' => 'required',
             'email' => 'required|email',
             'no_telp' => 'required|numeric',
-            'tempat_lahir' => 'required',
-            'tanggal_lahir' => 'required',
-            'jenis_kelamin' => 'required',
             'foto' => 'mimes:jpg,jpeg,png,webp,svg'
         ]);
 
@@ -153,7 +152,7 @@ class PenjokiController extends Controller
         }
         $profile->save();
 
-        return redirect()->route('admin.penjoki')->with('berhasil', 'Berhasil mengupdate penjoki.');
+        return redirect()->route('admin.penjoki')->with('berhasil', 'Berhasil mengupdate karyawan.');
     }
 
     // Proses menghapus penjoki
@@ -164,6 +163,6 @@ class PenjokiController extends Controller
 
         $user->delete();
 
-        return redirect()->route('admin.penjoki')->with('berhasil', 'Berhasil menghapus penjoki.');
+        return redirect()->route('admin.penjoki')->with('berhasil', 'Berhasil menghapus karyawan.');
     }
 }

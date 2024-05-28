@@ -71,7 +71,11 @@
         <li class="dropdown"><a href="#" data-toggle="dropdown"
                 class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                 @if (Auth::user()->profile != null)
-                    <img alt="image" src="{{ url(Auth::user()->profile->foto) }}" class="rounded-circle mr-1">
+                    @if(Auth::user()->profile->foto <> '')
+                        <img alt="image" src="{{ url(Auth::user()->profile->foto) }}" class="rounded-circle mr-1">
+                    @else
+                        <img alt="image" src="{{ url('images/avatar-5.png') }}" class="rounded-circle mr-1">
+                    @endif
                 @else
                     <img alt="image" src="{{ url('images/avatar-5.png') }}" class="rounded-circle mr-1">
                 @endif

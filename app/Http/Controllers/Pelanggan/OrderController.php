@@ -29,31 +29,26 @@ class OrderController extends Controller
 
     // Proses menampilkan data order dengan datatables
     public function listData() {
-        $projects = Project::where('user_id', Auth::guard('pelanggan')->user()->id)->get();
-        $project_id = array();
-        foreach ($projects as $key => $value) {
-            $project_id[] = $value->id;
-        }
-        $data = Order::whereIn('project_id', $project_id)->get();
+        $data = Order::where('pelanggan_id', Auth::guard('pelanggan')->user()->id)->get();
         $datatables = DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('penjoki', function($row) {
                 return $row->user->name;
             })
             ->addColumn('project', function($row) {
-                return $row->project->judul.' - '.$row->project->user->name;
+                return $row->judul;
             })
             ->addColumn('deadline', function($row) {
-                return Carbon::parse($row->project->deadline)->format('d M Y');
+                return Carbon::parse($row->deadline)->format('d M Y');
             })
             ->addColumn('jenis', function($row) {
                 return $row->jenis->judul;
             })
             ->addColumn('status', function($row) {
                 if ($row->status == 0) {
-                    $status = '<span class="badge badge-warning">Belum dibayar</span>';
+                    $status = '<span class="badge badge-warning"><i class="fas fa-exclamation-triangle"></i> Belum dibayar</span>';
                 } elseif ($row->status == 1) {
-                    $status = '<span class="badge badge-primary">Sedang diproses</span>';
+                    $status = '<span class="badge badge-primary"><i class="ion ion-load-a"></i> Sedang diproses</span>';
                 }
                 return $status;
             })
@@ -63,7 +58,7 @@ class OrderController extends Controller
                                 <i class="fas fa-eye"></i> '.$row->activity->judul_aktivitas.'
                             </a>';
                     } else {
-                        $btn = '<span class="badge badge-danger">Belum ada progress</span>';
+                        $btn = '<span class="badge badge-danger"><i class="fas fa-exclamation-triangle"></i> Belum ada progress</span>';
                     }
 
                 return $btn;
@@ -84,7 +79,7 @@ class OrderController extends Controller
                             </a>';
                     }
                 } else {
-                    $btn = '<span class="badge badge-danger">Belum ada pembayaran</span>';
+                    $btn = '<span class="badge badge-danger"><i class="fas fa-exclamation-triangle"></i> Belum ada pembayaran</span>';
                 }
 
                 return $btn;
@@ -93,10 +88,16 @@ class OrderController extends Controller
                 $btn = '<a href="'.route('pelanggan.order.detail', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2" title="Lihat">
                         <i class="fas fa-eye"></i>
                     </a>';
-                if ($row->payment->status <> 2) {
+                if ($row->payment == '') {
                     $btn .= '<a onClick="getOrder('.$row->id.')" href="#" class="btn btn-success btn-sm mr-2 mb-2" title="Bayar">
                             <i class="fas fa-money-bill"></i>
                         </a>';
+                } else {
+                    if ($row->payment->status <> 2) {
+                        $btn .= '<a onClick="getOrder('.$row->id.')" href="#" class="btn btn-success btn-sm mr-2 mb-2" title="Pelunasan">
+                            <i class="fas fa-money-bill"></i>
+                        </a>';
+                    }
                 }
 
                 return $btn;
@@ -144,7 +145,7 @@ class OrderController extends Controller
         $payment->save();
 
         $countpayment = Payment::where('order_id', $request->order_id)->count();
-        if ($countpayment < 1) {
+        if ($countpayment > 0) {
             $order = Order::find($request->order_id);
             $order->status = 1;
             $order->save();

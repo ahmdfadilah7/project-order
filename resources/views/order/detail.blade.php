@@ -9,7 +9,7 @@
         <div class="section-header-breadcrumb">
             <div class="breadcrumb-item"><a href="{{ route('admin.order') }}">Order</a></div>
             <div class="breadcrumb-item">Detail</div>
-            <div class="breadcrumb-item active">{{ $order->project->judul }}</div>
+            <div class="breadcrumb-item active">{{ $order->judul }}</div>
         </div>
     </div>
 
@@ -29,22 +29,22 @@
                         <tr>
                             <th>Pelanggan</th>
                             <th width="20">:</th>
-                            <td>{{ $order->project->user->name }}</td>
+                            <td>{{ $order->pelanggan->name }}</td>
                         </tr>
                         <tr>
                             <th>Deadline</th>
                             <th width="20">:</th>
-                            <td>{{ \Carbon\Carbon::parse($order->project->deadline)->format('d M Y') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($order->deadline)->format('d M Y') }}</td>
                         </tr>
                         <tr>
                             <th>Judul</th>
                             <th width="20">:</th>
-                            <td>{{ $order->project->judul }}</td>
+                            <td>{{ $order->judul }}</td>
                         </tr>
                         <tr>
                             <th>Deskripsi</th>
                             <th width="20">:</th>
-                            <td>{!! $order->project->deskripsi !!}</td>
+                            <td>{!! $order->deskripsi !!}</td>
                         </tr>
                     </table>
                     <a href="{{ route('admin.order') }}" class="btn btn-primary btn-sm"><i class="fa fa-arrow-left"></i> Kembali</a>
@@ -96,7 +96,7 @@
                 serverSide: true,
                 'ordering': 'true',
                 ajax: {
-                    url: "{{ route('admin.fileproject.list', $order->project_id) }}",
+                    url: "{{ route('admin.fileproject.list', $order->id) }}",
                     data: function(d) {}
                 },
                 columns: [

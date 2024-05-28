@@ -5,9 +5,9 @@
 @section('content')
 
     <div class="section-header">
-        <h1>Manajemen</h1>
+        <h1>Bobot</h1>
         <div class="section-header-breadcrumb">
-            <div class="breadcrumb-item active"><a href="{{ route('admin.administrator') }}">Manajemen</a></div>
+            <div class="breadcrumb-item active"><a href="{{ route('admin.bobot') }}">Bobot</a></div>
         </div>
     </div>
 
@@ -15,8 +15,8 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header justify-content-between">
-                    <h4>Manajemen</h4>
-                    <a href="{{ route('admin.administrator.add') }}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Tambah</a>
+                    <h4>Bobot</h4>
+                    <a href="{{ route('admin.bobot.add') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Tambah</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -26,9 +26,7 @@
                                     <th class="text-center">
                                         #
                                     </th>
-                                    <th>Nama Lengkap</th>
-                                    <th>Email</th>
-                                    <th>Akses</th>
+                                    <th>Judul</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -53,7 +51,7 @@
                 serverSide: true,
                 'ordering': 'true',
                 ajax: {
-                    url: "{{ route('admin.administrator.list') }}",
+                    url: "{{ route('admin.bobot.list') }}",
                     data: function(d) {}
                 },
                 columns: [
@@ -64,16 +62,8 @@
                         searchable: false
                     },
                     {
-                        data: 'name',
-                        name: 'name'
-                    },
-                    {
-                        data: 'email',
-                        name: 'email'
-                    },
-                    {
-                        data: 'access',
-                        name: 'access'
+                        data: 'bobot',
+                        name: 'bobot'
                     },
                     {
                         data: 'action',

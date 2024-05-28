@@ -29,7 +29,11 @@
                                     <th>Nama Lengkap</th>
                                     <th>Email</th>
                                     <th>No Telp</th>
-                                    <th>Aksi</th>
+
+                                    @if(Auth::user()->access->access <> 'Admin')
+                                        <th>Aksi</th>
+                                    @endif
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -75,12 +79,14 @@
                         data: 'no_telp',
                         name: 'no_telp'
                     },
+                    @if(Auth::user()->access->access <> 'Admin')
                     {
                         data: 'action',
                         name: 'action',
                         orderable: false,
                         searchable: false
                     }
+                    @endif
                 ]
             });
         });

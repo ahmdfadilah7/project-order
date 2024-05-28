@@ -14,8 +14,13 @@ class Order extends Model
 
     protected $fillable = [
         'user_id',
-        'project_id',
+        'pelanggan_id',
         'jenis_id',
+        'bobot_id',
+        'judul',
+        'deskripsi',
+        'keterangan',
+        'deadline',
         'total',
         'status',
     ];
@@ -25,14 +30,14 @@ class Order extends Model
         return $this->belongsTo(Jenis::class);
     }
 
-    public function project(): BelongsTo
-    {
-        return $this->belongsTo(Project::class);
-    }
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function pelanggan(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'pelanggan_id', 'id');
     }
 
     public function activity(): HasOne
@@ -43,5 +48,10 @@ class Order extends Model
     public function payment(): HasOne
     {
         return $this->hasOne(Payment::class)->orderBy('created_at', 'desc');
+    }
+
+    public function bobot(): BelongsTo
+    {
+        return $this->belongsTo(Bobot::class);
     }
 }

@@ -6,6 +6,7 @@ use App\Events\MessageBroadcast;
 use App\Models\ChatGroup;
 use App\Models\Group;
 use App\Models\Setting;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,9 +19,35 @@ class GroupController extends Controller
     {
         $setting = Setting::first();
 
+        $penjoki = User::where('role', 'penjoki')->orderBy('id', 'desc')->get();
+        $user = User::where('role', 'pelanggan')->get();
+
         $group = Group::orderBy('id', 'desc')->get();
 
-        return view('group.index', compact('setting', 'group'));
+        return view('group.index', compact('setting', 'group', 'penjoki', 'user'));
+    }
+
+    // Group baru
+    public function store_group(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'nama_group' => 'required',
+            'karyawan' => 'required',
+            'pelanggan' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return back()->with('errors', $errors);
+        }
+
+        $group = new Group;
+        $group->name = $request->nama_group;
+        $group->pelanggan_id = $request->pelanggan;
+        $group->penjoki_id = $request->karyawan;
+        $group->save();
+
+        return redirect()->route('admin.group')->with('berhasil', 'Berhasil membuat group baru.');
     }
 
     // Menampilkan chat group
@@ -62,6 +89,7 @@ class GroupController extends Controller
             'length' => ChatGroup::where('group_id', $id)->count(),
             'groupid' => $group->id,
             'title' => $group->name,
+            'member' => $group->karyawan->name.', '.$group->pelanggan->name,
             'chat' => $chat
         );
 

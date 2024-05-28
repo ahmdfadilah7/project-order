@@ -56,6 +56,6 @@ class ActivitiesController extends Controller
         $activities->status = $request->status !== null ? $request->status : 0; 
         $activities->save();
 
-        return redirect()->route('penjoki.order.detail', $activities->order->project_id)->with('berhasil', $message);
+        return redirect()->route('penjoki.order.detail', $activities->order_id)->with('berhasil', $message);
     }
 }

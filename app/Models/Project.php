@@ -24,10 +24,5 @@ class Project extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function order(): HasMany
-    {
-        return $this->hasMany(Order::class);
-    }
-
 
 }

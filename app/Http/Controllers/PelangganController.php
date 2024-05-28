@@ -61,10 +61,7 @@ class PelangganController extends Controller
             'no_telp' => 'required|numeric|unique:profiles,no_telp',
             'jurusan' => 'required',
             'daerah' => 'required',
-            'tempat_lahir' => 'required',
-            'tanggal_lahir' => 'required',
-            'jenis_kelamin' => 'required',
-            'foto' => 'required|mimes:jpg,jpeg,png,webp,svg',
+            'foto' => 'mimes:jpg,jpeg,png,webp,svg',
             'password' => 'required|min:8'
         ]);
 
@@ -80,10 +77,15 @@ class PelangganController extends Controller
         $user->password = Hash::make($request->get('password'));
         $user->save();
 
-        $foto = $request->file('foto');
-        $namafoto = 'Profile-'.str_replace(' ', '-', $request->get('nama_lengkap')).Str::random(5).'.'.$foto->extension();
-        $foto->move(public_path('images/'), $namafoto);
-        $fotoNama = 'images/'.$namafoto;
+        if ($request->foto <> '') {
+            $foto = $request->file('foto');
+            $namafoto = 'Profile-'.str_replace(' ', '-', $request->get('nama_lengkap')).Str::random(5).'.'.$foto->extension();
+            $foto->move(public_path('images/'), $namafoto);
+            $fotoNama = 'images/'.$namafoto;
+        } else {
+            $fotoNama = NULL;
+        }
+        
 
         Profile::create([
             'user_id' => $user->id,
@@ -115,9 +117,6 @@ class PelangganController extends Controller
             'no_telp' => 'required|numeric',
             'jurusan' => 'required',
             'daerah' => 'required',
-            'tempat_lahir' => 'required',
-            'tanggal_lahir' => 'required',
-            'jenis_kelamin' => 'required',
             'foto' => 'mimes:jpg,jpeg,png,webp,svg'
         ]);
 

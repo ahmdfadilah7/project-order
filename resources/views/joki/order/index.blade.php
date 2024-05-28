@@ -27,6 +27,8 @@
                                     </th>
                                     <th>Project</th>
                                     <th>Jenis</th>
+                                    <th>Bobot</th>
+                                    <th>Keterangan Bobot</th>
                                     <th>Deadline</th>
                                     <th>Progress</th>
                                     <th>Aksi</th>
@@ -70,6 +72,14 @@
                     {
                         data: 'jenis',
                         name: 'jenis'
+                    },
+                    {
+                        data: 'bobot',
+                        name: 'bobot'
+                    },
+                    {
+                        data: 'keterangan',
+                        name: 'keterangan'
                     },
                     {
                         data: 'deadline',

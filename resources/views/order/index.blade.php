@@ -27,8 +27,11 @@
                                         #
                                     </th>
                                     <th>Karyawan</th>
+                                    <th>Pelanggan</th>
                                     <th>Project</th>
                                     <th>Jenis</th>
+                                    <th>Bobot</th>
+                                    <th>Keterangan Bobot</th>
                                     <th>Total</th>
                                     <th>Deadline</th>
                                     <th>Progress</th>
@@ -77,12 +80,24 @@
                         name: 'penjoki'
                     },
                     {
-                        data: 'project',
-                        name: 'project'
+                        data: 'pelanggan',
+                        name: 'pelanggan'
+                    },
+                    {
+                        data: 'judul',
+                        name: 'judul'
                     },
                     {
                         data: 'jenis',
                         name: 'jenis'
+                    },
+                    {
+                        data: 'bobot',
+                        name: 'bobot'
+                    },
+                    {
+                        data: 'keterangan',
+                        name: 'keterangan'
                     },
                     {
                         data: 'total',

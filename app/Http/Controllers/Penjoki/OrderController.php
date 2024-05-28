@@ -29,19 +29,22 @@ class OrderController extends Controller
         $datatables = DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('project', function($row) {
-                return $row->project->judul.' - '.$row->project->user->name;
+                return $row->judul;
             })
             ->addColumn('deadline', function($row) {
-                return Carbon::parse($row->project->deadline)->format('d M Y');
+                return Carbon::parse($row->deadline)->format('d M Y');
             })
             ->addColumn('jenis', function($row) {
                 return $row->jenis->judul;
             })
+            ->addColumn('bobot', function($row) {
+                return strtoupper($row->bobot->bobot);
+            })
             ->addColumn('status', function($row) {
                 if ($row->status == 0) {
-                    $status = '<span class="badge badge-warning">Belum dibayar</span>';
+                    $status = '<span class="badge badge-warning"><i class="fas fa-exclamation-triangle"></i> Belum dibayar</span>';
                 } elseif ($row->status == 1) {
-                    $status = '<span class="badge badge-primary">Sedang diproses</span>';
+                    $status = '<span class="badge badge-primary"><i class="ion ion-load-a"></i> Sedang diproses</span>';
                 }
                 return $status;
             })
@@ -49,7 +52,7 @@ class OrderController extends Controller
                 if ($row->activity <> '') {
                     $btn = '<span class="badge badge-info">'.$row->activity->judul_aktivitas.'</span>';
                 } else {
-                    $btn = '<span class="badge badge-danger">Belum ada progress</span>';
+                    $btn = '<span class="badge badge-danger"><i class="fas fa-exclamation-triangle"></i> Belum ada progress</span>';
                     }
 
                 return $btn;

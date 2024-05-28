@@ -8,9 +8,9 @@
         <div class="section-header-back">
             <a href="{{ route('admin.administrator') }}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
         </div>
-        <h1>Administrator</h1>
+        <h1>Manajemen</h1>
         <div class="section-header-breadcrumb">
-            <div class="breadcrumb-item"><a href="{{ route('admin.administrator') }}">Administrator</a></div>
+            <div class="breadcrumb-item"><a href="{{ route('admin.administrator') }}">Manajemen</a></div>
             <div class="breadcrumb-item active">Tambah</div>
         </div>
     </div>
@@ -19,7 +19,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h4>Tambah Administrator</h4>
+                    <h4>Tambah Manajemen</h4>
                 </div>
                 <div class="card-body">
                     {!! Form::open(['method' => 'post', 'route' => ['admin.administrator.store'], 'enctype' => 'multipart/form-data']) !!}

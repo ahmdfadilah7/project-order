@@ -13,7 +13,7 @@
                     <div class="form-group">
                         <label>Project</label>
                         <input type="hidden" name="order_id" value="{{ $order->id }}">
-                        <input type="text" name="project" class="form-control" value="{{ $order->project->judul }}" readonly>
+                        <input type="text" name="project" class="form-control" value="{{ $order->judul }}" readonly>
                     </div>
                     <div class="form-group">
                         <label>File Project</label>

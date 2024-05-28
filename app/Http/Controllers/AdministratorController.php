@@ -63,11 +63,8 @@ class AdministratorController extends Controller
             'nama_lengkap' => 'required',
             'email' => 'required|email|unique:users,email',
             'no_telp' => 'required|numeric|unique:profiles,no_telp',
-            'tempat_lahir' => 'required',
-            'tanggal_lahir' => 'required',
-            'jenis_kelamin' => 'required',
             'akses' => 'required',
-            'foto' => 'required|mimes:jpg,jpeg,png,webp,svg',
+            'foto' => 'mimes:jpg,jpeg,png,webp,svg',
             'password' => 'required|min:8'
         ],
         [
@@ -89,10 +86,15 @@ class AdministratorController extends Controller
         $user->password = Hash::make($request->get('password'));
         $user->save();
 
-        $foto = $request->file('foto');
-        $namafoto = 'Profile-'.str_replace(' ', '-', $request->get('nama_lengkap')).Str::random(5).'.'.$foto->extension();
-        $foto->move(public_path('images/'), $namafoto);
-        $fotoNama = 'images/'.$namafoto;
+        if ($request->foto <> '') {
+            $foto = $request->file('foto');
+            $namafoto = 'Profile-'.str_replace(' ', '-', $request->get('nama_lengkap')).Str::random(5).'.'.$foto->extension();
+            $foto->move(public_path('images/'), $namafoto);
+            $fotoNama = 'images/'.$namafoto;
+        } else {
+            $fotoNama = NULL;
+        }
+        
 
         Profile::create([
             'user_id' => $user->id,
@@ -127,11 +129,6 @@ class AdministratorController extends Controller
         $validator = Validator::make($request->all(), [
             'nama_lengkap' => 'required',
             'email' => 'required|email',
-            'no_telp' => 'required|numeric',
-            'tempat_lahir' => 'required',
-            'tanggal_lahir' => 'required',
-            'jenis_kelamin' => 'required',
-            'akses' => 'required',
             'foto' => 'mimes:jpg,jpeg,png,webp,svg'
         ],
         [
@@ -174,11 +171,13 @@ class AdministratorController extends Controller
         }
         $profile->save();
 
-        $access = UserAccess::where('user_id', $id)->first();
-        $access->access = $request->akses;
-        $access->save();
+        if ($user->access->access == 'Super Admin') {
+            $access = UserAccess::where('user_id', $id)->first();
+            $access->access = $request->akses;
+            $access->save();
+        }
 
-        return redirect()->route('admin.administrator')->with('berhasil', 'Berhasil mengupdate administrator.');
+        return back()->with('berhasil', 'Berhasil mengupdate data profil.');
     }
 
     // Proses menghapus administrator

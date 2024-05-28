@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\Project;
 use App\Models\Setting;
 use App\Models\User;
@@ -13,7 +14,7 @@ class DashboardController extends Controller
     public function index()
     {
         $setting = Setting::first();
-        $totalproject = Project::count();
+        $totalproject = Order::count();
         $totalpenjoki = User::where('role', 'penjoki')->count();
         $totalpelanggan = User::where('role', 'pelanggan')->count();
 

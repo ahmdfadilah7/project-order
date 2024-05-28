@@ -89,9 +89,13 @@
                     <div class="form-group row mb-4">
                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Foto Sebelumnya</label>
                         <div class="col-sm-12 col-md-7">
-                            <div style="width: 250px">
-                                <img src="{{ url($user->profile->foto) }}" class="w-100">
-                            </div>
+                            @if($user->profile->foto <> '')
+                                <div style="width: 250px">
+                                    <img src="{{ url($user->profile->foto) }}" class="w-100">
+                                </div>
+                            @else
+                                <i class="text-danger">Tidak ada foto</i>
+                            @endif
                         </div>
                     </div>
                     <div class="form-group row mb-4">
