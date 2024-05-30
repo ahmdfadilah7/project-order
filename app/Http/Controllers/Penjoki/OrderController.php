@@ -45,17 +45,13 @@ class OrderController extends Controller
             ->addColumn('bobot', function($row) {
                 return strtoupper($row->bobot->bobot);
             })
-            ->addColumn('status', function($row) {
-                if ($row->status == 0) {
-                    $status = '<span class="badge badge-warning"><i class="fas fa-exclamation-triangle"></i> Belum dibayar</span>';
-                } elseif ($row->status == 1) {
-                    $status = '<span class="badge badge-primary"><i class="ion ion-load-a"></i> Sedang diproses</span>';
-                }
-                return $status;
-            })
             ->addColumn('progress', function($row) {
                 if ($row->activity <> '') {
-                    $btn = '<span class="badge badge-info">'.$row->activity->judul_aktivitas.'</span>';
+                    if ($row->activity->status <> 1) {
+                        $btn = '<span class="badge badge-info"><i class="ion ion-load-a"></i> '.$row->activity->judul_aktivitas.'</span>';
+                    } else {
+                        $btn = '<span class="badge badge-success"><i class="fas fa-check"></i> '.$row->activity->judul_aktivitas.'</span>';
+                    }
                 } else {
                     $btn = '<span class="badge badge-danger"><i class="fas fa-exclamation-triangle"></i> Belum ada progress</span>';
                     }
@@ -69,7 +65,7 @@ class OrderController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action', 'total', 'status', 'progress', 'deadline'])
+            ->rawColumns(['action', 'total', 'progress', 'deadline'])
             ->make(true);
 
         return $datatables;

@@ -18,7 +18,7 @@
                     <h4>Cetak Laporan</h4>
                 </div>
                 <div class="card-body">
-                    {!! Form::open(['method' => 'post']) !!}
+                    {!! Form::open(['method' => 'post', 'route' => ['admin.order.export']]) !!}
                         <div class="row">
                             <div class="col-md-3 col-sm-12">
                                 <div class="form-group">
@@ -46,7 +46,7 @@
                                 </div>
                             </div>
                             <div class="col-md-3 col-sm-12">
-                                <button type="submit" class="btn btn-success btn-block mt-4 pt-2"><i class="ion ion-archive"></i> Cetak Laporan</button>
+                                <button type="submit" class="btn btn-info btn-block mt-4 pt-2"><i class="ion ion-archive"></i> Cetak Laporan</button>
                             </div>
                         </div>
                     {!! Form::close() !!}

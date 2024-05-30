@@ -68,8 +68,11 @@ Route::group(['middleware' => ['auth:admin', 'role:admin']], function () {
     Route::get('admin/order/activities/{id}', [OrderController::class, 'activity'])->name('admin.order.activities');
     Route::post('admin/order/store', [OrderController::class, 'store'])->name('admin.order.store');
     Route::post('admin/order/payment', [OrderController::class, 'payment'])->name('admin.order.payment');
+    Route::post('admin/order/export', [OrderController::class, 'export'])->name('admin.order.export');
     Route::get('admin/order/{id}', [OrderController::class, 'edit'])->name('admin.order.edit');
     Route::put('admin/order/update/{id}', [OrderController::class, 'update'])->name('admin.order.update');
+    Route::get('admin/order/selesai/{id}', [OrderController::class, 'selesai'])->name('admin.order.selesai');
+    Route::get('admin/order/print/{id}', [OrderController::class, 'print'])->name('admin.order.print');
     Route::get('admin/order/delete/{id}', [OrderController::class, 'destroy'])->name('admin.order.delete');
 
     Route::get('admin/pelanggan', [PelangganController::class, 'index'])->name('admin.pelanggan');
@@ -174,6 +177,8 @@ Route::group(['middleware' => ['xss', 'auth:pelanggan', 'role:pelanggan']], func
     Route::get('pelanggan/order/getListData', [PelangganOrderController::class, 'listData'])->name('pelanggan.order.list');
     Route::get('pelanggan/order/detail/{id}', [PelangganOrderController::class, 'show'])->name('pelanggan.order.detail');
     Route::get('pelanggan/order/activities/{id}', [PelangganOrderController::class, 'activity'])->name('pelanggan.order.activities');
+    Route::get('pelanggan/order/invoice/{id}', [PelangganOrderController::class, 'invoice'])->name('pelanggan.order.invoice');
+    Route::get('pelanggan/order/print/{id}', [PelangganOrderController::class, 'print'])->name('pelanggan.order.print');
 
     Route::get('pelanggan/group', [PelangganGroupController::class, 'index'])->name('pelanggan.group');
     Route::get('pelanggan/group/chat/{id}', [PelangganGroupController::class, 'chat'])->name('pelanggan.group.chat');

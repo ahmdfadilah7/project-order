@@ -6,7 +6,7 @@
     <div class="section-header">
         <h1>Order</h1>
         <div class="section-header-breadcrumb">
-            <div class="breadcrumb-item active"><a href="{{ route('admin.order') }}">Order</a></div>
+            <div class="breadcrumb-item active"><a href="{{ route('pelanggan.order') }}">Order</a></div>
             <div class="breadcrumb-item">Invoice</div>
         </div>
     </div>
@@ -114,9 +114,9 @@
             <hr>
             <div class="text-md-right">
                 <div class="float-lg-left mb-lg-0 mb-3">
-                    <a href="{{ route('admin.order') }}" class="btn btn-primary btn-sm"><i class="fa fa-arrow-left"></i> Kembali</a>
+                    <a href="{{ route('pelanggan.order') }}" class="btn btn-primary btn-sm"><i class="fa fa-arrow-left"></i> Kembali</a>
                 </div>
-                <a href="{{ route('admin.order.print', $order->id) }}" class="btn btn-warning btn-icon icon-left"><i class="fas fa-print"></i> Print</a>
+                <a href="{{ route('pelanggan.order.print', $order->id) }}" class="btn btn-warning btn-icon icon-left"><i class="fas fa-print"></i> Print</a>
             </div>
         </div>
     </div>

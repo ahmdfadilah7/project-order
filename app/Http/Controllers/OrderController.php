@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\OrderExport;
 use App\Helpers\AllHelper;
 use App\Models\Activity;
 use App\Models\Bobot;
@@ -13,6 +14,7 @@ use App\Models\Payment;
 use App\Models\Project;
 use App\Models\Setting;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -99,6 +101,8 @@ class OrderController extends Controller
                     $status = '<span class="badge badge-warning"><i class="fas fa-exclamation-triangle"></i> Belum dibayar</span>';
                 } elseif ($row->status == 1) {
                     $status = '<span class="badge badge-primary"><i class="ion ion-load-a"></i> Sedang diproses</span>';
+                } elseif ($row->status == 2) {
+                    $status = '<span class="badge badge-success"><i class="fas fa-check"></i> Order Selesai</span>';
                 }
                 return $status;
             })
@@ -120,6 +124,17 @@ class OrderController extends Controller
                         </a>';
                     }
                 }
+
+                if ($row->status == 1) {
+                    if ($row->payment <> '' &&  $row->activity <> '') {
+                        if ($row->payment->status == 2 && $row->activity->status == 1) {
+                            $btn .= '<a href="'.route('admin.order.selesai', $row->id).'" class="btn btn-success btn-sm mr-2 mb-2" title="Selesai">
+                                    <i class="fas fa-check"></i> Selesai
+                                </a>';
+                        }
+                    }
+                }
+
                 $btn .= '<a href="'.route('admin.order.delete', $row->id).'" class="btn btn-danger btn-sm mr-2 mb-2" title="Hapus">
                         <i class="fas fa-trash"></i> Hapus
                     </a>';
@@ -138,6 +153,63 @@ class OrderController extends Controller
         $order = Order::find($id);
 
         return json_encode($order);
+    }
+
+    // Proses Export
+    public function export(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'dari' => 'required',
+            'sampai' => 'required',
+            'format' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return back()->with('errors', $errors);
+        }
+
+        if ($request->format == 'EXCEL') {
+            return (new OrderExport($request->dari, $request->sampai))
+                    ->download('Laporan-Order-'.date('dmY', strtotime($request->dari)).'-'.date('dmY', strtotime($request->sampai)).'-'.Str::random(5).'.xlsx');
+        } elseif ($request->format == 'PDF') {
+
+            $setting = Setting::first();
+            $order = Order::where('deadline', '>=', $request->dari)
+            ->where('deadline', '<=', $request->sampai)
+            ->get();
+            
+            $formatname = 'Laporan-Order-'.date('dmY', strtotime($request->dari)).'-'.date('dmY', strtotime($request->sampai)).'-'.Str::random(5);
+
+            $data = array(
+                'setting' => $setting,
+                'order' => $order
+            );
+
+            view()->share('order.pdf', $data);
+            $pdf = Pdf::loadView('order.pdf', $data);
+
+            return $pdf->stream(strtoupper($formatname).'.pdf');
+        }
+    }
+
+    // Proses print
+    public function print($id)
+    {
+        $setting = Setting::first();
+        $order = Order::find($id);
+        
+        $formatname = 'Invoice-'.$order->kode_order;
+
+        $data = array(
+            'setting' => $setting,
+            'order' => $order
+        );
+
+        view()->share('order.print', $data);
+        $pdf = Pdf::loadView('order.print', $data);
+
+        return $pdf->stream(strtoupper($formatname).'.pdf');
     }
 
     // Proses Payment
@@ -286,6 +358,16 @@ class OrderController extends Controller
         }
 
         return redirect()->route('admin.order')->with('berhasil', 'Berhasil menambahkan order baru.');
+    }
+
+    // Proses selesai order
+    public function selesai($id) 
+    {
+        $order = Order::find($id);
+        $order->status = 2;
+        $order->save();
+
+        return redirect()->route('admin.order')->with('berhasil', 'Order diselesaikan.');
     }
 
     // Proses menghapus order

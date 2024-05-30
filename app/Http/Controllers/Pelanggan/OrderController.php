@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Project;
 use App\Models\Setting;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -54,6 +55,8 @@ class OrderController extends Controller
                     $status = '<span class="badge badge-warning"><i class="fas fa-exclamation-triangle"></i> Belum dibayar</span>';
                 } elseif ($row->status == 1) {
                     $status = '<span class="badge badge-primary"><i class="ion ion-load-a"></i> Sedang diproses</span>';
+                } elseif ($row->status == 2) {
+                    $status = '<span class="badge badge-success"><i class="fas fa-check"></i> Order Selesai</span>';
                 }
                 return $status;
             })
@@ -91,18 +94,24 @@ class OrderController extends Controller
             })
             ->addColumn('action', function($row) {
                 $btn = '<a href="'.route('pelanggan.order.detail', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2" title="Lihat">
-                        <i class="fas fa-eye"></i>
+                        <i class="fas fa-eye"></i> Lihat
                     </a>';
                 if ($row->payment == '') {
                     $btn .= '<a onClick="getOrder('.$row->id.')" href="#" class="btn btn-success btn-sm mr-2 mb-2" title="Bayar">
-                            <i class="fas fa-money-bill"></i>
+                            <i class="fas fa-money-bill"></i> Bayar
                         </a>';
                 } else {
                     if ($row->payment->status <> 2) {
                         $btn .= '<a onClick="getOrder('.$row->id.')" href="#" class="btn btn-success btn-sm mr-2 mb-2" title="Pelunasan">
-                            <i class="fas fa-money-bill"></i>
+                            <i class="fas fa-money-bill"></i> Bayar
                         </a>';
                     }
+                }
+
+                if ($row->status == 2) {
+                    $btn .= '<a href="'.route('pelanggan.order.invoice', $row->id).'" class="btn btn-warning btn-sm mr-2 mb-2" title="Invoice">
+                        <i class="ion ion-document-text"></i> Invoice
+                    </a>';
                 }
 
                 return $btn;
@@ -119,6 +128,25 @@ class OrderController extends Controller
         $order = Order::find($id);
 
         return json_encode($order);
+    }
+
+    // Proses print
+    public function print($id)
+    {
+        $setting = Setting::first();
+        $order = Order::find($id);
+        
+        $formatname = 'Invoice-'.$order->kode_order;
+
+        $data = array(
+            'setting' => $setting,
+            'order' => $order
+        );
+
+        view()->share('customer.order.print', $data);
+        $pdf = Pdf::loadView('customer.order.print', $data);
+
+        return $pdf->stream(strtoupper($formatname).'.pdf');
     }
 
     // Proses Payment
@@ -177,6 +205,16 @@ class OrderController extends Controller
         $order = Order::find($id);
 
         return view('customer.order.detail', compact('setting', 'order'));
+    }
+
+    // Invoice Order
+    public function invoice($id)
+    {
+        $setting = Setting::first();
+
+        $order = Order::find($id);
+
+        return view('customer.order.invoice', compact('setting', 'order'));
     }
 
     // Activity 
