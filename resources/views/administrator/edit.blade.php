@@ -97,7 +97,7 @@
                         </div>
                     </div>
 
-                    @if($user->access->acces == 'Super Admin')
+                    @if(Auth::user()->access->access == 'Super Admin')
                         <div class="form-group row mb-4">
                             <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Akses</label>
                             <div class="col-sm-12 col-md-7">

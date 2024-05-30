@@ -25,7 +25,14 @@ class AdministratorController extends Controller
 
     // Proses menampilkan data administrator dengan datatables
     public function listData() {
-        $data = User::where('role', 'admin');
+        if (Auth::user()->access->access == 'Super Admin') {
+            $data = User::where('role', 'admin');
+        } else {
+            $data = User::select('users.*')
+                ->join('user_accesses', 'users.id', 'user_accesses.user_id')
+                ->where('role', 'admin')
+                ->where('access', '!=', 'Super Admin');
+        }
         $datatables = DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('access', function($row) {
@@ -52,7 +59,7 @@ class AdministratorController extends Controller
     // Menampilkan halaman tambah administrator
     public function create() {
         $setting = Setting::first();
-        $access = array('Super Admin', 'Admin', 'Admin QC');
+        $access = array('Super Admin', 'Manajer', 'Admin', 'Admin QC');
 
         return view('administrator.add', compact('setting', 'access'));
     }
@@ -119,7 +126,7 @@ class AdministratorController extends Controller
     public function edit($id) {
         $setting = Setting::first();
         $user = User::find($id);
-        $access = array('Super Admin', 'Admin', 'Admin QC');
+        $access = array('Super Admin', 'Manajer', 'Admin', 'Admin QC');
 
         return view('administrator.edit', compact('setting', 'user', 'access'));
     }
@@ -157,21 +164,24 @@ class AdministratorController extends Controller
             $fotoNama = 'images/'.$namafoto;
         }
 
-        $profile = Profile::where('user_id', $id)->first();
-        $profile->no_telp = $request->get('no_telp');
-        $profile->jurusan = $request->get('jurusan');
-        $profile->daerah = $request->get('daerah');
-        $profile->tmpt_lahir = $request->get('tempat_lahir');
-        $profile->tgl_lahir = $request->get('tanggal_lahir');
-        $profile->jns_kelamin = $request->get('jenis_kelamin');
-        if ($request->foto <> '') {
-            File::delete($profile->foto);
-
-            $profile->foto = $fotoNama;
+        if ($user->access->access <> 'Super Admin') {
+            $profile = Profile::where('user_id', $id)->first();
+            $profile->no_telp = $request->get('no_telp');
+            $profile->jurusan = $request->get('jurusan');
+            $profile->daerah = $request->get('daerah');
+            $profile->tmpt_lahir = $request->get('tempat_lahir');
+            $profile->tgl_lahir = $request->get('tanggal_lahir');
+            $profile->jns_kelamin = $request->get('jenis_kelamin');
+            if ($request->foto <> '') {
+                File::delete($profile->foto);
+    
+                $profile->foto = $fotoNama;
+            }
+            $profile->save();
         }
-        $profile->save();
 
-        if ($user->access->access == 'Super Admin') {
+
+        if (Auth::user()->access->access == 'Super Admin') {
             $access = UserAccess::where('user_id', $id)->first();
             $access->access = $request->akses;
             $access->save();

@@ -65,6 +65,9 @@ class SettingController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nama_website' => 'required',
+            'email' => 'required',
+            'no_telp' => 'required',
+            'alamat' => 'required',
             'logo' => 'mimes:jpg,jpeg,png,svg,webp',
             'favicon' => 'mimes:jpg,jpeg,png,svg,webp',
         ],
@@ -93,6 +96,9 @@ class SettingController extends Controller
 
         $setting = Setting::find($id);
         $setting->nama_website = $request->get('nama_website');
+        $setting->email = $request->get('email');
+        $setting->no_telp = $request->get('no_telp');
+        $setting->alamat = $request->get('alamat');
         if ($request->logo <> '') {
             $setting->logo = $logoNama;
         }

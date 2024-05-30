@@ -26,6 +26,8 @@
                                         #
                                     </th>
                                     <th>Nama Website</th>
+                                    <th>Email</th>
+                                    <th>No Telp</th>
                                     <th>Logo</th>
                                     <th>Favicon</th>
                                     <th>Aksi</th>
@@ -65,6 +67,14 @@
                     {
                         data: 'nama_website',
                         name: 'nama_website'
+                    },
+                    {
+                        data: 'email',
+                        name: 'email'
+                    },
+                    {
+                        data: 'no_telp',
+                        name: 'no_telp'
                     },                    
                     {
                         data: 'logo',

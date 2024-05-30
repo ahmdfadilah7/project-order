@@ -7,6 +7,7 @@ use App\Models\Activity;
 use App\Models\Bobot;
 use App\Models\Group;
 use App\Models\Jenis;
+use App\Models\JenisOrder;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Project;
@@ -41,11 +42,19 @@ class OrderController extends Controller
             ->addColumn('pelanggan', function($row) {
                 return $row->pelanggan->name;
             })
+            ->addColumn('tanggal_order', function($row) {
+                return Carbon::parse($row->created_at)->format('d M Y');
+            })
             ->addColumn('deadline', function($row) {
                 return Carbon::parse($row->deadline)->format('d M Y');
             })
-            ->addColumn('jenis', function($row) {
-                return $row->jenis->judul;
+            ->addColumn('jenisorder', function($row) {
+                $jenis = array();
+                foreach ($row->jenisorder as $value) {
+                    $jenis[] = $value->jenis->judul;
+                }
+                $jenisorder = implode(',', $jenis);
+                return $jenisorder;
             })
             ->addColumn('bobot', function($row) {
                 return strtoupper($row->bobot->bobot);
@@ -95,21 +104,24 @@ class OrderController extends Controller
             })
             ->addColumn('action', function($row) {
                 $btn = '<a href="'.route('admin.order.detail', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2" title="Lihat">
-                        <i class="fas fa-eye"></i>
+                        <i class="fas fa-eye"></i> Lihat
+                    </a>';
+                $btn .= '<a href="'.route('admin.order.invoice', $row->id).'" class="btn btn-warning btn-sm mr-2 mb-2" title="Invoice">
+                        <i class="ion ion-document-text"></i> Invoice
                     </a>';
                 if ($row->payment == '') {
                     $btn .= '<a onClick="getOrder('.$row->id.')" href="#" class="btn btn-success btn-sm mr-2 mb-2" title="Bayar">
-                            <i class="fas fa-money-bill"></i>
+                            <i class="fas fa-money-bill"></i> Bayar
                         </a>';
                 } else {
                     if ($row->payment->status <> 2) {
                         $btn .= '<a onClick="getOrder('.$row->id.')" href="#" class="btn btn-success btn-sm mr-2 mb-2" title="Pelunasan">
-                            <i class="fas fa-money-bill"></i>
+                            <i class="fas fa-money-bill"></i> Bayar
                         </a>';
                     }
                 }
                 $btn .= '<a href="'.route('admin.order.delete', $row->id).'" class="btn btn-danger btn-sm mr-2 mb-2" title="Hapus">
-                        <i class="fas fa-trash"></i>
+                        <i class="fas fa-trash"></i> Hapus
                     </a>';
 
                 return $btn;
@@ -176,6 +188,16 @@ class OrderController extends Controller
         return view('order.detail', compact('setting', 'order'));
     }
 
+    // Invoice Order
+    public function invoice($id)
+    {
+        $setting = Setting::first();
+
+        $order = Order::find($id);
+
+        return view('order.invoice', compact('setting', 'order'));
+    }
+
     // Activity 
     public function activity($id)
     {
@@ -221,7 +243,6 @@ class OrderController extends Controller
             'judul' => 'required',
             'deskripsi' => 'required',
             'deadline' => 'required',
-            'jenis' => 'required',
             'bobot' => 'required',
             'total' => 'required',
         ]);
@@ -231,18 +252,38 @@ class OrderController extends Controller
             return back()->with('errors', $errors)->withInput($request->all());
         }
 
-        Order::create([
-            'user_id' => $request->get('penjoki'),
-            'pelanggan_id' => $request->pelanggan,
-            'jenis_id' => $request->get('jenis'),
-            'bobot_id' => $request->get('bobot'),
-            'judul' => $request->judul,
-            'deskripsi' => $request->deskripsi,
-            'keterangan' => $request->keterangan,
-            'deadline' => $request->deadline,
-            'total' => str_replace(',', '', $request->get('total')),
-            'status' => 0
-        ]);
+        $order = new Order;
+        $order->kode_order = 'ORDSIP'.date('Ymd').strtoupper(Str::random(3));
+        $order->user_id = $request->penjoki;
+        $order->pelanggan_id = $request->pelanggan;
+        $order->bobot_id = $request->bobot;
+        $order->judul = $request->judul;
+        $order->deskripsi = $request->deskripsi;
+        $order->keterangan = $request->keterangan;
+        $order->deadline = $request->deadline;
+        $order->total = str_replace(',', '', $request->get('total'));
+        $order->status = 0;
+        $order->save();
+
+        // Order::create([
+        //     'user_id' => $request->get('penjoki'),
+        //     'pelanggan_id' => $request->pelanggan,
+        //     'jenis_id' => $request->get('jenis'),
+        //     'bobot_id' => $request->get('bobot'),
+        //     'judul' => $request->judul,
+        //     'deskripsi' => $request->deskripsi,
+        //     'keterangan' => $request->keterangan,
+        //     'deadline' => $request->deadline,
+        //     'total' => str_replace(',', '', $request->get('total')),
+        //     'status' => 0
+        // ]);
+
+        for ($i=0; $i < count($request->jenis); $i++) { 
+            $jenisorder = new JenisOrder;
+            $jenisorder->order_id = $order->id;
+            $jenisorder->jenis_id = $request->jenis[$i];
+            $jenisorder->save();
+        }
 
         return redirect()->route('admin.order')->with('berhasil', 'Berhasil menambahkan order baru.');
     }

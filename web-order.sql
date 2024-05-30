@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1deb5ubuntu1
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: May 28, 2024 at 09:06 AM
--- Server version: 8.0.36-0ubuntu0.22.04.1
--- PHP Version: 8.2.18
+-- Host: 127.0.0.1
+-- Generation Time: May 30, 2024 at 11:31 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,11 +28,11 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `activities` (
-  `id` bigint UNSIGNED NOT NULL,
-  `order_id` bigint UNSIGNED NOT NULL,
-  `user_id` bigint UNSIGNED NOT NULL,
-  `judul_aktivitas` text COLLATE utf8mb4_unicode_ci,
-  `status` tinyint(1) NOT NULL DEFAULT '0',
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `order_id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `judul_aktivitas` text DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -44,8 +44,8 @@ CREATE TABLE `activities` (
 --
 
 CREATE TABLE `bobots` (
-  `id` bigint UNSIGNED NOT NULL,
-  `bobot` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `bobot` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -66,10 +66,10 @@ INSERT INTO `bobots` (`id`, `bobot`, `created_at`, `updated_at`) VALUES
 --
 
 CREATE TABLE `chat_groups` (
-  `id` bigint UNSIGNED NOT NULL,
-  `message` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `group_id` bigint UNSIGNED NOT NULL,
-  `user_id` bigint UNSIGNED NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `message` longtext NOT NULL,
+  `group_id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -90,13 +90,13 @@ INSERT INTO `chat_groups` (`id`, `message`, `group_id`, `user_id`, `created_at`,
 --
 
 CREATE TABLE `failed_jobs` (
-  `id` bigint UNSIGNED NOT NULL,
-  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `uuid` varchar(255) NOT NULL,
+  `connection` text NOT NULL,
+  `queue` text NOT NULL,
+  `payload` longtext NOT NULL,
+  `exception` longtext NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -106,10 +106,10 @@ CREATE TABLE `failed_jobs` (
 --
 
 CREATE TABLE `file_projects` (
-  `id` bigint UNSIGNED NOT NULL,
-  `order_id` bigint UNSIGNED NOT NULL,
-  `file` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `keterangan` longtext COLLATE utf8mb4_unicode_ci,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `order_id` bigint(20) UNSIGNED NOT NULL,
+  `file` longtext NOT NULL,
+  `keterangan` longtext DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -121,10 +121,10 @@ CREATE TABLE `file_projects` (
 --
 
 CREATE TABLE `groups` (
-  `id` bigint UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `pelanggan_id` bigint UNSIGNED NOT NULL,
-  `penjoki_id` bigint UNSIGNED NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `pelanggan_id` bigint(20) UNSIGNED NOT NULL,
+  `penjoki_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -143,8 +143,8 @@ INSERT INTO `groups` (`id`, `name`, `pelanggan_id`, `penjoki_id`, `created_at`, 
 --
 
 CREATE TABLE `jenis` (
-  `id` bigint UNSIGNED NOT NULL,
-  `judul` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `judul` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -164,13 +164,36 @@ INSERT INTO `jenis` (`id`, `judul`, `created_at`, `updated_at`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `jenis_orders`
+--
+
+CREATE TABLE `jenis_orders` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `order_id` bigint(20) UNSIGNED NOT NULL,
+  `jenis_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `jenis_orders`
+--
+
+INSERT INTO `jenis_orders` (`id`, `order_id`, `jenis_id`, `created_at`, `updated_at`) VALUES
+(4, 9, 3, '2024-05-29 11:31:55', '2024-05-29 11:31:55'),
+(5, 9, 2, '2024-05-29 11:31:55', '2024-05-29 11:31:55'),
+(6, 9, 1, '2024-05-29 11:31:55', '2024-05-29 11:31:55');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `migrations`
 --
 
 CREATE TABLE `migrations` (
-  `id` int UNSIGNED NOT NULL,
-  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `batch` int NOT NULL
+  `id` int(10) UNSIGNED NOT NULL,
+  `migration` varchar(255) NOT NULL,
+  `batch` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -202,7 +225,10 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (22, '2024_05_28_114525_add_field_judul_to_orders', 10),
 (23, '2024_05_28_151033_create_bobots_table', 11),
 (24, '2024_05_28_151804_add_field_bobot_id_to_orders', 12),
-(25, '2024_05_28_152232_add_field_keterangan_to_orders', 13);
+(25, '2024_05_28_152232_add_field_keterangan_to_orders', 13),
+(26, '2024_05_29_045904_create_jenis_orders_table', 14),
+(27, '2024_05_29_182742_add_field_code_order_to_orders', 15),
+(28, '2024_05_29_183400_add_field_email_to_settings', 16);
 
 -- --------------------------------------------------------
 
@@ -211,17 +237,17 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 --
 
 CREATE TABLE `orders` (
-  `id` bigint UNSIGNED NOT NULL,
-  `user_id` bigint UNSIGNED NOT NULL,
-  `pelanggan_id` bigint UNSIGNED NOT NULL,
-  `jenis_id` bigint UNSIGNED NOT NULL,
-  `bobot_id` bigint UNSIGNED NOT NULL,
-  `keterangan` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `judul` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `deskripsi` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `kode_order` varchar(255) NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `pelanggan_id` bigint(20) UNSIGNED NOT NULL,
+  `bobot_id` bigint(20) UNSIGNED NOT NULL,
+  `keterangan` varchar(255) DEFAULT NULL,
+  `judul` varchar(255) NOT NULL,
+  `deskripsi` varchar(255) NOT NULL,
   `deadline` date NOT NULL,
-  `total` int DEFAULT NULL,
-  `status` int NOT NULL,
+  `total` int(11) DEFAULT NULL,
+  `status` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -230,8 +256,8 @@ CREATE TABLE `orders` (
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `user_id`, `pelanggan_id`, `jenis_id`, `bobot_id`, `keterangan`, `judul`, `deskripsi`, `deadline`, `total`, `status`, `created_at`, `updated_at`) VALUES
-(6, 19, 20, 5, 2, '-2 BAB', 'Test', '<p>Berhasil</p>', '2024-05-31', 800000, 1, '2024-05-28 08:27:59', '2024-05-28 09:01:12');
+INSERT INTO `orders` (`id`, `kode_order`, `user_id`, `pelanggan_id`, `bobot_id`, `keterangan`, `judul`, `deskripsi`, `deadline`, `total`, `status`, `created_at`, `updated_at`) VALUES
+(9, 'ORDSIP20240529VRQ', 7, 20, 3, NULL, 'Test', '<p>Berhasil</p>', '2024-06-02', 950000, 0, '2024-05-29 11:31:55', '2024-05-29 11:31:55');
 
 -- --------------------------------------------------------
 
@@ -240,8 +266,8 @@ INSERT INTO `orders` (`id`, `user_id`, `pelanggan_id`, `jenis_id`, `bobot_id`, `
 --
 
 CREATE TABLE `password_reset_tokens` (
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -252,21 +278,13 @@ CREATE TABLE `password_reset_tokens` (
 --
 
 CREATE TABLE `payments` (
-  `id` bigint UNSIGNED NOT NULL,
-  `order_id` bigint UNSIGNED NOT NULL,
-  `file` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` int NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `order_id` bigint(20) UNSIGNED NOT NULL,
+  `file` varchar(255) NOT NULL,
+  `status` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `payments`
---
-
-INSERT INTO `payments` (`id`, `order_id`, `file`, `status`, `created_at`, `updated_at`) VALUES
-(4, 6, 'images/bukti_pembayaran/BuktiPembayaranzyEPJ.jpg', 1, '2024-05-28 08:53:03', '2024-05-28 08:53:03'),
-(7, 6, 'images/bukti_pembayaran/BuktiPembayaranx21zY.jpg', 2, '2024-05-28 09:01:12', '2024-05-28 09:01:12');
 
 -- --------------------------------------------------------
 
@@ -275,12 +293,12 @@ INSERT INTO `payments` (`id`, `order_id`, `file`, `status`, `created_at`, `updat
 --
 
 CREATE TABLE `personal_access_tokens` (
-  `id` bigint UNSIGNED NOT NULL,
-  `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tokenable_id` bigint UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `abilities` text COLLATE utf8mb4_unicode_ci,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `tokenable_type` varchar(255) NOT NULL,
+  `tokenable_id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `token` varchar(64) NOT NULL,
+  `abilities` text DEFAULT NULL,
   `last_used_at` timestamp NULL DEFAULT NULL,
   `expires_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -294,15 +312,15 @@ CREATE TABLE `personal_access_tokens` (
 --
 
 CREATE TABLE `profiles` (
-  `id` bigint UNSIGNED NOT NULL,
-  `user_id` bigint UNSIGNED NOT NULL,
-  `no_telp` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `tmpt_lahir` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `tgl_lahir` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `jns_kelamin` enum('l','p') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `foto` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `jurusan` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `daerah` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `no_telp` varchar(255) DEFAULT NULL,
+  `tmpt_lahir` varchar(255) DEFAULT NULL,
+  `tgl_lahir` varchar(255) DEFAULT NULL,
+  `jns_kelamin` enum('l','p') DEFAULT NULL,
+  `foto` varchar(255) DEFAULT NULL,
+  `jurusan` varchar(255) DEFAULT NULL,
+  `daerah` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -328,7 +346,8 @@ INSERT INTO `profiles` (`id`, `user_id`, `no_telp`, `tmpt_lahir`, `tgl_lahir`, `
 (17, 18, '089636908632', 'Mombang Boru', '1998-09-12', 'p', NULL, NULL, NULL, '2024-05-28 04:33:32', '2024-05-28 04:33:32'),
 (18, 19, '085770713652', 'Bogor', '2000-06-02', 'l', NULL, NULL, NULL, '2024-05-28 04:34:21', '2024-05-28 04:34:21'),
 (19, 20, '081237123612', NULL, NULL, NULL, NULL, 'Sistem Informasi', 'Jakarta', '2024-05-28 04:50:30', '2024-05-28 04:50:30'),
-(20, 21, '0819318221', 'Bogor', NULL, NULL, NULL, NULL, NULL, '2024-05-28 08:35:12', '2024-05-28 08:48:34');
+(20, 21, '0819318221', 'Bogor', NULL, NULL, NULL, NULL, NULL, '2024-05-28 08:35:12', '2024-05-28 08:48:34'),
+(21, 22, '08912381283', NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-28 19:36:14', '2024-05-28 19:36:14');
 
 -- --------------------------------------------------------
 
@@ -337,10 +356,10 @@ INSERT INTO `profiles` (`id`, `user_id`, `no_telp`, `tmpt_lahir`, `tgl_lahir`, `
 --
 
 CREATE TABLE `projects` (
-  `id` bigint UNSIGNED NOT NULL,
-  `user_id` bigint UNSIGNED NOT NULL,
-  `judul` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `deskripsi` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `judul` varchar(255) NOT NULL,
+  `deskripsi` text NOT NULL,
   `deadline` date NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -353,10 +372,13 @@ CREATE TABLE `projects` (
 --
 
 CREATE TABLE `settings` (
-  `id` bigint UNSIGNED NOT NULL,
-  `nama_website` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `logo` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `favicon` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `nama_website` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `no_telp` varchar(255) NOT NULL,
+  `alamat` text NOT NULL,
+  `logo` varchar(255) NOT NULL,
+  `favicon` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -365,8 +387,8 @@ CREATE TABLE `settings` (
 -- Dumping data for table `settings`
 --
 
-INSERT INTO `settings` (`id`, `nama_website`, `logo`, `favicon`, `created_at`, `updated_at`) VALUES
-(1, 'CV. Solution Intan Prima', 'images/Logo-Web-Order1HMDn.png', 'images/Favicon-Web-Order4k9H2.png', '2023-12-07 12:07:32', '2024-03-05 17:04:50');
+INSERT INTO `settings` (`id`, `nama_website`, `email`, `no_telp`, `alamat`, `logo`, `favicon`, `created_at`, `updated_at`) VALUES
+(1, 'CV. Solution Intan Prima', 'solutionintanprima@gmail.com', '08983122616', '<p>Kebon Kopi<br>RT 01/02</p>', 'images/Logo-Web-Order1HMDn.png', 'images/Favicon-Web-Order4k9H2.png', '2023-12-07 12:07:32', '2024-05-29 11:38:27');
 
 -- --------------------------------------------------------
 
@@ -375,13 +397,13 @@ INSERT INTO `settings` (`id`, `nama_website`, `logo`, `favicon`, `created_at`, `
 --
 
 CREATE TABLE `users` (
-  `id` bigint UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `role` enum('admin','penjoki','pelanggan') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `role` enum('admin','penjoki','pelanggan') NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `remember_token` varchar(100) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -391,7 +413,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `role`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Administrator', 'admin@example.com', 'admin', NULL, '$2y$10$k26rK1sh10rA8c7nZelyWu89jldyldvqKAHBjDIXYWZDBGvVp1rk6', NULL, '2023-12-07 12:09:42', '2023-12-07 12:09:42'),
+(1, 'Administrator', 'superadmin@example.com', 'admin', NULL, '$2y$10$Re7qnBIn4xNuw.TA38eklulJoOY94zfPxpxkI6cHhnwXrIAbM7aHG', NULL, '2023-12-07 12:09:42', '2024-05-29 11:25:01'),
 (5, 'Ahmad Fadilah', 'ahmdfadilah7@gmail.com', 'penjoki', NULL, '$2y$10$Q4WjXkJrATwz/Zf9eMb/NOVlUOlta28EnBbPjhuLe64JF9yOC3.tW', NULL, '2024-05-28 04:21:07', '2024-05-28 04:21:07'),
 (6, 'Ainun Islamiyah', 'ainunislamiyah99@gmail.com', 'penjoki', NULL, '$2y$10$w/GU2XBmvAHfwQQgiJzbieYF3rYYEn6DEmIXmnjP1LAUzj1zgh9Kq', NULL, '2024-05-28 04:22:46', '2024-05-28 04:22:46'),
 (7, 'Alfan Fadilah', 'alfanfdlah.30@gmail.com', 'penjoki', NULL, '$2y$10$cCaw1h6nx/GNS74Eh8fGmezyzK7GYf/4SfnX7y5J7.LuskvmU0eRy', NULL, '2024-05-28 04:23:28', '2024-05-28 04:23:28'),
@@ -408,7 +430,8 @@ INSERT INTO `users` (`id`, `name`, `email`, `role`, `email_verified_at`, `passwo
 (18, 'Yusni', 'yusnikonayy@gmail.com', 'penjoki', NULL, '$2y$10$ggjUGVF24izj.ySL2g43ZurMxPlHcPbX1CEzm85ffIYOOFDz6H59O', NULL, '2024-05-28 04:33:32', '2024-05-28 04:33:32'),
 (19, 'Muhammad Diwan Sundarta', 'mdiwansundarta461@gmail.com', 'penjoki', NULL, '$2y$10$s/3EaKzb10Q5ysrwpOGPeu4EpmK4GvmZ/z0N0tjjEBu4PlxKmiKvO', NULL, '2024-05-28 04:34:21', '2024-05-28 04:34:21'),
 (20, 'Pelanggan 1', 'pelanggan1@example.com', 'pelanggan', NULL, '$2y$10$1FKHHPf9Mti6tcWqzjd4duqpA9eHqLW4qRxx0k.pMT61m06nujtXu', NULL, '2024-05-28 04:50:30', '2024-05-28 04:50:30'),
-(21, 'Ima', 'ima@example.com', 'admin', NULL, '$2y$10$4YEfxl6DiA8XnsGOvmu0k.T.//NEjS8PSiuBe7N7/V9BNXxvowiqG', NULL, '2024-05-28 08:35:12', '2024-05-28 08:35:12');
+(21, 'Ima', 'ima@example.com', 'admin', NULL, '$2y$10$4YEfxl6DiA8XnsGOvmu0k.T.//NEjS8PSiuBe7N7/V9BNXxvowiqG', NULL, '2024-05-28 08:35:12', '2024-05-28 08:35:12'),
+(22, 'Ricky', 'ricky@example.com', 'admin', NULL, '$2y$10$Sm2ZWQvrXutIc80aV4w3j.o8j5L3dnfQLpwQZq7hsLFT0Hasftyhu', NULL, '2024-05-28 19:36:13', '2024-05-28 19:36:13');
 
 -- --------------------------------------------------------
 
@@ -417,9 +440,9 @@ INSERT INTO `users` (`id`, `name`, `email`, `role`, `email_verified_at`, `passwo
 --
 
 CREATE TABLE `user_accesses` (
-  `id` bigint UNSIGNED NOT NULL,
-  `user_id` bigint UNSIGNED NOT NULL,
-  `access` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `access` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -430,7 +453,8 @@ CREATE TABLE `user_accesses` (
 
 INSERT INTO `user_accesses` (`id`, `user_id`, `access`, `created_at`, `updated_at`) VALUES
 (1, 1, 'Super Admin', '2024-03-08 16:53:45', '2024-03-08 16:53:45'),
-(3, 21, 'Admin', '2024-05-28 08:35:12', '2024-05-28 08:35:12');
+(3, 21, 'Admin', '2024-05-28 08:35:12', '2024-05-29 11:25:52'),
+(4, 22, 'Manajer', '2024-05-28 19:36:14', '2024-05-28 19:36:14');
 
 --
 -- Indexes for dumped tables
@@ -488,6 +512,14 @@ ALTER TABLE `jenis`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `jenis_orders`
+--
+ALTER TABLE `jenis_orders`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `jenis_orders_order_id_foreign` (`order_id`),
+  ADD KEY `jenis_orders_jenis_id_foreign` (`jenis_id`);
+
+--
 -- Indexes for table `migrations`
 --
 ALTER TABLE `migrations`
@@ -498,8 +530,8 @@ ALTER TABLE `migrations`
 --
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `orders_kode_order_unique` (`kode_order`),
   ADD KEY `orders_user_id_foreign` (`user_id`),
-  ADD KEY `orders_jenis_id_foreign` (`jenis_id`),
   ADD KEY `orders_pelanggan_id_foreign` (`pelanggan_id`),
   ADD KEY `orders_bobot_id_foreign` (`bobot_id`);
 
@@ -566,97 +598,103 @@ ALTER TABLE `user_accesses`
 -- AUTO_INCREMENT for table `activities`
 --
 ALTER TABLE `activities`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `bobots`
 --
 ALTER TABLE `bobots`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `chat_groups`
 --
 ALTER TABLE `chat_groups`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=114;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=114;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `file_projects`
 --
 ALTER TABLE `file_projects`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `groups`
 --
 ALTER TABLE `groups`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `jenis`
 --
 ALTER TABLE `jenis`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `jenis_orders`
+--
+ALTER TABLE `jenis_orders`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `profiles`
 --
 ALTER TABLE `profiles`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `projects`
 --
 ALTER TABLE `projects`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `user_accesses`
 --
 ALTER TABLE `user_accesses`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
@@ -690,11 +728,17 @@ ALTER TABLE `groups`
   ADD CONSTRAINT `groups_penjoki_id_foreign` FOREIGN KEY (`penjoki_id`) REFERENCES `users` (`id`);
 
 --
+-- Constraints for table `jenis_orders`
+--
+ALTER TABLE `jenis_orders`
+  ADD CONSTRAINT `jenis_orders_jenis_id_foreign` FOREIGN KEY (`jenis_id`) REFERENCES `jenis` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `jenis_orders_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `orders`
 --
 ALTER TABLE `orders`
-  ADD CONSTRAINT `orders_bobot_id_foreign` FOREIGN KEY (`bobot_id`) REFERENCES `bobots` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
-  ADD CONSTRAINT `orders_jenis_id_foreign` FOREIGN KEY (`jenis_id`) REFERENCES `jenis` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `orders_bobot_id_foreign` FOREIGN KEY (`bobot_id`) REFERENCES `bobots` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `orders_pelanggan_id_foreign` FOREIGN KEY (`pelanggan_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `orders_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 

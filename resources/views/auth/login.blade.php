@@ -83,7 +83,7 @@
                                     </div>
                                 </form>
                                 <div class="mt-2 text-center text-dark">
-                                    Don't have an account? <a href="{{ route('register') }}">Create One</a>
+                                    {{-- Don't have an account? <a href="{{ route('register') }}">Create One</a> --}}
                                 </div>
                                 <div class="simple-footer text-dark">
                                     Copyright &copy; {{ $setting->nama_website }} {{ date('Y') }}

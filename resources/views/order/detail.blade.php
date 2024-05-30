@@ -20,7 +20,7 @@
                     <h4>Detail Project</h4>
                 </div>
                 <div class="card-body">
-                    <table>
+                    <table class="table table-striped">
                         <tr>
                             <th>Karyawan</th>
                             <th width="20">:</th>
@@ -30,6 +30,24 @@
                             <th>Pelanggan</th>
                             <th width="20">:</th>
                             <td>{{ $order->pelanggan->name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Jenis Order</th>
+                            <th width="20">:</th>
+                            <td>
+                                @php
+                                    $jenis = array();
+                                    foreach ($order->jenisorder as $value) {
+                                        $jenis[] = $value->jenis->judul;
+                                    }
+                                    echo implode(',', $jenis);
+                                @endphp    
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Bobot</th>
+                            <th width="20">:</th>
+                            <td>{{ strtoupper($order->bobot->bobot) }}</td>
                         </tr>
                         <tr>
                             <th>Deadline</th>

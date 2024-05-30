@@ -15,7 +15,6 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'pelanggan_id',
-        'jenis_id',
         'bobot_id',
         'judul',
         'deskripsi',
@@ -24,11 +23,6 @@ class Order extends Model
         'total',
         'status',
     ];
-
-    public function jenis(): BelongsTo
-    {
-        return $this->belongsTo(Jenis::class);
-    }
 
     public function user(): BelongsTo
     {
@@ -45,6 +39,11 @@ class Order extends Model
         return $this->hasOne(Activity::class)->orderBy('created_at', 'desc');
     }
 
+    public function jenisorder(): HasMany
+    {
+        return $this->hasMany(JenisOrder::class);
+    }
+
     public function payment(): HasOne
     {
         return $this->hasOne(Payment::class)->orderBy('created_at', 'desc');
@@ -54,4 +53,5 @@ class Order extends Model
     {
         return $this->belongsTo(Bobot::class);
     }
+    
 }

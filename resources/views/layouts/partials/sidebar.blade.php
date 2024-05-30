@@ -32,7 +32,7 @@
                     <li @if(Request::segment(2)=='penjoki') class="active" @endif><a class="nav-link" href="{{ route('admin.penjoki') }}"><i class="fas fa-users"></i> <span>Karyawan</span></a></li>
                     <li @if(Request::segment(2)=='pelanggan') class="active" @endif><a class="nav-link" href="{{ route('admin.pelanggan') }}"><i class="fas fa-users"></i> <span>Pelanggan</span></a></li>
 
-                    @if(Auth::user()->access->access == 'Super Admin')
+                    @if(Auth::user()->access->access == 'Super Admin' || Auth::user()->access->access == 'Manajer')
                         <li @if(Request::segment(2)=='administrator') class="active" @endif><a class="nav-link" href="{{ route('admin.administrator') }}"><i class="fas fa-users"></i> <span>Manajemen</span></a></li>
                     @endif
 

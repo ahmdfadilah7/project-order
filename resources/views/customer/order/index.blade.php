@@ -74,8 +74,8 @@
                         name: 'project'
                     },
                     {
-                        data: 'jenis',
-                        name: 'jenis'
+                        data: 'jenisorder',
+                        name: 'jenisorder'
                     },
                     {
                         data: 'deadline',

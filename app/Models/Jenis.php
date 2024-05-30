@@ -15,8 +15,8 @@ class Jenis extends Model
         'judul'
     ];
 
-    public function order(): HasMany
+    public function jenisorder(): HasMany
     {
-        return $this->hasMany(Order::class);
+        return $this->hasMany(JenisOrder::class);
     }
 }

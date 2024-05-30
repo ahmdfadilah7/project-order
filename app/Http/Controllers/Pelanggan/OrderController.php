@@ -41,8 +41,13 @@ class OrderController extends Controller
             ->addColumn('deadline', function($row) {
                 return Carbon::parse($row->deadline)->format('d M Y');
             })
-            ->addColumn('jenis', function($row) {
-                return $row->jenis->judul;
+            ->addColumn('jenisorder', function($row) {
+                $jenis = array();
+                foreach ($row->jenisorder as $value) {
+                    $jenis[] = $value->jenis->judul;
+                }
+                $jenisorder = implode(',', $jenis);
+                return $jenisorder;
             })
             ->addColumn('status', function($row) {
                 if ($row->status == 0) {

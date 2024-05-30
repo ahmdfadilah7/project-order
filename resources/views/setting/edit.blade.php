@@ -28,8 +28,29 @@
                     <div class="form-group row mb-4">
                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Nama Website</label>
                         <div class="col-sm-12 col-md-7">
-                            <input type="text" name="nama_website" class="form-control" value="{{ $setting->nama_website }}">
+                            <input type="text" name="nama_website" class="form-control" value="{{ $setting->nama_website }}" autocomplete="off">
                             <i class="text-danger">{{ $errors->first('nama_website') }}</i>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Email</label>
+                        <div class="col-sm-12 col-md-7">
+                            <input type="email" name="email" class="form-control" value="{{ $setting->email }}" autocomplete="off">
+                            <i class="text-danger">{{ $errors->first('email') }}</i>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">No Telp</label>
+                        <div class="col-sm-12 col-md-7">
+                            <input type="number" name="no_telp" class="form-control" value="{{ $setting->no_telp }}" autocomplete="off">
+                            <i class="text-danger">{{ $errors->first('no_telp') }}</i>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Alamat</label>
+                        <div class="col-sm-12 col-md-7">
+                            <textarea name="alamat" class="form-control summernote-simple" id="alamat" rows="10">{!! $setting->alamat !!}</textarea>
+                            <i class="text-danger">{{ $errors->first('alamat') }}</i>
                         </div>
                     </div>
                     
