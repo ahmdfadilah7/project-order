@@ -25,7 +25,7 @@ class AdministratorController extends Controller
         $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
         $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
 
-        return view('administrator.index', compact('setting', 'dataDeadline', 'dataDeadline'));
+        return view('administrator.index', compact('setting', 'dataDeadline', 'dataDeadline2'));
     }
 
     // Proses menampilkan data administrator dengan datatables
