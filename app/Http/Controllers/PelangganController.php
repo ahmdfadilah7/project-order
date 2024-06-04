@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\Profile;
 use App\Models\Setting;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -18,7 +20,10 @@ class PelangganController extends Controller
     public function index() {
         $setting = Setting::first();
 
-        return view('pelanggan.index', compact('setting'));
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
+        return view('pelanggan.index', compact('setting', 'dataDeadline', 'dataDeadline2'));
     }
 
     // Proses menampilkan data pelanggan dengan datatables
@@ -50,7 +55,10 @@ class PelangganController extends Controller
     public function create() {
         $setting = Setting::first();
 
-        return view('pelanggan.add', compact('setting'));
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
+        return view('pelanggan.add', compact('setting', 'dataDeadline', 'dataDeadline2'));
     }
 
     // Proses menambahkan pelanggan
@@ -104,9 +112,13 @@ class PelangganController extends Controller
     // Menampilkan halaman edit pelanggan
     public function edit($id) {
         $setting = Setting::first();
+
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
         $user = User::find($id);
 
-        return view('pelanggan.edit', compact('setting', 'user'));
+        return view('pelanggan.edit', compact('setting', 'dataDeadline', 'dataDeadline2', 'user'));
     }
 
     // Proses edit pelanggan

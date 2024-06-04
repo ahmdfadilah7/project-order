@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Jenis;
+use App\Models\Order;
 use App\Models\Setting;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
@@ -15,7 +17,10 @@ class JenisController extends Controller
     {
         $setting = Setting::first();
 
-        return view('jenis.index', compact('setting'));
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
+        return view('jenis.index', compact('setting', 'dataDeadline', 'dataDeadline2'));
     }
 
     // Proses menampilkan data jenis dengan datatables
@@ -44,7 +49,10 @@ class JenisController extends Controller
     {
         $setting = Setting::first();
 
-        return view('jenis.add', compact('setting'));
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
+        return view('jenis.add', compact('setting', 'dataDeadline', 'dataDeadline2'));
     }
 
     // Proses tambah jenis
@@ -70,9 +78,13 @@ class JenisController extends Controller
     public function edit($id)
     {
         $setting = Setting::first();
+
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
         $jenis = Jenis::find($id);
 
-        return view('jenis.edit', compact('setting', 'jenis'));
+        return view('jenis.edit', compact('setting', 'dataDeadline', 'dataDeadline2', 'jenis'));
     }
 
     // Proses edit jenis

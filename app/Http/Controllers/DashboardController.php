@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Project;
 use App\Models\Setting;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -18,6 +19,9 @@ class DashboardController extends Controller
         $totalpenjoki = User::where('role', 'penjoki')->count();
         $totalpelanggan = User::where('role', 'pelanggan')->count();
 
-        return view('dashboard.index', compact('setting', 'totalproject', 'totalpenjoki', 'totalpelanggan'));
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
+        return view('dashboard.index', compact('setting', 'dataDeadline', 'dataDeadline2', 'totalproject', 'totalpenjoki', 'totalpelanggan'));
     }
 }

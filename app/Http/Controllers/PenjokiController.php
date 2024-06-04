@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\Profile;
 use App\Models\Setting;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -19,7 +21,10 @@ class PenjokiController extends Controller
     {
         $setting = Setting::first();
 
-        return view('penjoki.index', compact('setting'));
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
+        return view('penjoki.index', compact('setting', 'dataDeadline', 'dataDeadline2'));
     }
 
     // Proses menampilkan data penjoki dengan datatables
@@ -53,7 +58,10 @@ class PenjokiController extends Controller
     {
         $setting = Setting::first();
 
-        return view('penjoki.add', compact('setting'));
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
+        return view('penjoki.add', compact('setting', 'dataDeadline', 'dataDeadline2'));
     }
 
     // Proses menambahkan penjoki
@@ -105,9 +113,13 @@ class PenjokiController extends Controller
     public function edit($id)
     {
         $setting = Setting::first();
+
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
         $user = User::find($id);
 
-        return view('penjoki.edit', compact('setting', 'user'));
+        return view('penjoki.edit', compact('setting', 'dataDeadline', 'dataDeadline2', 'user'));
     }
 
     // Proses edit penjoki

@@ -6,6 +6,7 @@ use App\Events\MessageBroadcast;
 use App\Http\Controllers\Controller;
 use App\Models\ChatGroup;
 use App\Models\Group;
+use App\Models\Order;
 use App\Models\Setting;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -19,9 +20,12 @@ class GroupController extends Controller
     {
         $setting = Setting::first();
 
+        $dataDeadline = Order::where('user_id', Auth::user()->id)->whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::where('user_id', Auth::user()->id)->whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
         $group = Group::where('penjoki_id', Auth::guard('penjoki')->user()->id)->orderBy('id', 'desc')->get();
 
-        return view('joki.group.index', compact('setting', 'group'));
+        return view('joki.group.index', compact('setting', 'dataDeadline', 'dataDeadline2', 'group'));
     }
 
     // Menampilkan chat group

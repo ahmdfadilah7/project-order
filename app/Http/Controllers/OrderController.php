@@ -30,7 +30,10 @@ class OrderController extends Controller
         
         $status = array('DP 50%', 'LUNAS');
 
-        return view('order.index', compact('setting', 'status'));
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
+        return view('order.index', compact('setting', 'status', 'dataDeadline', 'dataDeadline2'));
     }
 
     // Proses menampilkan data order dengan datatables
@@ -255,9 +258,12 @@ class OrderController extends Controller
     {
         $setting = Setting::first();
 
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
         $order = Order::find($id);
 
-        return view('order.detail', compact('setting', 'order'));
+        return view('order.detail', compact('setting', 'dataDeadline', 'dataDeadline2', 'order'));
     }
 
     // Invoice Order
@@ -265,9 +271,12 @@ class OrderController extends Controller
     {
         $setting = Setting::first();
 
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
         $order = Order::find($id);
 
-        return view('order.invoice', compact('setting', 'order'));
+        return view('order.invoice', compact('setting', 'dataDeadline', 'dataDeadline2', 'order'));
     }
 
     // Activity 
@@ -275,13 +284,16 @@ class OrderController extends Controller
     {
         $setting = Setting::first();
 
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
         $order = Order::find($id);
 
         $activity = Activity::where('order_id', $id)
                           ->orderBy('created_at', 'asc')
                           ->get();
 
-        return view('order.activities', compact('setting', 'order', 'activity'));
+        return view('order.activities', compact('setting', 'dataDeadline', 'dataDeadline2', 'order', 'activity'));
     }
 
     // Detail Payment
@@ -289,21 +301,28 @@ class OrderController extends Controller
     {
         $setting = Setting::first();
 
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
         $order = Order::find($id);
 
-        return view('order.detailpayment', compact('setting', 'order'));
+        return view('order.detailpayment', compact('setting', 'dataDeadline', 'dataDeadline2', 'order'));
     }
 
     // Menampilkan halaman tambah order
     public function create()
     {
         $setting = Setting::first();
+
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
         $penjoki = User::where('role', 'penjoki')->orderBy('id', 'desc')->get();
         $user = User::where('role', 'pelanggan')->get();
         $jenis = Jenis::orderBy('id', 'desc')->get();
         $bobot = Bobot::orderBy('id', 'desc')->get();
 
-        return view('order.add', compact('setting', 'penjoki', 'jenis', 'bobot', 'user'));
+        return view('order.add', compact('setting', 'dataDeadline', 'dataDeadline2', 'penjoki', 'jenis', 'bobot', 'user'));
     }
 
     // Proses menambahkan order
@@ -312,6 +331,7 @@ class OrderController extends Controller
         $validator = Validator::make($request->all(), [
             'penjoki' => 'required',
             'pelanggan' => 'required',
+            'kode_klien' => 'required',
             'judul' => 'required',
             'deskripsi' => 'required',
             'deadline' => 'required',
@@ -329,6 +349,7 @@ class OrderController extends Controller
         $order->user_id = $request->penjoki;
         $order->pelanggan_id = $request->pelanggan;
         $order->bobot_id = $request->bobot;
+        $order->kode_klien = $request->kode_klien;
         $order->judul = $request->judul;
         $order->deskripsi = $request->deskripsi;
         $order->keterangan = $request->keterangan;

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\MessageBroadcast;
 use App\Models\ChatGroup;
 use App\Models\Group;
+use App\Models\Order;
 use App\Models\Setting;
 use App\Models\User;
 use Carbon\Carbon;
@@ -19,12 +20,15 @@ class GroupController extends Controller
     {
         $setting = Setting::first();
 
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
         $penjoki = User::where('role', 'penjoki')->orderBy('id', 'desc')->get();
         $user = User::where('role', 'pelanggan')->get();
 
         $group = Group::orderBy('id', 'desc')->get();
 
-        return view('group.index', compact('setting', 'group', 'penjoki', 'user'));
+        return view('group.index', compact('setting', 'dataDeadline', 'dataDeadline2', 'group', 'penjoki', 'user'));
     }
 
     // Group baru

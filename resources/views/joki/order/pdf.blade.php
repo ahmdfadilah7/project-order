@@ -95,7 +95,6 @@
     <table class="table w-100">
         <tr>
             <th>No</th>
-            <th>Kode Order</th>
             <th>Kode Klien</th>
             <th>Karyawan</th>
             <th>Project</th>
@@ -108,7 +107,6 @@
         @foreach ($order as $no => $row)
             <tr>
                 <td>{{ ++$no }}</td>
-                <td>{{ $row->kode_order }}</td>
                 <td>{{ $row->kode_klien }}</td>
                 <td>{{ $row->user->name }}</td>
                 <td>{{ $row->judul }}</td>

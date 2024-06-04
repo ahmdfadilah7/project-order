@@ -28,10 +28,20 @@ class OrderExport implements FromView, ShouldAutoSize
     {
         $setting = Setting::first();
         
-        $order = Order::where('deadline', '>=', $this->dari)
-            ->where('deadline', '<=', $this->sampai)
-            ->get();
+        if (Auth::user()->role == 'penjoki') {
+            $order = Order::where('user_id', Auth::user()->id)
+                ->where('deadline', '>=', $this->dari)
+                ->where('deadline', '<=', $this->sampai)
+                ->get();
 
-        return view('order.excel', compact('setting', 'order'));
+            return view('joki.order.excel', compact('setting', 'order'));
+        } else {
+            $order = Order::where('deadline', '>=', $this->dari)
+                ->where('deadline', '<=', $this->sampai)
+                ->get();
+
+            return view('order.excel', compact('setting', 'order'));
+        }
+
     }
 }

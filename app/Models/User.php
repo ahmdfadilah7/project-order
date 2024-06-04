@@ -81,4 +81,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserAccess::class);
     }
+
+    public function fileproject(): HasOne
+    {
+        return $this->hasOne(FileProject::class);
+    }
 }

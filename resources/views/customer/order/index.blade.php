@@ -25,6 +25,7 @@
                                     <th class="text-center">
                                         #
                                     </th>
+                                    <th>Kode Klien</th>
                                     <th>Project</th>
                                     <th>Jenis</th>
                                     <th>Deadline</th>
@@ -68,6 +69,10 @@
                         name: 'DT_RowIndex',
                         orderable: false,
                         searchable: false
+                    },
+                    {
+                        data: 'kode_klien',
+                        name: 'kode_klien'
                     },
                     {
                         data: 'project',

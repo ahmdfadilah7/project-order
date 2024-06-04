@@ -1,11 +1,10 @@
 <table style="width: 100%; border: 2px solid #000;">
     <thead>
         <tr>
-            <th colspan="11" style="font-size: 13px; font-weight: bold; text-align:center;">Laporan Order {{ $setting->nama_website }}</th>
+            <th colspan="10" style="font-size: 13px; font-weight: bold; text-align:center;">Laporan Order {{ $setting->nama_website }}</th>
         </tr>
         <tr>
             <th>No</th>
-            <th>Kode Order</th>
             <th>Kode Klien</th>
             <th>Karyawan</th>
             <th>Pelanggan</th>
@@ -21,7 +20,6 @@
         @foreach ($order as $no => $row)
             <tr>
                 <td>{{ ++$no }}</td>
-                <td>{{ $row->kode_order }}</td>
                 <td>{{ $row->kode_klien }}</td>
                 <td>{{ $row->user->name }}</td>
                 <td>{{ $row->pelanggan->name }}</td>

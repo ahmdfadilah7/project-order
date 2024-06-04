@@ -77,6 +77,7 @@
                                     </th>
                                     <th>File</th>
                                     <th>Keterangan</th>
+                                    <th>Dikirim Oleh</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -120,6 +121,10 @@
                     {
                         data: 'keterangan',
                         name: 'keterangan'
+                    },
+                    {
+                        data: 'user',
+                        name: 'user'
                     },
                     {
                         data: 'action',

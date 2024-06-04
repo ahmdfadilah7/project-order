@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\FileProject;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -16,6 +17,9 @@ class FileProjectController extends Controller
         $data = FileProject::where('order_id', $id)->get();
         $datatables = DataTables::of($data)
             ->addIndexColumn()
+            ->addColumn('user', function($row) {
+                return $row->user->name;
+            })
             ->addColumn('file', function($row) {
                 $ext = explode('.', $row->file);
                 $nama = explode('/', $row->file);
@@ -58,6 +62,7 @@ class FileProjectController extends Controller
         $fileName = 'file/'.$namafile;
 
         $fileproject = new FileProject;
+        $fileproject->user_id = Auth::user()->id;
         $fileproject->order_id = $request->order_id;
         $fileproject->file = $fileName;
         $fileproject->keterangan = $request->keterangan;

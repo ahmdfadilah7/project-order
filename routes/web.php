@@ -151,6 +151,7 @@ Route::group(['middleware' => ['xss', 'auth:penjoki', 'role:penjoki']], function
     Route::get('penjoki/order/detail/{id}', [PenjokiOrderController::class, 'show'])->name('penjoki.order.detail');
     Route::post('penjoki/order/store', [PenjokiOrderController::class, 'store'])->name('penjoki.order.store');
     Route::get('penjoki/order/{id}', [PenjokiOrderController::class, 'edit'])->name('penjoki.order.edit');
+    Route::post('penjoki/order/export', [PenjokiOrderController::class, 'export'])->name('penjoki.order.export');
     Route::put('penjoki/order/update/{id}', [PenjokiOrderController::class, 'update'])->name('penjoki.order.update');
     Route::get('penjoki/order/delete/{id}', [PenjokiOrderController::class, 'destroy'])->name('penjoki.order.delete');
 

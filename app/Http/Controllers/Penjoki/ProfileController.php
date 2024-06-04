@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Penjoki;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Models\Profile;
 use App\Models\Setting;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -18,9 +20,13 @@ class ProfileController extends Controller
     // Menampilkan halaman profile
     public function index() {
         $setting = Setting::first();
+
+        $dataDeadline = Order::where('user_id', Auth::user()->id)->whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::where('user_id', Auth::user()->id)->whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
         $user = User::find(Auth::user()->id);
 
-        return view('profile.index', compact('setting', 'user'));
+        return view('profile.index', compact('setting', 'dataDeadline', 'dataDeadline2', 'user'));
     }
 
     // Proses edit profile

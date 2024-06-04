@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\Setting;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -15,7 +17,10 @@ class SettingController extends Controller
     {
         $setting = Setting::first();
 
-        return view('setting.index', compact('setting'));
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
+        return view('setting.index', compact('setting', 'dataDeadline', 'dataDeadline2'));
     }
 
     // Proses menampilkan data setting dengan datatables
@@ -58,7 +63,10 @@ class SettingController extends Controller
     {
         $setting = Setting::find($id);
 
-        return view('setting.edit', compact('setting'));
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
+        return view('setting.edit', compact('setting', 'dataDeadline', 'dataDeadline2'));
     }
 
     public function update(Request $request, $id)

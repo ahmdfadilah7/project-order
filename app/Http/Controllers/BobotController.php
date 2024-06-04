@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bobot;
+use App\Models\Order;
 use App\Models\Setting;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
@@ -15,7 +17,10 @@ class BobotController extends Controller
     {
         $setting = Setting::first();
 
-        return view('bobot.index', compact('setting'));
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
+        return view('bobot.index', compact('setting', 'dataDeadline', 'dataDeadline2'));
     }
 
     // Proses menampilkan data bobot dengan datatables
@@ -44,7 +49,10 @@ class BobotController extends Controller
     {
         $setting = Setting::first();
 
-        return view('bobot.add', compact('setting'));
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
+        return view('bobot.add', compact('setting', 'dataDeadline', 'dataDeadline2'));
     }
 
     // Proses tambah bobot
@@ -70,9 +78,13 @@ class BobotController extends Controller
     public function edit($id)
     {
         $setting = Setting::first();
+
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
         $bobot = Bobot::find($id);
 
-        return view('bobot.edit', compact('setting', 'bobot'));
+        return view('bobot.edit', compact('setting', 'dataDeadline', 'dataDeadline2', 'bobot'));
     }
 
     // Proses edit bobot

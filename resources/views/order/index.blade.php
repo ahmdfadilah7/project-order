@@ -71,6 +71,7 @@
                                         #
                                     </th>
                                     <th>Koder Order</th>
+                                    <th>Kode Klien</th>
                                     <th>Karyawan</th>
                                     <th>Pelanggan</th>
                                     <th>Project</th>
@@ -124,6 +125,10 @@
                     {
                         data: 'kode_order',
                         name: 'kode_order'
+                    },
+                    {
+                        data: 'kode_klien',
+                        name: 'kode_klien'
                     },
                     {
                         data: 'penjoki',

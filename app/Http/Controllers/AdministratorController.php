@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\Profile;
 use App\Models\Setting;
 use App\Models\User;
 use App\Models\UserAccess;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -20,7 +22,10 @@ class AdministratorController extends Controller
     public function index() {
         $setting = Setting::first();
 
-        return view('administrator.index', compact('setting'));
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
+        return view('administrator.index', compact('setting', 'dataDeadline', 'dataDeadline'));
     }
 
     // Proses menampilkan data administrator dengan datatables
@@ -59,9 +64,13 @@ class AdministratorController extends Controller
     // Menampilkan halaman tambah administrator
     public function create() {
         $setting = Setting::first();
+
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
         $access = array('Super Admin', 'Manajer', 'Admin', 'Admin QC');
 
-        return view('administrator.add', compact('setting', 'access'));
+        return view('administrator.add', compact('setting', 'dataDeadline', 'dataDeadline2', 'access'));
     }
 
     // Proses menambahkan pelanggan
@@ -125,10 +134,14 @@ class AdministratorController extends Controller
     // Menampilkan halaman edit administrator
     public function edit($id) {
         $setting = Setting::first();
+
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
         $user = User::find($id);
         $access = array('Super Admin', 'Manajer', 'Admin', 'Admin QC');
 
-        return view('administrator.edit', compact('setting', 'user', 'access'));
+        return view('administrator.edit', compact('setting', 'dataDeadline', 'dataDeadline2', 'user', 'access'));
     }
 
     // Proses edit administrator
