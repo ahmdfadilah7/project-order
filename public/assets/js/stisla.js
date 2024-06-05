@@ -221,21 +221,37 @@
     }, chat);
 
     var target = $(element),
+    
         element = '<div class="chat-item '+chat.position+'" style="display:none">' +
                   '<img src="'+chat.picture+'">' +
                   '<div class="chat-details">' +
                   '<div class="chat-text"><b>'+chat.name+'</b><br>'+chat.text+'</div>' +
-                  '<div class="chat-time">'+chat.time+'</div>' +
+                  '<div class="chat-time">'+chat.time+
+                  '<a onclick="deleteModal('+chat.id+')" class="btn btn-danger btn-sm text-white"><i class="fas fa-trash"></i> Hapus</a>'+
+                  '</div>' +
+                  '</div>' +
+                  '</div>',
+        element2 = '<div class="chat-item '+chat.position+'" style="display:none">' +
+                  '<img src="'+chat.picture+'">' +
+                  '<div class="chat-details">' +
+                  '<div class="chat-text"><b>'+chat.name+'</b><br>'+chat.text+'</div>' +
+                  '<div class="chat-time">'+chat.time+
+                  '</div>' +
                   '</div>' +
                   '</div>',
         typing_element = '<div class="chat-item chat-left chat-typing" style="display:none">' +
                   '<img src="'+chat.picture+'">' +
                   '<div class="chat-details">' +
                   '<div class="chat-text"></div>' +
+                  '<a href="" class="btn btn-danger btn-sm"><i class="ti ti-trash"></i></a>' +
                   '</div>' +
                   '</div>';
 
-      var append_element = element;
+      if (chat.role == 'admin') {
+        var append_element = element;
+      } else {
+        var append_element = element2;
+      }
       if(chat.type == 'typing') {
         append_element = typing_element;
       }

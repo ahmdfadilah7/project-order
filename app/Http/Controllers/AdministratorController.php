@@ -68,7 +68,11 @@ class AdministratorController extends Controller
         $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
         $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
 
-        $access = array('Super Admin', 'Manajer', 'Admin', 'Admin QC');
+        if (Auth::user()->access->access == 'Super Admin') {
+            $access = array('Super Admin', 'Manajer', 'Admin', 'Admin QC');
+        } else {
+            $access = array('Manajer', 'Admin', 'Admin QC');
+        }
 
         return view('administrator.add', compact('setting', 'dataDeadline', 'dataDeadline2', 'access'));
     }
@@ -139,7 +143,11 @@ class AdministratorController extends Controller
         $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
 
         $user = User::find($id);
-        $access = array('Super Admin', 'Manajer', 'Admin', 'Admin QC');
+        if (Auth::user()->access->access == 'Super Admin') {
+            $access = array('Super Admin', 'Manajer', 'Admin', 'Admin QC');
+        } else {
+            $access = array('Manajer', 'Admin', 'Admin QC');
+        }
 
         return view('administrator.edit', compact('setting', 'dataDeadline', 'dataDeadline2', 'user', 'access'));
     }

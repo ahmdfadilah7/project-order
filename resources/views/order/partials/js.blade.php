@@ -52,8 +52,16 @@
 
     function deadline() {
         @foreach ($dataDeadline as $key => $row)
-            @if ($row->activity <> '')
-                @if ($row->activity->status <> 1)
+            @if ($row->status <> 2)
+                @if ($row->activity <> '')
+                    @if ($row->activity->status <> 1)
+                        iziToast.warning({
+                            title: 'Warning',
+                            message: 'Order dengan judul {{ $row->judul }} dan Kode Klien {{ $row->kode_klien }} sudah Deadline',
+                            position: 'topRight'
+                        });
+                    @endif
+                @else
                     iziToast.warning({
                         title: 'Warning',
                         message: 'Order dengan judul {{ $row->judul }} dan Kode Klien {{ $row->kode_klien }} sudah Deadline',
@@ -68,8 +76,16 @@
 
     function deadline2() {
         @foreach ($dataDeadline2 as $key => $row)
-            @if ($row->activity <> '')
-                @if ($row->activity->status <> 1)
+            @if ($row->status <> 2)
+                @if ($row->activity <> '')
+                    @if ($row->activity->status <> 1)
+                        iziToast.warning({
+                            title: 'Warning',
+                            message: 'Order dengan judul {{ $row->judul }} dan Kode Klien {{ $row->kode_klien }} sisa 1 hari lagi',
+                            position: 'topRight'
+                        });
+                    @endif
+                @else
                     iziToast.warning({
                         title: 'Warning',
                         message: 'Order dengan judul {{ $row->judul }} dan Kode Klien {{ $row->kode_klien }} sisa 1 hari lagi',

@@ -33,9 +33,12 @@ class GroupController extends Controller
         $chat = array();
         foreach($chatgroup as $row) {
 
-            $name = $row->user->name;
-            if ($row->user->role == 'penjoki') {
-                $name = "Anonimous";
+            if ($row->user->role == 'pelanggan') {
+                $name = $row->user->name." - Klien";
+            } elseif ($row->user->role == 'penjoki') {
+                $name = $row->user->name." - Tim";
+            } elseif ($row->user->role == 'admin') {
+                $name = $row->user->name.' - '.$row->user->access->access;
             }
             $time = Carbon::parse($row->created_at)->diffForHumans();
 
@@ -78,9 +81,12 @@ class GroupController extends Controller
     {
         $chat = ChatGroup::find($id);
 
-        $name = $chat->user->name;
-        if ($chat->user->role == 'penjoki') {
-            $name = 'Anonimous';
+        if ($chat->user->role == 'pelanggan') {
+            $name = $chat->user->name.' - Klien';
+        } elseif ($chat->user->role == 'penjoki') {
+            $name = $chat->user->name.' - Tim';
+        } elseif ($chat->user->role == 'admin') {
+            $name = $chat->user->name.' - '.$chat->user->access->access;
         }
         $time = Carbon::parse($chat->created_at)->diffForHumans();
 
@@ -94,11 +100,18 @@ class GroupController extends Controller
             }
         }
 
+        if (strlen($chat->message) > 150) {
+            $message = substr($chat->message, 0, 200).'...';
+        } else {
+            $message = $chat->message;
+        }
+
         $position = 'left';
 
         $chat = array(
             'name' => $name,
             'text' => $chat->message,
+            'text2' => $message,
             'picture' => $picture,
             'position' => $position,
             'time' => $time
@@ -146,6 +159,12 @@ class GroupController extends Controller
                     $picture = url('images/avatar-2.png');
                 }
             }
+
+            if (strlen($chat->message) > 150) {
+                $message = substr($chat->message, 0, 200).'...';
+            } else {
+                $message = $chat->message;
+            }
     
             $position = 'right';
     
@@ -153,6 +172,7 @@ class GroupController extends Controller
                 'chat' => array(
                     'name' => $name,
                     'text' => $chat->message,
+                    'text2' => $message,
                     'picture' => $picture,
                     'position' => 'chat-'.$position,
                     'time' => $time

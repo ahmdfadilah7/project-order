@@ -62,7 +62,14 @@ class GroupController extends Controller
 
         $chat = array();
         foreach($chatgroup as $row) {
-            $name = $row->user->name;
+
+            if ($row->user->role == 'pelanggan') {
+                $name = $row->user->name." - Klien";
+            } elseif ($row->user->role == 'penjoki') {
+                $name = $row->user->name." - Tim";
+            } elseif ($row->user->role == 'admin') {
+                $name = $row->user->name.' - '.$row->user->access->access;
+            }
             $time = Carbon::parse($row->created_at)->diffForHumans();
 
             if ($row->user->role == 'admin') {
@@ -81,6 +88,7 @@ class GroupController extends Controller
             }
 
             $chat[] = array(
+                'id' => $row->id,
                 'name' => $name,
                 'text' => $row->message,
                 'picture' => $picture,
@@ -105,7 +113,13 @@ class GroupController extends Controller
     {
         $chat = ChatGroup::find($id);
 
-        $name = $chat->user->name;
+        if ($chat->user->role == 'pelanggan') {
+            $name = $chat->user->name.' - Klien';
+        } elseif ($chat->user->role == 'penjoki') {
+            $name = $chat->user->name.' - Tim';
+        } elseif ($chat->user->role == 'admin') {
+            $name = $chat->user->name.' - '.$chat->user->access->access;
+        }
         $time = Carbon::parse($chat->created_at)->diffForHumans();
 
         if ($chat->user->role == 'admin') {
@@ -120,9 +134,18 @@ class GroupController extends Controller
 
         $position = 'left';
 
+        if (strlen($chat->message) > 150) {
+            $message = substr($chat->message, 0, 200).'...';
+        } else {
+            $message = $chat->message;
+        }
+
         $chat = array(
+            'role' => Auth::user()->role,
+            'id' => $chat->id,
             'name' => $name,
             'text' => $chat->message,
+            'text2' => $message,
             'picture' => $picture,
             'position' => $position,
             'time' => $time
@@ -171,13 +194,22 @@ class GroupController extends Controller
                     $picture = url('images/avatar-2.png');
                 }
             }
+
+            if (strlen($chat->message) > 150) {
+                $message = substr($chat->message, 0, 200).'...';
+            } else {
+                $message = $chat->message;
+            }
     
             $position = 'right';
     
             $data = array(
                 'chat' => array(
+                    'role' => Auth::user()->role,
+                    'id' => $chat->id,
                     'name' => $name,
                     'text' => $chat->message,
+                    'text2' => $message,
                     'picture' => $picture,
                     'position' => 'chat-'.$position,
                     'time' => $time
@@ -187,5 +219,23 @@ class GroupController extends Controller
     
             return $data;
         }
+    }
+
+    // Proses hapus chat
+    public function destroy_chat($id)
+    {
+        $chat = ChatGroup::find($id);
+        $chat->delete();
+
+        return redirect()->route('admin.group')->with('berhasil', 'Berhasil menghapus chat.');
+    }
+
+    // Proses hapus group
+    public function destroy($id)
+    {
+        $group = Group::find($id);
+        $group->delete();
+
+        return redirect()->route('admin.group')->with('berhasil', 'Berhasil menghapus group.');
     }
 }

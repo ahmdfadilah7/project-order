@@ -51,7 +51,8 @@
     @endif
 
     function deadline() {
-            @foreach ($dataDeadline as $key => $row)
+        @foreach ($dataDeadline as $key => $row)
+            @if ($row->status <> 2)
                 @if ($row->activity <> '')
                     @if ($row->activity->status <> 1)
                         iziToast.warning({
@@ -60,14 +61,22 @@
                             position: 'topRight'
                         });
                     @endif
+                @else
+                    iziToast.warning({
+                        title: 'Warning',
+                        message: 'Order dengan judul {{ $row->judul }} dan Kode Klien {{ $row->kode_klien }} sudah Deadline',
+                        position: 'topRight'
+                    });
                 @endif
-            @endforeach
-        }
-        deadline();
-        setInterval(deadline, 60000);
+            @endif
+        @endforeach
+    }
+    deadline();
+    setInterval(deadline, 60000);
 
-        function deadline2() {
-            @foreach ($dataDeadline2 as $key => $row)
+    function deadline2() {
+        @foreach ($dataDeadline2 as $key => $row)
+            @if ($row->status <> 2)
                 @if ($row->activity <> '')
                     @if ($row->activity->status <> 1)
                         iziToast.warning({
@@ -76,11 +85,18 @@
                             position: 'topRight'
                         });
                     @endif
+                @else
+                    iziToast.warning({
+                        title: 'Warning',
+                        message: 'Order dengan judul {{ $row->judul }} dan Kode Klien {{ $row->kode_klien }} sisa 1 hari lagi',
+                        position: 'topRight'
+                    });
                 @endif
-            @endforeach
-        }
-        deadline2();
-        setInterval(deadline2, 60000);
+            @endif
+        @endforeach
+    }
+    deadline2();
+    setInterval(deadline2, 60000);
 
     // Inside your Javascript file
     function startTime() {

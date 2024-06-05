@@ -55,12 +55,16 @@ Route::group(['middleware' => ['auth:admin', 'role:admin']], function () {
     Route::get('admin/group', [GroupController::class, 'index'])->name('admin.group');
     Route::post('admin/group/store', [GroupController::class, 'store_group'])->name('admin.group.store');
     Route::get('admin/group/chat/{id}', [GroupController::class, 'chat'])->name('admin.group.chat');
+    Route::get('admin/group/chat/delete/{id}', [GroupController::class, 'destroy_chat'])->name('admin.group.chat.delete');
     Route::get('admin/group/receive/{id}', [GroupController::class, 'receive'])->name('admin.group.receive');
     Route::post('admin/group/chatadd', [GroupController::class, 'store'])->name('admin.group.chatadd');
+    Route::get('admin/group/delete/{id}', [GroupController::class, 'destroy'])->name('admin.group.delete');
 
     Route::get('admin/order', [OrderController::class, 'index'])->name('admin.order');
+    Route::get('admin/order/dataselesai', [OrderController::class, 'data_selesai'])->name('admin.order.dataselesai');
     Route::get('admin/order/get_order/{id}', [OrderController::class, 'getOrder'])->name('admin.order.get_order');
     Route::get('admin/order/getListData', [OrderController::class, 'listData'])->name('admin.order.list');
+    Route::get('admin/order/getListDataSelesai', [OrderController::class, 'listDataSelesai'])->name('admin.order.listSelesai');
     Route::get('admin/order/add', [OrderController::class, 'create'])->name('admin.order.add');
     Route::get('admin/order/detail/{id}', [OrderController::class, 'show'])->name('admin.order.detail');
     Route::get('admin/order/invoice/{id}', [OrderController::class, 'invoice'])->name('admin.order.invoice');

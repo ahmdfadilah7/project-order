@@ -23,7 +23,7 @@
                             <li>
                                 <a href="javascript:void(0)" id="group-chat"
                                     data-url="{{ route('penjoki.group.chat', $row->id) }}" 
-                                    data-groupId="{{ $row->id }}" class="media">
+                                    data-groupid="{{ $row->id }}" class="media">
                                     <figure class="avatar mr-2 bg-warning text-white" data-initial="GP"></figure>
                                     <div class="media-body">
                                         <div class="mb-1 font-weight-bold">{{ $row->name }}</div>
@@ -31,11 +31,14 @@
                                             {{-- <i class="fas fa-circle"></i> Online --}}
                                             @php
                                                 $chat = App\Models\ChatGroup::where('group_id', $row->id)->latest('created_at')->first();
-                                                $name = $chat->user->name;
-                                                if ($chat->user->role == 'pelanggan') {
-                                                    $name = 'Anonimous';
+                                                if ($chat <> '') {
+                                                    if (strlen($chat->message) > 150) {
+                                                        $message = substr($chat->message, 0, 200).'...';
+                                                    } else {
+                                                        $message = $chat->message;
+                                                    }
+                                                    echo $chat->user->name.': '.$message;
                                                 }
-                                                echo $name.': '.$chat->message;
                                             @endphp
                                         </div>
                                     </div>
@@ -57,7 +60,7 @@
                 <div class="card-footer chat-form">
                     {!! Form::open(['method' => 'post', 'id' => 'chat-form', 'enctype' => 'multipart/form-data']) !!}
                         <input type="hidden" name="group_id" id="groupId">
-                        <input type="text" name="message" id="message" class="form-control" placeholder="Type a message" autocomplete="off">
+                        <textarea name="message" id="message" class="form-control summernote-chat"></textarea>
                         <i class="text-danger" id="message-error"></i>
                         <button type="submit" class="btn btn-primary">
                             <i class="far fa-paper-plane"></i>
@@ -79,7 +82,7 @@
             /* When click show user */
             $('body').on('click', '#group-chat', function() {
                 var userURL = $(this).data('url');
-                var groupID = $(this).data('groupId');
+                var groupID = $(this).data('groupid');
                 $.get(userURL, function(data) {
                     $('#mychatbox .chat-content').empty();
                     document.getElementById('mychatbox').style.display = 'block';
@@ -112,7 +115,7 @@
 
                     var infoChatgroup = 'infoChat'+data.message.group_id
                     $.get(url, function (data) {
-                        document.getElementById(infoChatgroup).innerHTML = data.name + ': ' + data.text;
+                        document.getElementById(infoChatgroup).innerHTML = data.name + ': ' + data.text2;
                     });
                 });
             });
@@ -150,7 +153,9 @@
                     success: function(data) {
                         if (data.status == 'berhasil') {
                             $.chatCtrl('#mychatbox', data.chat);
-                            $('#message').val('');
+                            $('#message').summernote('code', '');
+                            var infoChatgroup = 'infoChat'+ groupid
+                            document.getElementById(infoChatgroup).innerHTML = data.chat.name + ': ' + data.chat.text2;
                             document.getElementById('message-error').style.display = 'none';
                         } else {
                             $('#message-error').text(data.error);

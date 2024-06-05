@@ -16,7 +16,8 @@
                 <li @if(Request::segment(2)=='dashboard') class="active" @endif><a class="nav-link" href="{{ route('admin.dashboard') }}"><i class="fas fa-fire"></i> <span>Dashboard</span></a></li>
 
                 <li class="menu-header">Transaksi</li>
-                <li @if(Request::segment(2)=='order') class="active" @endif><a class="nav-link" href="{{ route('admin.order') }}"><i class="fas fa-clipboard"></i> <span>Order</span></a></li>
+                <li @if(Request::segment(2)=='order' && Request::segment(3)=='') class="active" @endif><a class="nav-link" href="{{ route('admin.order') }}"><i class="fas fa-clipboard"></i> <span>Order</span></a></li>
+                <li @if(Request::segment(2)=='order' && Request::segment(3)=='dataselesai') class="active" @endif><a class="nav-link" href="{{ route('admin.order.dataselesai') }}"><i class="fas fa-clipboard"></i> <span>Order Selesai</span></a></li>
 
                 <li class="menu-header">Chatting</li>
                 <li @if(Request::segment(2)=='group') class="active" @endif><a class="nav-link" href="{{ route('admin.group') }}"><i class="ion ion-chatbubbles"></i> <span>Group</span></a></li>

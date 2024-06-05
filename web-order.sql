@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 30, 2024 at 11:31 PM
+-- Generation Time: Jun 05, 2024 at 09:30 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -74,15 +74,6 @@ CREATE TABLE `chat_groups` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `chat_groups`
---
-
-INSERT INTO `chat_groups` (`id`, `message`, `group_id`, `user_id`, `created_at`, `updated_at`) VALUES
-(111, 'Berhasil', 3, 1, '2024-05-28 06:21:39', '2024-05-28 06:21:39'),
-(112, 'Tahap pengerjaan ka', 3, 5, '2024-05-28 06:51:21', '2024-05-28 06:51:21'),
-(113, 'Oke ka', 3, 20, '2024-05-28 07:04:32', '2024-05-28 07:04:32');
-
 -- --------------------------------------------------------
 
 --
@@ -107,6 +98,7 @@ CREATE TABLE `failed_jobs` (
 
 CREATE TABLE `file_projects` (
   `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
   `order_id` bigint(20) UNSIGNED NOT NULL,
   `file` longtext NOT NULL,
   `keterangan` longtext DEFAULT NULL,
@@ -128,13 +120,6 @@ CREATE TABLE `groups` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `groups`
---
-
-INSERT INTO `groups` (`id`, `name`, `pelanggan_id`, `penjoki_id`, `created_at`, `updated_at`) VALUES
-(3, 'A0me226', 20, 5, '2024-05-28 06:10:47', '2024-05-28 06:10:47');
 
 -- --------------------------------------------------------
 
@@ -174,15 +159,6 @@ CREATE TABLE `jenis_orders` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `jenis_orders`
---
-
-INSERT INTO `jenis_orders` (`id`, `order_id`, `jenis_id`, `created_at`, `updated_at`) VALUES
-(4, 9, 3, '2024-05-29 11:31:55', '2024-05-29 11:31:55'),
-(5, 9, 2, '2024-05-29 11:31:55', '2024-05-29 11:31:55'),
-(6, 9, 1, '2024-05-29 11:31:55', '2024-05-29 11:31:55');
 
 -- --------------------------------------------------------
 
@@ -228,7 +204,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (25, '2024_05_28_152232_add_field_keterangan_to_orders', 13),
 (26, '2024_05_29_045904_create_jenis_orders_table', 14),
 (27, '2024_05_29_182742_add_field_code_order_to_orders', 15),
-(28, '2024_05_29_183400_add_field_email_to_settings', 16);
+(28, '2024_05_29_183400_add_field_email_to_settings', 16),
+(29, '2024_06_05_025539_add_field_user_id_to_file_projects', 17),
+(30, '2024_06_05_030228_add_field_kode_client_to_orders', 18);
 
 -- --------------------------------------------------------
 
@@ -239,6 +217,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 CREATE TABLE `orders` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `kode_order` varchar(255) NOT NULL,
+  `kode_klien` varchar(255) DEFAULT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
   `pelanggan_id` bigint(20) UNSIGNED NOT NULL,
   `bobot_id` bigint(20) UNSIGNED NOT NULL,
@@ -251,13 +230,6 @@ CREATE TABLE `orders` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `orders`
---
-
-INSERT INTO `orders` (`id`, `kode_order`, `user_id`, `pelanggan_id`, `bobot_id`, `keterangan`, `judul`, `deskripsi`, `deadline`, `total`, `status`, `created_at`, `updated_at`) VALUES
-(9, 'ORDSIP20240529VRQ', 7, 20, 3, NULL, 'Test', '<p>Berhasil</p>', '2024-06-02', 950000, 0, '2024-05-29 11:31:55', '2024-05-29 11:31:55');
 
 -- --------------------------------------------------------
 
@@ -345,7 +317,6 @@ INSERT INTO `profiles` (`id`, `user_id`, `no_telp`, `tmpt_lahir`, `tgl_lahir`, `
 (16, 17, '081281078651', 'Jakarta', '0007-05-12', 'p', NULL, NULL, NULL, '2024-05-28 04:32:48', '2024-05-28 04:32:48'),
 (17, 18, '089636908632', 'Mombang Boru', '1998-09-12', 'p', NULL, NULL, NULL, '2024-05-28 04:33:32', '2024-05-28 04:33:32'),
 (18, 19, '085770713652', 'Bogor', '2000-06-02', 'l', NULL, NULL, NULL, '2024-05-28 04:34:21', '2024-05-28 04:34:21'),
-(19, 20, '081237123612', NULL, NULL, NULL, NULL, 'Sistem Informasi', 'Jakarta', '2024-05-28 04:50:30', '2024-05-28 04:50:30'),
 (20, 21, '0819318221', 'Bogor', NULL, NULL, NULL, NULL, NULL, '2024-05-28 08:35:12', '2024-05-28 08:48:34'),
 (21, 22, '08912381283', NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-28 19:36:14', '2024-05-28 19:36:14');
 
@@ -429,7 +400,6 @@ INSERT INTO `users` (`id`, `name`, `email`, `role`, `email_verified_at`, `passwo
 (17, 'Vira', 'muvirah@gmail.com', 'penjoki', NULL, '$2y$10$mzhLse9lqDvmWHT0ezVwMObP/wb8ayMrHypNXV9vPBysCBRISS/PS', NULL, '2024-05-28 04:32:48', '2024-05-28 04:32:48'),
 (18, 'Yusni', 'yusnikonayy@gmail.com', 'penjoki', NULL, '$2y$10$ggjUGVF24izj.ySL2g43ZurMxPlHcPbX1CEzm85ffIYOOFDz6H59O', NULL, '2024-05-28 04:33:32', '2024-05-28 04:33:32'),
 (19, 'Muhammad Diwan Sundarta', 'mdiwansundarta461@gmail.com', 'penjoki', NULL, '$2y$10$s/3EaKzb10Q5ysrwpOGPeu4EpmK4GvmZ/z0N0tjjEBu4PlxKmiKvO', NULL, '2024-05-28 04:34:21', '2024-05-28 04:34:21'),
-(20, 'Pelanggan 1', 'pelanggan1@example.com', 'pelanggan', NULL, '$2y$10$1FKHHPf9Mti6tcWqzjd4duqpA9eHqLW4qRxx0k.pMT61m06nujtXu', NULL, '2024-05-28 04:50:30', '2024-05-28 04:50:30'),
 (21, 'Ima', 'ima@example.com', 'admin', NULL, '$2y$10$4YEfxl6DiA8XnsGOvmu0k.T.//NEjS8PSiuBe7N7/V9BNXxvowiqG', NULL, '2024-05-28 08:35:12', '2024-05-28 08:35:12'),
 (22, 'Ricky', 'ricky@example.com', 'admin', NULL, '$2y$10$Sm2ZWQvrXutIc80aV4w3j.o8j5L3dnfQLpwQZq7hsLFT0Hasftyhu', NULL, '2024-05-28 19:36:13', '2024-05-28 19:36:13');
 
@@ -494,7 +464,8 @@ ALTER TABLE `failed_jobs`
 --
 ALTER TABLE `file_projects`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `file_projects_order_id_foreign` (`order_id`);
+  ADD KEY `file_projects_order_id_foreign` (`order_id`),
+  ADD KEY `file_projects_user_id_foreign` (`user_id`);
 
 --
 -- Indexes for table `groups`
@@ -598,7 +569,7 @@ ALTER TABLE `user_accesses`
 -- AUTO_INCREMENT for table `activities`
 --
 ALTER TABLE `activities`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `bobots`
@@ -610,7 +581,7 @@ ALTER TABLE `bobots`
 -- AUTO_INCREMENT for table `chat_groups`
 --
 ALTER TABLE `chat_groups`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=114;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=152;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -622,7 +593,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `file_projects`
 --
 ALTER TABLE `file_projects`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `groups`
@@ -640,25 +611,25 @@ ALTER TABLE `jenis`
 -- AUTO_INCREMENT for table `jenis_orders`
 --
 ALTER TABLE `jenis_orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -718,7 +689,8 @@ ALTER TABLE `chat_groups`
 -- Constraints for table `file_projects`
 --
 ALTER TABLE `file_projects`
-  ADD CONSTRAINT `file_projects_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `file_projects_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `file_projects_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `groups`
