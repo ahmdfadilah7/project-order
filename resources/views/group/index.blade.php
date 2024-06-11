@@ -41,7 +41,7 @@
                                     <select name="pelanggan" class="form-control select2">
                                         <option value="">- Pilih -</option>
                                         @foreach ($user as $row)
-                                            <option value="{{ $row->id }}" @if(old('pelanggan')==$row->id) selected @endif>{{ $row->name }}</option>
+                                            <option value="{{ $row->id }}" @if(old('pelanggan')==$row->id) selected @endif>{{ $row->name.' - '.$row->profile->kode_klien }}</option>
                                         @endforeach
                                     </select>
                                     <i class="text-danger">{{ $errors->first('pelanggan') }}</i>

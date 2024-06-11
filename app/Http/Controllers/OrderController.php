@@ -458,7 +458,6 @@ class OrderController extends Controller
         $validator = Validator::make($request->all(), [
             'penjoki' => 'required',
             'pelanggan' => 'required',
-            'kode_klien' => 'required',
             'judul' => 'required',
             'deskripsi' => 'required',
             'deadline' => 'required',
@@ -471,12 +470,14 @@ class OrderController extends Controller
             return back()->with('errors', $errors)->withInput($request->all());
         }
 
+        $pelanggan = User::find($request->pelanggan);
+
         $order = new Order;
         $order->kode_order = 'ORDSIP'.date('Ymd').strtoupper(Str::random(3));
         $order->user_id = $request->penjoki;
         $order->pelanggan_id = $request->pelanggan;
         $order->bobot_id = $request->bobot;
-        $order->kode_klien = $request->kode_klien;
+        $order->kode_klien = $pelanggan->profile->kode_klien;
         $order->judul = $request->judul;
         $order->deskripsi = $request->deskripsi;
         $order->keterangan = $request->keterangan;

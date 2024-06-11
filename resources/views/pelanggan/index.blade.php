@@ -26,6 +26,7 @@
                                     <th class="text-center">
                                         #
                                     </th>
+                                    <th>Kode Klien</th>
                                     <th>Nama Lengkap</th>
                                     <th>Email</th>
                                     <th>No Telp</th>
@@ -62,6 +63,10 @@
                         name: 'DT_RowIndex',
                         orderable: false,
                         searchable: false
+                    },
+                    {
+                        data: 'kode_klien',
+                        name: 'kode_klien'
                     },
                     {
                         data: 'name',

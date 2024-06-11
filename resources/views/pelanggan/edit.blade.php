@@ -39,6 +39,13 @@
                         </div>
                     </div>
                     <div class="form-group row mb-4">
+                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Univ</label>
+                        <div class="col-sm-12 col-md-7">
+                            <input type="text" name="univ" class="form-control" value="{{ $user->profile->univ }}" autocomplete="off">
+                            <i class="text-danger">{{ $errors->first('univ') }}</i>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-4">
                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Jurusan</label>
                         <div class="col-sm-12 col-md-7">
                             <input type="text" name="jurusan" class="form-control" value="{{ $user->profile->jurusan }}" autocomplete="off">
@@ -53,50 +60,10 @@
                         </div>
                     </div>
                     <div class="form-group row mb-4">
-                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Tempat Lahir</label>
+                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Kode Klien</label>
                         <div class="col-sm-12 col-md-7">
-                            <input type="text" name="tempat_lahir" class="form-control" value="{{ $user->profile->tmpt_lahir }}" autocomplete="off">
-                            <i class="text-danger">{{ $errors->first('tempat_lahir') }}</i>
-                        </div>
-                    </div>
-                    <div class="form-group row mb-4">
-                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Tanggal Lahir</label>
-                        <div class="col-sm-12 col-md-7">
-                            <input type="date" name="tanggal_lahir" class="form-control" value="{{ $user->profile->tgl_lahir }}" autocomplete="off">
-                            <i class="text-danger">{{ $errors->first('tanggal_lahir') }}</i>
-                        </div>
-                    </div>
-                    <div class="form-group row mb-4">
-                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Jenis Kelamin</label>
-                        <div class="col-sm-12 col-md-7">
-                            <select name="jenis_kelamin" class="form-control selectric">
-                                <option value="">- Pilih -</option>
-                                <option value="l" @if($user->profile->jns_kelamin=='l') selected @endif>Laki - Laki</option>
-                                <option value="p" @if($user->profile->jns_kelamin=='p') selected @endif>Perempuan</option>
-                            </select>
-                            <i class="text-danger">{{ $errors->first('jenis_kelamin') }}</i>
-                        </div>
-                    </div>
-                    <div class="form-group row mb-4">
-                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Foto Sebelumnya</label>
-                        <div class="col-sm-12 col-md-7">
-                            @if($user->profile->foto <> '')
-                                <div style="width: 250px">
-                                    <img src="{{ url($user->profile->foto) }}" class="w-100">
-                                </div>
-                            @else
-                                <i class="text-danger">Tidak ada foto</i>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="form-group row mb-4">
-                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Foto</label>
-                        <div class="col-sm-12 col-md-7">
-                            <div id="image-preview" class="image-preview">
-                                <label for="image-upload" id="image-label">Choose File</label>
-                                <input type="file" name="foto" id="image-upload" />
-                            </div>
-                            <i class="text-danger">{{ $errors->first('foto') }}</i>
+                            <input type="text" name="kode_klien" class="form-control" value="{{ $user->profile->kode_klien }}" autocomplete="off">
+                            <i class="text-danger">{{ $errors->first('kode_klien') }}</i>
                         </div>
                     </div>
                     <div class="form-group row mb-4">

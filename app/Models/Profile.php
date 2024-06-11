@@ -12,11 +12,13 @@ class Profile extends Model
 
     protected $fillable = [
         'user_id',
+        'kode_klien',
         'no_telp',
         'tmpt_lahir',
         'tgl_lahir',
         'jns_kelamin',
         'foto',
+        'univ',
         'jurusan',
         'daerah',
     ];

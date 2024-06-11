@@ -31,6 +31,9 @@ class PelangganController extends Controller
         $data = User::where('role', 'pelanggan');
         $datatables = DataTables::of($data)
             ->addIndexColumn()
+            ->addColumn('kode_klien', function($row) {
+                return $row->profile->kode_klien;
+            })
             ->addColumn('no_telp', function($row) {
                 $no_telp = $row->profile->no_telp;
                 return $no_telp;
@@ -68,9 +71,10 @@ class PelangganController extends Controller
             'email' => 'required|email|unique:users,email',
             'no_telp' => 'required|numeric|unique:profiles,no_telp',
             'jurusan' => 'required',
-            'daerah' => 'required',
-            'foto' => 'mimes:jpg,jpeg,png,webp,svg',
-            'password' => 'required|min:8'
+            'daerah' => 'required'
+        ], 
+        [
+            'required' => ':attribute wajib diisi !!!'
         ]);
 
         if ($validator->fails()) {
@@ -82,28 +86,16 @@ class PelangganController extends Controller
         $user->name = $request->get('nama_lengkap');
         $user->email = $request->get('email');
         $user->role = 'pelanggan';
-        $user->password = Hash::make($request->get('password'));
+        $user->password = Hash::make('12345678');
         $user->save();
-
-        if ($request->foto <> '') {
-            $foto = $request->file('foto');
-            $namafoto = 'Profile-'.str_replace(' ', '-', $request->get('nama_lengkap')).Str::random(5).'.'.$foto->extension();
-            $foto->move(public_path('images/'), $namafoto);
-            $fotoNama = 'images/'.$namafoto;
-        } else {
-            $fotoNama = NULL;
-        }
-        
 
         Profile::create([
             'user_id' => $user->id,
             'no_telp' => $request->get('no_telp'),
+            'univ' => $request->get('univ'),
             'jurusan' => $request->get('jurusan'),
             'daerah' => $request->get('daerah'),
-            'tmpt_lahir' => $request->get('tempat_lahir'),
-            'tgl_lahir' => $request->get('tanggal_lahir'),
-            'jns_kelamin' => $request->get('jenis_kelamin'),
-            'foto' => $fotoNama
+            'kode_klien' => $request->get('kode_klien')
         ]);
 
         return redirect()->route('admin.pelanggan')->with('berhasil', 'Berhasil menambahkan pelanggan.');
@@ -128,8 +120,7 @@ class PelangganController extends Controller
             'email' => 'required|email',
             'no_telp' => 'required|numeric',
             'jurusan' => 'required',
-            'daerah' => 'required',
-            'foto' => 'mimes:jpg,jpeg,png,webp,svg'
+            'daerah' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -145,25 +136,12 @@ class PelangganController extends Controller
         }
         $user->save();
 
-        if ($request->foto <> '') {
-            $foto = $request->file('foto');
-            $namafoto = 'Profile-'.str_replace(' ', '-', $request->get('nama_lengkap')).Str::random(5).'.'.$foto->extension();
-            $foto->move(public_path('images/'), $namafoto);
-            $fotoNama = 'images/'.$namafoto;
-        }
-
         $profile = Profile::where('user_id', $id)->first();
         $profile->no_telp = $request->get('no_telp');
+        $profile->univ = $request->get('univ');
         $profile->jurusan = $request->get('jurusan');
         $profile->daerah = $request->get('daerah');
-        $profile->tmpt_lahir = $request->get('tempat_lahir');
-        $profile->tgl_lahir = $request->get('tanggal_lahir');
-        $profile->jns_kelamin = $request->get('jenis_kelamin');
-        if ($request->foto <> '') {
-            File::delete($profile->foto);
-
-            $profile->foto = $fotoNama;
-        }
+        $profile->kode_klien = $request->get('kode_klien');
         $profile->save();
 
         return redirect()->route('admin.pelanggan')->with('berhasil', 'Berhasil mengupdate pelanggan.');

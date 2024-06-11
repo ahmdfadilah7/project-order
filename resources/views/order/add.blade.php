@@ -72,17 +72,10 @@
                             <select name="pelanggan" class="form-control select2">
                                 <option value="">- Pilih -</option>
                                 @foreach ($user as $row)
-                                    <option value="{{ $row->id }}" @if(old('pelanggan')==$row->id) selected @endif>{{ $row->name }}</option>
+                                    <option value="{{ $row->id }}" @if(old('pelanggan')==$row->id) selected @endif>{{ $row->name.' - '.$row->profile->kode_klien }}</option>
                                 @endforeach
                             </select>
                             <i class="text-danger">{{ $errors->first('pelanggan') }}</i>
-                        </div>
-                    </div>
-                    <div class="form-group row mb-4">
-                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Kode Klien</label>
-                        <div class="col-sm-12 col-md-7">
-                            <input type="text" name="kode_klien" class="form-control" value="{{ old('kode_klien') }}" autocomplete="off">
-                            <i class="text-danger">{{ $errors->first('kode_klien') }}</i>
                         </div>
                     </div>
                     <div class="form-group row mb-4">

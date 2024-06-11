@@ -74,7 +74,6 @@
                                     <th>Kode Klien</th>
                                     <th>Karyawan</th>
                                     <th>Pelanggan</th>
-                                    <th>Project</th>
                                     <th>Jenis</th>
                                     <th>Bobot</th>
                                     <th>Keterangan Bobot</th>
@@ -137,10 +136,6 @@
                     {
                         data: 'pelanggan',
                         name: 'pelanggan'
-                    },
-                    {
-                        data: 'judul',
-                        name: 'judul'
                     },
                     {
                         data: 'jenisorder',
