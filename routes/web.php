@@ -150,9 +150,12 @@ Route::group(['middleware' => ['xss', 'auth:penjoki', 'role:penjoki']], function
     Route::post('penjoki/group/chatadd', [PenjokiGroupController::class, 'store'])->name('penjoki.group.chatadd');
 
     Route::get('penjoki/order', [PenjokiOrderController::class, 'index'])->name('penjoki.order');
+    Route::get('penjoki/order/dataselesai', [PenjokiOrderController::class, 'data_selesai'])->name('penjoki.order.dataselesai');
     Route::get('penjoki/order/getListData', [PenjokiOrderController::class, 'listData'])->name('penjoki.order.list');
+    Route::get('penjoki/order/getListDataSelesai', [PenjokiOrderController::class, 'listDataSelesai'])->name('penjoki.order.listSelesai');
     Route::get('penjoki/order/add', [PenjokiOrderController::class, 'create'])->name('penjoki.order.add');
     Route::get('penjoki/order/detail/{id}', [PenjokiOrderController::class, 'show'])->name('penjoki.order.detail');
+    Route::get('penjoki/order/detailselesai/{id}', [PenjokiOrderController::class, 'show'])->name('penjoki.order.detailselesai');
     Route::post('penjoki/order/store', [PenjokiOrderController::class, 'store'])->name('penjoki.order.store');
     Route::get('penjoki/order/{id}', [PenjokiOrderController::class, 'edit'])->name('penjoki.order.edit');
     Route::post('penjoki/order/export', [PenjokiOrderController::class, 'export'])->name('penjoki.order.export');

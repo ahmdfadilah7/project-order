@@ -14,52 +14,8 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header">
-                    <h4>Cetak Laporan</h4>
-                </div>
-                <div class="card-body">
-                    {!! Form::open(['method' => 'post', 'route' => ['penjoki.order.export']]) !!}
-                        <div class="row">
-                            <div class="col-md-3 col-sm-12">
-                                <div class="form-group">
-                                    <label for="">Dari</label>
-                                    <input type="date" name="dari" class="form-control">
-                                    <i class="text-danger">{{ $errors->first('dari') }}</i>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-sm-12">
-                                <div class="form-group">
-                                    <label for="">Sampai</label>
-                                    <input type="date" name="sampai" class="form-control">
-                                    <i class="text-danger">{{ $errors->first('sampai') }}</i>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-sm-12">
-                                <div class="form-group">
-                                    <label for="">Format</label>
-                                    <select name="format" class="form-control select2">
-                                        <option value="">- Pilih -</option>
-                                        <option value="PDF">PDF</option>
-                                        <option value="EXCEL">EXCEL</option>
-                                    </select>
-                                    <i class="text-danger">{{ $errors->first('format') }}</i>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-sm-12">
-                                <button type="submit" class="btn btn-info btn-block mt-4 pt-2"><i class="ion ion-archive"></i> Cetak Laporan</button>
-                            </div>
-                        </div>
-                    {!! Form::close() !!}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
                 <div class="card-header justify-content-between">
-                    <h4>Order</h4>
+                    <h4>Order Selesai</h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

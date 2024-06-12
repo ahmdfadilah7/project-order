@@ -45,11 +45,13 @@ class AdministratorController extends Controller
             })
             ->addColumn('action', function($row) {
                 $btn = '<a href="'.route('admin.administrator.edit', $row->id).'" class="btn btn-primary btn-sm mr-2 mb-2">
-                            <i class="fas fa-edit"></i>
+                            <i class="fas fa-edit"></i> Edit
                         </a>';
                 if ($row->id <> Auth::guard('admin')->user()->id) {
-                    $btn .= '<a href="'.route('admin.administrator.delete', $row->id).'" class="btn btn-danger btn-sm mr-2 mb-2">
-                            <i class="fas fa-trash"></i>
+                    
+                    $url = "'".route('admin.administrator.delete', $row->id)."'";
+                    $btn .= '<a onclick="deleteModal('.$url.')" class="btn btn-danger btn-sm text-white mr-2 mb-2">
+                            <i class="fas fa-trash"></i> Hapus
                         </a>';
                 }
 

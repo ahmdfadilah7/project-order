@@ -154,6 +154,12 @@
         setInterval(startTime, 1000);
 
     })
+
+    function deleteModal(url) {
+        var url = url;
+        $('#staticBackdrop').modal('show');
+        $('#btnDelete').attr('href', url)
+    }
 </script>
 
 @endsection

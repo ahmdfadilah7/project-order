@@ -36,13 +36,14 @@
                             </div>
                             <div class="col-md-3 col-sm-12">
                                 <div class="form-group">
-                                    <label for="">Format</label>
-                                    <select name="format" class="form-control select2">
-                                        <option value="">- Pilih -</option>
-                                        <option value="PDF">PDF</option>
-                                        <option value="EXCEL">EXCEL</option>
+                                    <label for="">Status Order</label>
+                                    <select name="status" class="form-control select2">
+                                        <option value="">- Semua -</option>
+                                        @foreach($status_order as $key => $row)
+                                            <option value="{{ $key }}">{{ $row }}</option>
+                                        @endforeach
                                     </select>
-                                    <i class="text-danger">{{ $errors->first('format') }}</i>
+                                    <i class="text-danger">{{ $errors->first('status') }}</i>
                                 </div>
                             </div>
                             <div class="col-md-3 col-sm-12">
@@ -70,7 +71,6 @@
                                     <th class="text-center">
                                         #
                                     </th>
-                                    <th>Koder Order</th>
                                     <th>Kode Klien</th>
                                     <th>Karyawan</th>
                                     <th>Pelanggan</th>
@@ -100,6 +100,7 @@
 
 @section('modal')
     @include('order.partials.payment')
+    @include('layouts.partials.deleteModal')
 @endsection
 
 @section('script')
@@ -120,10 +121,6 @@
                         name: 'DT_RowIndex',
                         orderable: false,
                         searchable: false
-                    },
-                    {
-                        data: 'kode_order',
-                        name: 'kode_order'
                     },
                     {
                         data: 'kode_klien',

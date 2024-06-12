@@ -44,6 +44,10 @@
 
 @endsection
 
+@section('modal')
+    @include('layouts.partials.deleteModal')
+@endsection
+
 @section('script')
 
     <script>

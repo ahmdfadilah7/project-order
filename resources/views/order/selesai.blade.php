@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <div class="row">
+    {{-- <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
@@ -53,7 +53,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <div class="row">
         <div class="col-12">
@@ -69,11 +69,9 @@
                                     <th class="text-center">
                                         #
                                     </th>
-                                    <th>Koder Order</th>
                                     <th>Kode Klien</th>
                                     <th>Karyawan</th>
                                     <th>Pelanggan</th>
-                                    <th>Project</th>
                                     <th>Jenis</th>
                                     <th>Bobot</th>
                                     <th>Keterangan Bobot</th>
@@ -98,6 +96,10 @@
 
 @endsection
 
+@section('modal')
+    @include('layouts.partials.deleteModal')
+@endsection
+
 @section('script')
 
     <script>
@@ -118,10 +120,6 @@
                         searchable: false
                     },
                     {
-                        data: 'kode_order',
-                        name: 'kode_order'
-                    },
-                    {
                         data: 'kode_klien',
                         name: 'kode_klien'
                     },
@@ -132,10 +130,6 @@
                     {
                         data: 'pelanggan',
                         name: 'pelanggan'
-                    },
-                    {
-                        data: 'judul',
-                        name: 'judul'
                     },
                     {
                         data: 'jenisorder',

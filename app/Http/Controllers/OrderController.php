@@ -30,10 +30,12 @@ class OrderController extends Controller
         
         $status = array('DP 50%', 'LUNAS');
 
+        $status_order = array('Belum dibayar', 'Sedang diproses', 'Order Selesai');
+
         $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
         $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
 
-        return view('order.index', compact('setting', 'status', 'dataDeadline', 'dataDeadline2'));
+        return view('order.index', compact('setting', 'status', 'status_order', 'dataDeadline', 'dataDeadline2'));
     }
 
     // Proses menampilkan data order dengan datatables
@@ -138,7 +140,8 @@ class OrderController extends Controller
                     }
                 }
 
-                $btn .= '<a href="'.route('admin.order.delete', $row->id).'" class="btn btn-danger btn-sm mr-2 mb-2" title="Hapus">
+                $url = "'".route('admin.order.delete', $row->id)."'";
+                $btn .= '<a onclick="deleteModal('.$url.')" class="btn btn-danger btn-sm text-white mr-2 mb-2" title="Hapus">
                         <i class="fas fa-trash"></i> Hapus
                     </a>';
 
@@ -265,7 +268,8 @@ class OrderController extends Controller
                     }
                 }
 
-                $btn .= '<a href="'.route('admin.order.delete', $row->id).'" class="btn btn-danger btn-sm mr-2 mb-2" title="Hapus">
+                $url = "'".route('admin.order.delete', $row->id)."'";
+                $btn .= '<a onclick="deleteModal('.$url.')" class="btn btn-danger btn-sm text-white mr-2 mb-2" title="Hapus">
                         <i class="fas fa-trash"></i> Hapus
                     </a>';
 
@@ -290,8 +294,7 @@ class OrderController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'dari' => 'required',
-            'sampai' => 'required',
-            'format' => 'required'
+            'sampai' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -299,28 +302,8 @@ class OrderController extends Controller
             return back()->with('errors', $errors);
         }
 
-        if ($request->format == 'EXCEL') {
-            return (new OrderExport($request->dari, $request->sampai))
-                    ->download('Laporan-Order-'.date('dmY', strtotime($request->dari)).'-'.date('dmY', strtotime($request->sampai)).'-'.Str::random(5).'.xlsx');
-        } elseif ($request->format == 'PDF') {
-
-            $setting = Setting::first();
-            $order = Order::where('deadline', '>=', $request->dari)
-            ->where('deadline', '<=', $request->sampai)
-            ->get();
-            
-            $formatname = 'Laporan-Order-'.date('dmY', strtotime($request->dari)).'-'.date('dmY', strtotime($request->sampai)).'-'.Str::random(5);
-
-            $data = array(
-                'setting' => $setting,
-                'order' => $order
-            );
-
-            view()->share('order.pdf', $data);
-            $pdf = Pdf::loadView('order.pdf', $data);
-
-            return $pdf->stream(strtoupper($formatname).'.pdf');
-        }
+        return (new OrderExport($request->dari, $request->sampai, $request->status))
+                ->download('Laporan-Order-'.date('dmY', strtotime($request->dari)).'-'.date('dmY', strtotime($request->sampai)).'-'.Str::random(5).'.xlsx');
     }
 
     // Proses print

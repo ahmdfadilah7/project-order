@@ -39,10 +39,12 @@ class PenjokiController extends Controller
             })
             ->addColumn('action', function($row) {
                 $btn = '<a href="'.route('admin.penjoki.edit', $row->id).'" class="btn btn-primary btn-sm mr-2 mb-2">
-                        <i class="fas fa-edit"></i>
+                        <i class="fas fa-edit"></i> Edit
                     </a>';
-                $btn .= '<a href="'.route('admin.penjoki.delete', $row->id).'" class="btn btn-danger btn-sm mr-2 mb-2">
-                    <i class="fas fa-trash"></i>
+
+                $url = "'".route('admin.penjoki.delete', $row->id)."'";
+                $btn .= '<a onclick="deleteModal('.$url.')" class="btn btn-danger btn-sm text-white mr-2 mb-2">
+                    <i class="fas fa-trash"></i> Hapus
                 </a>';
 
                 return $btn;

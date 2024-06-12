@@ -32,6 +32,12 @@
 <script src="{{ asset('assets/js/scripts.js') }}"></script>
 <script src="{{ asset('assets/js/custom.js') }}"></script>
 <script>
+    function deleteModal(url) {
+        var url = url;
+        $('#staticBackdrop').modal('show');
+        $('#btnDelete').attr('href', url)
+    }
+
     @if (Session::has('berhasil'))
         iziToast.success({
             title: 'Success',

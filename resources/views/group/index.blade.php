@@ -91,7 +91,7 @@
                                             </div>
                                         </div>
                                     </a>
-                                    <a href="{{ route('admin.group.delete', $row->id) }}" class="text-danger text-right"><i class="fas fa-trash"></i> Hapus</a>
+                                    <a onclick="deleteModal('{{ route('admin.group.delete', $row->id) }}')" class="text-danger text-right"><i class="fas fa-trash"></i> Hapus</a>
                                 </div>
                             </li>
                         @endforeach
@@ -214,7 +214,13 @@
             
         });
 
-        function deleteModal(id) {
+        function deleteModal(url) {
+            var url = url;
+            $('#staticBackdrop').modal('show');
+            $('#btnDelete').attr('href', url)
+        }
+
+        function deleteChatModal(id) {
             var idChat = id;
             $('#staticBackdrop').modal('show');
             $('#btnDelete').attr('href', '{{ url("admin/group/chat/delete") }}/'+id)

@@ -17,11 +17,13 @@ class OrderExport implements FromView, ShouldAutoSize
 
     public $dari;
     public $sampai;
+    public $status;
 
-    public function __construct($dari, $sampai)
+    public function __construct($dari, $sampai, $status)
     {
         $this->dari = $dari;
         $this->sampai = $sampai;
+        $this->status = $status;
     }
 
     public function view() : View 
@@ -30,17 +32,36 @@ class OrderExport implements FromView, ShouldAutoSize
         
         if (Auth::user()->role == 'penjoki') {
             $order = Order::where('user_id', Auth::user()->id)
-                ->where('deadline', '>=', $this->dari)
-                ->where('deadline', '<=', $this->sampai)
+                ->where('created_at', '>=', $this->dari)
+                ->where('created_at', '<=', $this->sampai)
                 ->get();
 
-            return view('joki.order.excel', compact('setting', 'order'));
+            $ordercount = Order::where('user_id', Auth::user()->id)
+                ->where('created_at', '>=', $this->dari)
+                ->where('created_at', '<=', $this->sampai)
+                ->count();
+
+            $dari = $this->dari;
+            $sampai = $this->sampai;
+
+            return view('joki.order.excel', compact('setting', 'order', 'ordercount', 'dari', 'sampai'));
         } else {
-            $order = Order::where('deadline', '>=', $this->dari)
-                ->where('deadline', '<=', $this->sampai)
-                ->get();
 
-            return view('order.excel', compact('setting', 'order'));
+            if ($this->status <> '') {
+                $order = Order::where('created_at', '>=', $this->dari)
+                    ->where('created_at', '<=', $this->sampai)
+                    ->where('status', $this->status)
+                    ->get();
+            } else {
+                $order = Order::where('created_at', '>=', $this->dari)
+                    ->where('created_at', '<=', $this->sampai)
+                    ->get();
+            }
+
+            $dari = $this->dari;
+            $sampai = $this->sampai;
+
+            return view('order.excel', compact('setting', 'order', 'dari', 'sampai'));
         }
 
     }

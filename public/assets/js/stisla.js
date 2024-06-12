@@ -227,7 +227,7 @@
                   '<div class="chat-details">' +
                   '<div class="chat-text"><b>'+chat.name+'</b><br>'+chat.text+'</div>' +
                   '<div class="chat-time">'+chat.time+
-                  '<a onclick="deleteModal('+chat.id+')" class="btn btn-danger btn-sm text-white"><i class="fas fa-trash"></i> Hapus</a>'+
+                  '<a onclick="deleteChatModal('+chat.id+')" class="btn btn-danger btn-sm text-white"><i class="fas fa-trash"></i> Hapus</a>'+
                   '</div>' +
                   '</div>' +
                   '</div>',

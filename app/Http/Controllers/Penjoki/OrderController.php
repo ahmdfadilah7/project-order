@@ -24,15 +24,17 @@ class OrderController extends Controller
     {
         $setting = Setting::first();
 
+        $status_order = array('Belum dibayar', 'Sedang diproses', 'Order Selesai');
+
         $dataDeadline = Order::where('user_id', Auth::user()->id)->whereDate('deadline', '=', Carbon::now())->get();
         $dataDeadline2 = Order::where('user_id', Auth::user()->id)->whereDate('deadline', '=', Carbon::now()->addDay())->get();
 
-        return view('joki.order.index', compact('setting', 'dataDeadline', 'dataDeadline2'));
+        return view('joki.order.index', compact('setting', 'status_order', 'dataDeadline', 'dataDeadline2'));
     }
 
     // Proses menampilkan data order dengan datatables
     public function listData() {
-        $data = Order::where('user_id', Auth::guard('penjoki')->user()->id)->orderBy('deadline', 'asc')->get();
+        $data = Order::where('user_id', Auth::guard('penjoki')->user()->id)->where('status', '<>', 2)->orderBy('deadline', 'asc')->get();
         $datatables = DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('project', function($row) {
@@ -67,7 +69,68 @@ class OrderController extends Controller
             })
             ->addColumn('action', function($row) {
                 $btn = '<a href="'.route('penjoki.order.detail', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2">
-                        <i class="fas fa-eye"></i>
+                        <i class="fas fa-eye"></i> Lihat
+                    </a>';
+
+                return $btn;
+            })
+            ->rawColumns(['action', 'total', 'progress', 'deadline'])
+            ->make(true);
+
+        return $datatables;
+    }
+
+    // Menampilkan halaman order
+    public function data_selesai()
+    {
+        $setting = Setting::first();
+
+        $status_order = array('Belum dibayar', 'Sedang diproses', 'Order Selesai');
+
+        $dataDeadline = Order::where('user_id', Auth::user()->id)->whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::where('user_id', Auth::user()->id)->whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
+        return view('joki.order.selesai', compact('setting', 'status_order', 'dataDeadline', 'dataDeadline2'));
+    }
+
+    // Proses menampilkan data order dengan datatables
+    public function listDataSelesai() {
+        $data = Order::where('user_id', Auth::guard('penjoki')->user()->id)->where('status', 2)->orderBy('deadline', 'asc')->get();
+        $datatables = DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('project', function($row) {
+                return $row->judul;
+            })
+            ->addColumn('deadline', function($row) {
+                return Carbon::parse($row->deadline)->format('d M Y');
+            })
+            ->addColumn('jenisorder', function($row) {
+                $jenis = array();
+                foreach ($row->jenisorder as $value) {
+                    $jenis[] = $value->jenis->judul;
+                }
+                $jenisorder = implode(',', $jenis);
+                return $jenisorder;
+            })
+            ->addColumn('bobot', function($row) {
+                return strtoupper($row->bobot->bobot);
+            })
+            ->addColumn('progress', function($row) {
+                if ($row->activity <> '') {
+                    if ($row->activity->status <> 1) {
+                        $btn = '<span class="badge badge-info"><i class="ion ion-load-a"></i> '.$row->activity->judul_aktivitas.'</span>';
+                    } else {
+                        $btn = '<span class="badge badge-success"><i class="fas fa-check"></i> '.$row->activity->judul_aktivitas.'</span>';
+                    }
+                } else {
+                    $btn = '<span class="badge badge-danger"><i class="fas fa-exclamation-triangle"></i> Belum ada progress</span>';
+                    }
+
+                return $btn;
+            })
+            ->addColumn('action', function($row) {
+                $btn = '<a href="'.route('penjoki.order.detailselesai', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2">
+                        <i class="fas fa-eye"></i> Lihat
                     </a>';
 
                 return $btn;
@@ -100,8 +163,7 @@ class OrderController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'dari' => 'required',
-            'sampai' => 'required',
-            'format' => 'required'
+            'sampai' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -109,28 +171,7 @@ class OrderController extends Controller
             return back()->with('errors', $errors);
         }
 
-        if ($request->format == 'EXCEL') {
-            return (new OrderExport($request->dari, $request->sampai))
-                    ->download('Laporan-Order-'.date('dmY', strtotime($request->dari)).'-'.date('dmY', strtotime($request->sampai)).'-'.Str::random(5).'.xlsx');
-        } elseif ($request->format == 'PDF') {
-
-            $setting = Setting::first();
-            $order = Order::where('user_id', Auth::user()->id)
-                ->where('deadline', '>=', $request->dari)
-                ->where('deadline', '<=', $request->sampai)
-                ->get();
-            
-            $formatname = 'Laporan-Order-'.date('dmY', strtotime($request->dari)).'-'.date('dmY', strtotime($request->sampai)).'-'.Str::random(5);
-
-            $data = array(
-                'setting' => $setting,
-                'order' => $order
-            );
-
-            view()->share('joki.order.pdf', $data);
-            $pdf = Pdf::loadView('joki.order.pdf', $data);
-
-            return $pdf->stream(strtoupper($formatname).'.pdf');
-        }
+        return (new OrderExport($request->dari, $request->sampai, ''))
+                ->download('Laporan-Order-'.date('dmY', strtotime($request->dari)).'-'.date('dmY', strtotime($request->sampai)).'-'.Str::random(5).'.xlsx');
     }
 }
