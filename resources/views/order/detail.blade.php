@@ -4,14 +4,25 @@
 
 @section('content')
 
-    <div class="section-header">
-        <h1>Order</h1>
-        <div class="section-header-breadcrumb">
-            <div class="breadcrumb-item"><a href="{{ route('admin.order') }}">Order</a></div>
-            <div class="breadcrumb-item">Detail</div>
-            <div class="breadcrumb-item active">{{ $order->judul }}</div>
+    @if(Request::segment(3)=='detailselesai')
+        <div class="section-header">
+            <h1>Order Selesai</h1>
+            <div class="section-header-breadcrumb">
+                <div class="breadcrumb-item"><a href="{{ route('admin.order.dataselesai') }}">Order</a></div>
+                <div class="breadcrumb-item">Detail</div>
+                <div class="breadcrumb-item active">{{ $order->kode_klien }}</div>
+            </div>
         </div>
-    </div>
+    @else
+        <div class="section-header">
+            <h1>Order</h1>
+            <div class="section-header-breadcrumb">
+                <div class="breadcrumb-item"><a href="{{ route('admin.order') }}">Order</a></div>
+                <div class="breadcrumb-item">Detail</div>
+                <div class="breadcrumb-item active">{{ $order->kode_klien }}</div>
+            </div>
+        </div>
+    @endif
 
     <div class="row">
         <div class="col-md-6 col-sm-12">
@@ -21,6 +32,11 @@
                 </div>
                 <div class="card-body">
                     <table class="table table-striped">
+                        <tr>
+                            <th>Kode Klien</th>
+                            <th width="20">:</th>
+                            <td>{{ $order->kode_klien }}</td>
+                        </tr>
                         <tr>
                             <th>Karyawan</th>
                             <th width="20">:</th>
@@ -65,7 +81,14 @@
                             <td>{!! $order->deskripsi !!}</td>
                         </tr>
                     </table>
-                    <a href="{{ route('admin.order') }}" class="btn btn-primary btn-sm"><i class="fa fa-arrow-left"></i> Kembali</a>
+                    
+                    @if(Request::segment(3)=='detailselesai')
+                        <a href="{{ route('admin.order.dataselesai') }}" class="btn btn-primary btn-sm"><i class="fa fa-arrow-left"></i>
+                            Kembali</a>
+                    @else
+                        <a href="{{ route('admin.order') }}" class="btn btn-primary btn-sm"><i class="fa fa-arrow-left"></i>
+                            Kembali</a>
+                    @endif
                 </div>
             </div>
         </div>

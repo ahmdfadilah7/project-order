@@ -12,6 +12,16 @@
                 {!! Form::open(['method' => 'post', 'route' => ['admin.order.payment'], 'enctype' => 'multipart/form-data']) !!}
                     
                     <div class="form-group">
+                        <label>Kode Klien</label>
+                        <h4 id="kodeKlien"></h4>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Total Pembayaran</label>
+                        <h4 id="totalPembayaran"></h4>
+                    </div>
+
+                    <div class="form-group">
                         <input type="hidden" name="order_id" id="orderId">
                         <label>Bukti Pembayaran</label>
                         <input type="file" name="file" class="form-control">
@@ -25,6 +35,18 @@
                                 <option value="{{ ++$key }}">{{ $value }}</option>
                             @endforeach
                         </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="">Nominal</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                              <div class="input-group-text">
+                                Rp
+                              </div>
+                            </div>
+                            <input type="text" name="nominal" class="form-control currency" value="{{ old('nominal') }}" autocomplete="off">
+                        </div>
                     </div>
             </div>
             <div class="modal-footer">

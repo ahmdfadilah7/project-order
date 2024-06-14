@@ -67,6 +67,7 @@ Route::group(['middleware' => ['auth:admin', 'role:admin']], function () {
     Route::get('admin/order/getListDataSelesai', [OrderController::class, 'listDataSelesai'])->name('admin.order.listSelesai');
     Route::get('admin/order/add', [OrderController::class, 'create'])->name('admin.order.add');
     Route::get('admin/order/detail/{id}', [OrderController::class, 'show'])->name('admin.order.detail');
+    Route::get('admin/order/detailselesai/{id}', [OrderController::class, 'show'])->name('admin.order.detailselesai');
     Route::get('admin/order/invoice/{id}', [OrderController::class, 'invoice'])->name('admin.order.invoice');
     Route::get('admin/order/detailPayment/{id}', [OrderController::class, 'show_payment'])->name('admin.order.detailPayment');
     Route::get('admin/order/activities/{id}', [OrderController::class, 'activity'])->name('admin.order.activities');

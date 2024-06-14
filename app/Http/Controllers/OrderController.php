@@ -28,7 +28,7 @@ class OrderController extends Controller
     {
         $setting = Setting::first();
         
-        $status = array('DP 50%', 'LUNAS');
+        $status = array('DP', 'LUNAS');
 
         $status_order = array('Belum dibayar', 'Sedang diproses', 'Order Selesai');
 
@@ -84,7 +84,7 @@ class OrderController extends Controller
                 if ($row->payment <> '') {
                     if ($row->payment->status == 1) {
                         $btn = '<a href="'.route('admin.order.detailPayment', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2">
-                                <i class="fas fa-eye"></i> DP 50%
+                                <i class="fas fa-eye"></i> DP
                             </a>';
                     } elseif ($row->payment->status == 2) {
                         $btn = '<a href="'.route('admin.order.detailPayment', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2">
@@ -114,6 +114,9 @@ class OrderController extends Controller
             ->addColumn('action', function($row) {
                 $btn = '<a href="'.route('admin.order.detail', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2" title="Lihat">
                         <i class="fas fa-eye"></i> Lihat
+                    </a>';
+                $btn .= '<a href="'.route('admin.order.edit', $row->id).'" class="btn btn-primary btn-sm mr-2 mb-2" title="Edit">
+                        <i class="fas fa-edit"></i> Edit
                     </a>';
                 $btn .= '<a href="'.route('admin.order.invoice', $row->id).'" class="btn btn-warning btn-sm mr-2 mb-2" title="Invoice">
                         <i class="ion ion-document-text"></i> Invoice
@@ -240,7 +243,7 @@ class OrderController extends Controller
                 return $status;
             })
             ->addColumn('action', function($row) {
-                $btn = '<a href="'.route('admin.order.detail', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2" title="Lihat">
+                $btn = '<a href="'.route('admin.order.detailselesai', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2" title="Lihat">
                         <i class="fas fa-eye"></i> Lihat
                     </a>';
                 $btn .= '<a href="'.route('admin.order.invoice', $row->id).'" class="btn btn-warning btn-sm mr-2 mb-2" title="Invoice">
@@ -330,7 +333,8 @@ class OrderController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'file' => 'required|mimes:png,jpg,jpeg,svg',
-            'status' => 'required'
+            'status' => 'required',
+            'nominal' => 'required'
         ],
         [
             'required' => ':attribute wajib diisi!!!',
@@ -350,6 +354,7 @@ class OrderController extends Controller
         $payment = new Payment;
         $payment->order_id = $request->order_id;
         $payment->file = $fileNama;
+        $payment->nominal = str_replace(',', '', $request->get('nominal'));
         $payment->status = $request->status;
         $payment->save();
 
@@ -469,19 +474,6 @@ class OrderController extends Controller
         $order->status = 0;
         $order->save();
 
-        // Order::create([
-        //     'user_id' => $request->get('penjoki'),
-        //     'pelanggan_id' => $request->pelanggan,
-        //     'jenis_id' => $request->get('jenis'),
-        //     'bobot_id' => $request->get('bobot'),
-        //     'judul' => $request->judul,
-        //     'deskripsi' => $request->deskripsi,
-        //     'keterangan' => $request->keterangan,
-        //     'deadline' => $request->deadline,
-        //     'total' => str_replace(',', '', $request->get('total')),
-        //     'status' => 0
-        // ]);
-
         for ($i=0; $i < count($request->jenis); $i++) { 
             $jenisorder = new JenisOrder;
             $jenisorder->order_id = $order->id;
@@ -490,6 +482,59 @@ class OrderController extends Controller
         }
 
         return redirect()->route('admin.order')->with('berhasil', 'Berhasil menambahkan order baru.');
+    }
+
+    // Menampilkan halaman edit order
+    public function edit($id)
+    {
+        $setting = Setting::first();
+
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
+        $penjoki = User::where('role', 'penjoki')->orderBy('id', 'desc')->get();
+        $user = User::where('role', 'pelanggan')->get();
+        $jenis = Jenis::orderBy('id', 'desc')->get();
+        $bobot = Bobot::orderBy('id', 'desc')->get();
+
+        $order = Order::find($id);
+
+        return view('order.edit', compact('setting', 'dataDeadline', 'dataDeadline2', 'penjoki', 'jenis', 'bobot', 'user', 'order'));
+    }
+
+    // Proses mengedit order
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'penjoki' => 'required',
+            'pelanggan' => 'required',
+            'judul' => 'required',
+            'deskripsi' => 'required',
+            'deadline' => 'required',
+            'bobot' => 'required',
+            'total' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return back()->with('errors', $errors)->withInput($request->all());
+        }
+
+        $pelanggan = User::find($request->pelanggan);
+
+        $order = Order::find($id);
+        $order->user_id = $request->penjoki;
+        $order->pelanggan_id = $request->pelanggan;
+        $order->bobot_id = $request->bobot;
+        $order->kode_klien = $pelanggan->profile->kode_klien;
+        $order->judul = $request->judul;
+        $order->deskripsi = $request->deskripsi;
+        $order->keterangan = $request->keterangan;
+        $order->deadline = $request->deadline;
+        $order->total = str_replace(',', '', $request->get('total'));
+        $order->save();
+
+        return redirect()->route('admin.order')->with('berhasil', 'Berhasil mengedit order baru.');
     }
 
     // Proses selesai order

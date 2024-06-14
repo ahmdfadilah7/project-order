@@ -191,11 +191,19 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
+                    var total = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(data.total)
                     $('#paymentModal').modal('show');
                     $('#orderId').val(data.id);
+                    $('#kodeKlien').html(data.kode_klien);
+                    $('#totalPembayaran').html(total);
                 }
             })
         }
+
+        var cleaveC = new Cleave('.currency', {
+            numeral: true,
+            numeralThousandsGroupStyle: 'thousand'
+        });
     </script>
 
 @endsection
