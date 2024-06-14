@@ -12,6 +12,7 @@ use App\Models\JenisOrder;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Project;
+use App\Models\Refund;
 use App\Models\Setting;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -108,6 +109,8 @@ class OrderController extends Controller
                     $status = '<span class="badge badge-primary"><i class="ion ion-load-a"></i> Sedang diproses</span>';
                 } elseif ($row->status == 2) {
                     $status = '<span class="badge badge-success"><i class="fas fa-check"></i> Order Selesai</span>';
+                } elseif ($row->status == 3) {
+                    $status = '<span class="badge badge-danger"><i class="fas ion-close"></i> Order Refund</span>';
                 }
                 return $status;
             })
@@ -115,32 +118,40 @@ class OrderController extends Controller
                 $btn = '<a href="'.route('admin.order.detail', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2" title="Lihat">
                         <i class="fas fa-eye"></i> Lihat
                     </a>';
-                $btn .= '<a href="'.route('admin.order.edit', $row->id).'" class="btn btn-primary btn-sm mr-2 mb-2" title="Edit">
-                        <i class="fas fa-edit"></i> Edit
-                    </a>';
-                $btn .= '<a href="'.route('admin.order.invoice', $row->id).'" class="btn btn-warning btn-sm mr-2 mb-2" title="Invoice">
-                        <i class="ion ion-document-text"></i> Invoice
-                    </a>';
-                if ($row->payment == '') {
-                    $btn .= '<a onClick="getOrder('.$row->id.')" href="#" class="btn btn-success btn-sm mr-2 mb-2" title="Bayar">
-                            <i class="fas fa-money-bill"></i> Bayar
-                        </a>';
-                } else {
-                    if ($row->payment->status <> 2) {
-                        $btn .= '<a onClick="getOrder('.$row->id.')" href="#" class="btn btn-success btn-sm mr-2 mb-2" title="Pelunasan">
-                            <i class="fas fa-money-bill"></i> Bayar
-                        </a>';
-                    }
-                }
 
-                if ($row->status == 1) {
-                    if ($row->payment <> '' &&  $row->activity <> '') {
-                        if ($row->payment->status == 2 && $row->activity->status == 1) {
-                            $btn .= '<a href="'.route('admin.order.selesai', $row->id).'" class="btn btn-success btn-sm mr-2 mb-2" title="Selesai">
-                                    <i class="fas fa-check"></i> Selesai
-                                </a>';
+                if ($row->status <> 3) {
+                
+                    $btn .= '<a href="'.route('admin.order.edit', $row->id).'" class="btn btn-primary btn-sm mr-2 mb-2" title="Edit">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>';
+                    $btn .= '<a href="'.route('admin.order.invoice', $row->id).'" class="btn btn-warning btn-sm mr-2 mb-2" title="Invoice">
+                            <i class="ion ion-document-text"></i> Invoice
+                        </a>';
+                    if ($row->payment == '') {
+                        $btn .= '<a onClick="getOrder('.$row->id.')" href="#" class="btn btn-success btn-sm mr-2 mb-2" title="Bayar">
+                                <i class="fas fa-money-bill"></i> Bayar
+                            </a>';
+                    } else {
+                        if ($row->payment->status <> 2) {
+                            $btn .= '<a onClick="getOrder('.$row->id.')" href="#" class="btn btn-success btn-sm mr-2 mb-2" title="Pelunasan">
+                                <i class="fas fa-money-bill"></i> Bayar
+                            </a>';
                         }
                     }
+
+                    if ($row->status == 1) {
+                        if ($row->payment <> '' &&  $row->activity <> '') {
+                            if ($row->payment->status == 2 && $row->activity->status == 1) {
+                                $btn .= '<a href="'.route('admin.order.selesai', $row->id).'" class="btn btn-success btn-sm mr-2 mb-2" title="Selesai">
+                                        <i class="fas fa-check"></i> Selesai
+                                    </a>';
+                            }
+                        }
+                    }
+
+                    $btn .= '<a onClick="getOrder2('.$row->id.')" href="#" class="btn btn-danger btn-sm mr-2 mb-2" title="Refund">
+                                <i class="fas ion-close"></i> Refund
+                            </a>';
                 }
 
                 $url = "'".route('admin.order.delete', $row->id)."'";
@@ -239,6 +250,8 @@ class OrderController extends Controller
                     $status = '<span class="badge badge-primary"><i class="ion ion-load-a"></i> Sedang diproses</span>';
                 } elseif ($row->status == 2) {
                     $status = '<span class="badge badge-success"><i class="fas fa-check"></i> Order Selesai</span>';
+                } elseif ($row->status == 3) {
+                    $status = '<span class="badge badge-danger"><i class="fas ion-close"></i> Order Refund</span>';
                 }
                 return $status;
             })
@@ -290,6 +303,25 @@ class OrderController extends Controller
         $order = Order::find($id);
 
         return json_encode($order);
+    }
+
+    // get order
+    public function getOrder2($id)
+    {
+        $order = Order::find($id);
+
+        $total = array();
+        foreach ($order->payment->where('order_id', $id)->get() as $row) {
+            $total[] = $row->nominal;
+        }
+
+        $data = array(
+            'id' => $order->id,
+            'kode_klien' => $order->kode_klien,
+            'total' => array_sum($total)
+        );
+
+        return json_encode($data);
     }
 
     // Proses Export
@@ -366,6 +398,38 @@ class OrderController extends Controller
         }
 
         return redirect()->route('admin.order')->with('berhasil', 'Berhasil menambahkan pembayaran');
+    }
+
+    // Proses Payment
+    public function refund(Request $request) 
+    {
+        $validator = Validator::make($request->all(), [
+            'nominal' => 'required'
+        ],
+        [
+            'required' => ':attribute wajib diisi!!!',
+            'mimes' => ':attribute harus berformat .png, .jpg, .jpeg'
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return back()->with('errors', $errors);
+        }
+        
+        $refund = new Refund;
+        $refund->order_id = $request->order_id;
+        $refund->nominal = str_replace(',', '', $request->get('nominal'));
+        $refund->status = 1;
+        $refund->save();
+
+        $countpayment = Payment::where('order_id', $request->order_id)->count();
+        if ($countpayment > 0) {
+            $order = Order::find($request->order_id);
+            $order->status = 3;
+            $order->save();
+        }
+
+        return redirect()->route('admin.order')->with('berhasil', 'Order berhasil direfund');
     }
 
     // Detail Order

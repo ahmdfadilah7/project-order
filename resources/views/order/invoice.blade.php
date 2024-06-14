@@ -89,7 +89,7 @@
                                     <div class="invoice-detail-value invoice-detail-value-lg">
                                         @if($order->payment <> '')
                                             @if($order->payment->status == 1)
-                                                DP 50%
+                                                DP
                                             @elseif($order->payment->status == 2)
                                                 LUNAS
                                             @endif
@@ -106,6 +106,26 @@
                                         {{ AllHelper::rupiah($order->total) }}
                                     </div>
                                 </div>
+                                
+                                @if($order->payment <> '')
+                                    @if($order->payment->status == 1)
+
+                                        <div class="invoice-detail-item">
+                                            <div class="invoice-detail-name">Total DP</div>
+                                            <div class="invoice-detail-value invoice-detail-value-lg">
+                                                {{ AllHelper::rupiah($order->payment->nominal) }}
+                                            </div>
+                                        </div>
+                                
+                                        <div class="invoice-detail-item">
+                                            <div class="invoice-detail-name">Sisa Pembayaran</div>
+                                            <div class="invoice-detail-value invoice-detail-value-lg">
+                                                {{ AllHelper::rupiah($order->total-$order->payment->nominal) }}
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endif
+
                             </div>
                         </div>
                     </div>

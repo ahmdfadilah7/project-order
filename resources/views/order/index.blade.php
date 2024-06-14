@@ -100,6 +100,7 @@
 
 @section('modal')
     @include('order.partials.payment')
+    @include('order.partials.refund')
     @include('layouts.partials.deleteModal')
 @endsection
 
@@ -200,7 +201,29 @@
             })
         }
 
+        function getOrder2(id) {
+            var url = '{{ url("admin/order/get_order2") }}/' + id;
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data);
+                    var total = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(data.total)
+                    $('#refundModal').modal('show');
+                    $('#orderIdRefund').val(data.id);
+                    $('#kodeKlienRefund').html(data.kode_klien);
+                    $('#totalPembayaranRefund').html(total);
+                }
+            })
+        }
+
         var cleaveC = new Cleave('.currency', {
+            numeral: true,
+            numeralThousandsGroupStyle: 'thousand'
+        });
+
+        var cleaveC2 = new Cleave('.currency2', {
             numeral: true,
             numeralThousandsGroupStyle: 'thousand'
         });

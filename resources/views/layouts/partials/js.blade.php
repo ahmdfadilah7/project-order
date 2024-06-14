@@ -1,165 +1,169 @@
 @section('js')
+    <!-- General JS Scripts -->
+    <script src="{{ asset('assets/modules/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/modules/popper.js') }}"></script>
+    <script src="{{ asset('assets/modules/tooltip.js') }}"></script>
+    <script src="{{ asset('assets/modules/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/modules/nicescroll/jquery.nicescroll.min.js') }}"></script>
+    <script src="{{ asset('assets/modules/moment.min.js') }}"></script>
+    <script src="{{ asset('assets/js/stisla.js') }}"></script>
 
-<!-- General JS Scripts -->
-<script src="{{ asset('assets/modules/jquery.min.js') }}"></script>
-<script src="{{ asset('assets/modules/popper.js') }}"></script>
-<script src="{{ asset('assets/modules/tooltip.js') }}"></script>
-<script src="{{ asset('assets/modules/bootstrap/js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('assets/modules/nicescroll/jquery.nicescroll.min.js') }}"></script>
-<script src="{{ asset('assets/modules/moment.min.js') }}"></script>
-<script src="{{ asset('assets/js/stisla.js') }}"></script>
+    <!-- JS Libraies -->
+    <script src="{{ asset('assets/modules/cleave-js/dist/cleave.min.js') }}"></script>
+    <script src="{{ asset('assets/modules/jquery.sparkline.min.js') }}"></script>
+    <script src="{{ asset('assets/modules/chart.min.js') }}"></script>
+    <script src="{{ asset('assets/modules/owlcarousel2/dist/owl.carousel.min.js') }}"></script>
+    <script src="{{ asset('assets/modules/summernote/summernote-bs4.js') }}"></script>
+    <script src="{{ asset('assets/modules/chocolat/dist/js/jquery.chocolat.min.js') }}"></script>
+    <script src="{{ asset('assets/modules/izitoast/js/iziToast.min.js') }}"></script>
+    <script src="{{ asset('assets/modules/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('assets/modules/datatables/Select-1.2.4/js/dataTables.select.min.js') }}"></script>
+    <script src="{{ asset('assets/modules/select2/dist/js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('assets/modules/jquery-selectric/jquery.selectric.min.js') }}"></script>
+    <script src="{{ asset('assets/modules/upload-preview/assets/js/jquery.uploadPreview.min.js') }}"></script>
+    <script src="{{ asset('assets/modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js') }}"></script>
 
-<!-- JS Libraies -->
-<script src="{{ asset('assets/modules/cleave-js/dist/cleave.min.js') }}"></script>
-<script src="{{ asset('assets/modules/jquery.sparkline.min.js') }}"></script>
-<script src="{{ asset('assets/modules/chart.min.js') }}"></script>
-<script src="{{ asset('assets/modules/owlcarousel2/dist/owl.carousel.min.js') }}"></script>
-<script src="{{ asset('assets/modules/summernote/summernote-bs4.js') }}"></script>
-<script src="{{ asset('assets/modules/chocolat/dist/js/jquery.chocolat.min.js') }}"></script>
-<script src="{{ asset('assets/modules/izitoast/js/iziToast.min.js') }}"></script>
-<script src="{{ asset('assets/modules/datatables/datatables.min.js') }}"></script>
-<script src="{{ asset('assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('assets/modules/datatables/Select-1.2.4/js/dataTables.select.min.js') }}"></script>
-<script src="{{ asset('assets/modules/select2/dist/js/select2.full.min.js') }}"></script>
-<script src="{{ asset('assets/modules/jquery-selectric/jquery.selectric.min.js') }}"></script>
-<script src="{{ asset('assets/modules/upload-preview/assets/js/jquery.uploadPreview.min.js') }}"></script>
-<script src="{{ asset('assets/modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js') }}"></script>
+    <!-- Page Specific JS File -->
+    {{-- <script src="{{ asset('assets/js/page/index.js') }}"></script> --}}
+    <script src="{{ asset('assets/js/page/features-post-create.js') }}"></script>
 
-<!-- Page Specific JS File -->
-{{-- <script src="{{ asset('assets/js/page/index.js') }}"></script> --}}
-<script src="{{ asset('assets/js/page/features-post-create.js') }}"></script>
+    <!-- Template JS File -->
+    <script src="{{ asset('assets/js/scripts.js') }}"></script>
+    <script src="{{ asset('assets/js/custom.js') }}"></script>
+    <script>
+        $(document).ready(function() {
 
-<!-- Template JS File -->
-<script src="{{ asset('assets/js/scripts.js') }}"></script>
-<script src="{{ asset('assets/js/custom.js') }}"></script>
-<script>
-    $(document).ready(function () {
+            const pusher = new Pusher('{{ config('broadcasting.connections.pusher.key') }}', {
+                cluster: 'ap1'
+            });
+            const channel = pusher.subscribe('public');
 
-        const pusher = new Pusher('{{ config('broadcasting.connections.pusher.key') }}', { cluster: 'ap1' });
-        const channel = pusher.subscribe('public');
+            channel.bind('chat', function(data) {
+                var user_id = '{{ Auth::user()->id }}';
 
-        channel.bind('chat', function (data) {
-            var user_id = '{{ Auth::user()->id }}';
+                if (user_id != data.message.user_id) {
+                    var url = "{{ url('notif/group/chat') }}/" + data.message.group_id;
+                    $.get(url, function(data) {
+                        iziToast.success({
+                            title: 'Success',
+                            message: data,
+                            position: 'topRight'
+                        });
+                    });
+                }
+            });
 
-            if (user_id != data.message.user_id) {
-                var url = "{{ url('notif/group/chat') }}/" + data.message.group_id;
-                $.get(url, function (data) {
-                    iziToast.success({
-                        title: 'Success',
-                        message: data,
+            @if (Session::has('berhasil'))
+                iziToast.success({
+                    title: 'Success',
+                    message: '{{ session('berhasil') }}',
+                    position: 'topRight'
+                });
+            @endif
+
+            @if (Session::has('errors'))
+                @foreach ($errors->all() as $errors)
+                    iziToast.error({
+                        title: 'Error',
+                        message: '{{ $errors }}',
                         position: 'topRight'
                     });
-                });
-            }
-        });
-        
-        @if (Session::has('berhasil'))
-            iziToast.success({
-                title: 'Success',
-                message: '{{ session("berhasil") }}',
-                position: 'topRight'
-            });
-        @endif
-    
-        @if (Session::has('errors'))
-            @foreach ($errors->all() as $errors)
-            iziToast.error({
-                title: 'Error',
-                message: '{{ $errors }}',
-                position: 'topRight'
-            });
-            @endforeach
-        @endif
-        
-        @if (Auth::user()->role <> 'pelanggan')
-            
-            function deadline() {
-            @foreach ($dataDeadline as $key => $row)
-                @if ($row->status <> 2)
-                    @if ($row->activity <> '')
-                        @if ($row->activity->status <> 1)
-                            iziToast.warning({
-                                title: 'Warning',
-                                message: 'Order dengan judul {{ $row->judul }} dan Kode Klien {{ $row->kode_klien }} sudah Deadline',
-                                position: 'topRight'
-                            });
+                @endforeach
+            @endif
+
+            @if (Auth::user()->role != 'pelanggan')
+
+                function deadline() {
+                    @foreach ($dataDeadline as $key => $row)
+                        @if ($row->status != 2)
+                            @if ($row->activity != '')
+                                @if ($row->activity->status != 1)
+                                    iziToast.warning({
+                                        title: 'Warning',
+                                        message: 'Tim {{ $row->user->name }} - Kode Klien {{ $row->kode_klien }} sudah Deadline',
+                                        position: 'topRight'
+                                    });
+                                @endif
+                            @else
+                                iziToast.warning({
+                                    title: 'Warning',
+                                    message: 'Tim {{ $row->user->name }} - Kode Klien {{ $row->kode_klien }} sudah Deadline',
+                                    position: 'topRight'
+                                });
+                            @endif
                         @endif
-                    @else
-                        iziToast.warning({
-                            title: 'Warning',
-                            message: 'Order dengan judul {{ $row->judul }} dan Kode Klien {{ $row->kode_klien }} sudah Deadline',
-                            position: 'topRight'
-                        });
-                    @endif
-                @endif
-            @endforeach
-        }
-        deadline();
-        setInterval(deadline, 60000);
+                    @endforeach
+                }
+                deadline();
+                setInterval(deadline, 60000);
 
-        function deadline2() {
-            @foreach ($dataDeadline2 as $key => $row)
-                @if ($row->status <> 2)
-                    @if ($row->activity <> '')
-                        @if ($row->activity->status <> 1)
-                            iziToast.warning({
-                                title: 'Warning',
-                                message: 'Order dengan judul {{ $row->judul }} dan Kode Klien {{ $row->kode_klien }} sisa 1 hari lagi',
-                                position: 'topRight'
-                            });
+                function deadline2() {
+                    @foreach ($dataDeadline2 as $key => $row)
+                        @if ($row->status != 2)
+                            @if ($row->activity != '')
+                                @if ($row->activity->status != 1)
+                                    iziToast.warning({
+                                        title: 'Warning',
+                                        message: 'Tim {{ $row->user->name }} - Kode Klien {{ $row->kode_klien }} sisa 1 hari lagi',
+                                        position: 'topRight'
+                                    });
+                                @endif
+                            @else
+                                iziToast.warning({
+                                    title: 'Warning',
+                                    message: 'Tim {{ $row->user->name }} - Kode Klien {{ $row->kode_klien }} sisa 1 hari lagi',
+                                    position: 'topRight'
+                                });
+                            @endif
                         @endif
-                    @else
-                        iziToast.warning({
-                            title: 'Warning',
-                            message: 'Order dengan judul {{ $row->judul }} dan Kode Klien {{ $row->kode_klien }} sisa 1 hari lagi',
-                            position: 'topRight'
-                        });
-                    @endif
-                @endif
-            @endforeach
-        }
-        deadline2();
-        setInterval(deadline2, 60000);
+                    @endforeach
+                }
+                deadline2();
+                setInterval(deadline2, 60000);
+            @endif
 
-        @endif
+            // Inside your Javascript file
+            function startTime() {
+                var today = new Date();
+                var h = today.getHours();
+                var m = today.getMinutes();
+                var s = today.getSeconds();
+                m = checkTime(m);
+                s = checkTime(s);
+                var text = "Selamat Pagi {{ Auth::user()->name }}, Jadilah yang terbaik dari yang terbaik."
+                if (h >= 12) {
+                    var text = "Selamat Siang {{ Auth::user()->name }}, Jangan lupa makan dan istirahat sejenak."
+                }
+                if (h >= 15) {
+                    var text =
+                        "Selamat Sore {{ Auth::user()->name }}, Kebahagiaan itu ada, jika kamu mau menjemputnya."
+                }
+                if (h >= 19) {
+                    var text =
+                        "Selamat Malam {{ Auth::user()->name }}, Seberat apapun hal yang dihadapi jangan pernah menyerah."
+                }
+                var emoji = "&#128513;"
 
-        // Inside your Javascript file
-        function startTime() {
-            var today = new Date();
-            var h = today.getHours();
-            var m = today.getMinutes();
-            var s = today.getSeconds();
-            m = checkTime(m);
-            s = checkTime(s);
-            var text = "Selamat Pagi {{ Auth::user()->name }}, Jadilah yang terbaik dari yang terbaik."
-            if (h >= 12) {
-               var text = "Selamat Siang {{ Auth::user()->name }}, Jangan lupa makan dan istirahat sejenak."
-            } 
-            if (h >= 15) {
-                var text = "Selamat Sore {{ Auth::user()->name }}, Kebahagiaan itu ada, jika kamu mau menjemputnya."
-            } 
-            if (h >= 19) {
-                var text = "Selamat Malam {{ Auth::user()->name }}, Seberat apapun hal yang dihadapi jangan pernah menyerah."
+                document.getElementById('time').innerHTML =
+                    h + ":" + m + " " + text + " " + emoji;
+                var t = setTimeout(startTime, 500);
             }
-            var emoji = "&#128513;"
 
-            document.getElementById('time').innerHTML =
-            h + ":" + m + " " + text + " " + emoji;
-            var t = setTimeout(startTime, 500);
+            function checkTime(i) {
+                if (i < 10) {
+                    i = "0" + i
+                }; // add zero in front of numbers < 10
+                return i;
+            }
+            setInterval(startTime, 1000);
+
+        })
+
+        function deleteModal(url) {
+            var url = url;
+            $('#staticBackdrop').modal('show');
+            $('#btnDelete').attr('href', url)
         }
-        function checkTime(i) {
-            if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
-            return i;
-        }
-        setInterval(startTime, 1000);
-
-    })
-
-    function deleteModal(url) {
-        var url = url;
-        $('#staticBackdrop').modal('show');
-        $('#btnDelete').attr('href', url)
-    }
-</script>
-
+    </script>
 @endsection

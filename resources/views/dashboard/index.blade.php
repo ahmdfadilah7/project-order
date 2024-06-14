@@ -23,19 +23,46 @@
         <div class="col-lg-4 col-md-4 col-sm-12">
             <div class="card card-statistic-2">
                 <div class="card-icon shadow-warning bg-warning">
-                    <i class="fas fa-users"></i>
+                    <i class="fas fa-dollar-sign"></i>
                 </div>
                 <div class="card-wrap">
                     <div class="card-header">
-                        <h4>Total Karyawan</h4>
+                        <h4>Hari ini</h4>
                     </div>
                     <div class="card-body">
-                        {{ $totalpenjoki }}
+                        @php
+                            $totalmasuk = array();
+                            foreach ($totalpemasukan as $row) {
+                                $totalmasuk[] = $row->total;
+                            }
+                            echo AllHelper::rupiah(array_sum($totalmasuk));
+                        @endphp
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12">
+            <div class="card card-statistic-2">
+                <div class="card-icon shadow-info bg-info">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="card-wrap">
+                    <div class="card-header">
+                        <h4>Bulan ini</h4>
+                    </div>
+                    <div class="card-body">
+                        @php
+                            $totalbulanini = array();
+                            foreach ($totalbulan as $row) {
+                                $totalbulanini[] = $row->total;
+                            }
+                            echo AllHelper::rupiah(array_sum($totalbulanini));
+                        @endphp
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- <div class="col-lg-4 col-md-4 col-sm-12">
             <div class="card card-statistic-2">
                 <div class="card-icon shadow-success bg-success">
                     <i class="fas fa-users"></i>
@@ -49,7 +76,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">

@@ -160,6 +160,7 @@
                         <p>Nama Lengkap : {{ $order->pelanggan->name }}</p>
                         <p>Email : {{ $order->pelanggan->email }}</p>
                         <p>No. Telepon : {{ $order->pelanggan->profile->no_telp }}</p>
+                        <p>Jurusan : {{ $order->pelanggan->profile->jurusan }}</p>
                     </div>
                 </td>
                 <td>
@@ -198,21 +199,6 @@
             </tr>
         </table>
     </div>
-    
-    <div class="table-section w-100 mt-10">
-        <table class="table bill-tbl w-100 mt-10">
-            <tr>
-                <th class="w-100">Total Pembayaran</th>
-            </tr>
-            <tr class="text-center">
-                <td>
-                    <div class="box-text">
-                        {{ AllHelper::rupiah($order->total) }}
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </div>
 
     <div class="table-section w-100 mt-10">
         <table class="table bill-tbl w-100 mt-10">
@@ -224,7 +210,7 @@
                     <div class="box-text">
                         @if($order->payment <> '')
                             @if($order->payment->status == 1)
-                                DP 50%
+                                DP
                             @elseif($order->payment->status == 2)
                                 LUNAS
                             @endif
@@ -233,6 +219,41 @@
                         @endif
                     </div>
                 </td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="table-section w-100 mt-10">
+        <table class="table bill-tbl w-100 mt-10">
+            <tr>
+                <th class="w-100">Total Pembayaran</th>
+                @if($order->payment <> '')
+                    @if($order->payment->status == 1)
+                        <th class="w-100">Total DP</th>
+                        <th class="w-100">Sisa Pembayaran</th>
+                    @endif
+                @endif
+            </tr>
+            <tr class="text-center">
+                <td>
+                    <div class="box-text">
+                        {{ AllHelper::rupiah($order->total) }}
+                    </div>
+                </td>
+                @if($order->payment <> '')
+                    @if($order->payment->status == 1)
+                    <td>
+                        <div class="box-text">
+                            {{ AllHelper::rupiah($order->payment->nominal) }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="box-text">
+                            {{ AllHelper::rupiah($order->total-$order->payment->nominal) }}
+                        </div>
+                    </td>
+                    @endif
+                @endif
             </tr>
         </table>
     </div>

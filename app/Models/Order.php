@@ -49,6 +49,11 @@ class Order extends Model
         return $this->hasOne(Payment::class)->orderBy('created_at', 'desc');
     }
 
+    public function refund(): HasMany
+    {
+        return $this->hasMany(Refund::class)->orderBy('created_at', 'desc');
+    }
+
     public function bobot(): BelongsTo
     {
         return $this->belongsTo(Bobot::class);

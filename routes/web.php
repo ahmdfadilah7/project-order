@@ -63,6 +63,7 @@ Route::group(['middleware' => ['auth:admin', 'role:admin']], function () {
     Route::get('admin/order', [OrderController::class, 'index'])->name('admin.order');
     Route::get('admin/order/dataselesai', [OrderController::class, 'data_selesai'])->name('admin.order.dataselesai');
     Route::get('admin/order/get_order/{id}', [OrderController::class, 'getOrder'])->name('admin.order.get_order');
+    Route::get('admin/order/get_order2/{id}', [OrderController::class, 'getOrder2'])->name('admin.order.get_order2');
     Route::get('admin/order/getListData', [OrderController::class, 'listData'])->name('admin.order.list');
     Route::get('admin/order/getListDataSelesai', [OrderController::class, 'listDataSelesai'])->name('admin.order.listSelesai');
     Route::get('admin/order/add', [OrderController::class, 'create'])->name('admin.order.add');
@@ -72,6 +73,7 @@ Route::group(['middleware' => ['auth:admin', 'role:admin']], function () {
     Route::get('admin/order/detailPayment/{id}', [OrderController::class, 'show_payment'])->name('admin.order.detailPayment');
     Route::get('admin/order/activities/{id}', [OrderController::class, 'activity'])->name('admin.order.activities');
     Route::post('admin/order/store', [OrderController::class, 'store'])->name('admin.order.store');
+    Route::post('admin/order/refund', [OrderController::class, 'refund'])->name('admin.order.refund');
     Route::post('admin/order/payment', [OrderController::class, 'payment'])->name('admin.order.payment');
     Route::post('admin/order/export', [OrderController::class, 'export'])->name('admin.order.export');
     Route::get('admin/order/{id}', [OrderController::class, 'edit'])->name('admin.order.edit');

@@ -63,14 +63,14 @@
                     @if ($row->activity->status <> 1)
                         iziToast.warning({
                             title: 'Warning',
-                            message: 'Order dengan judul {{ $row->judul }} dan Kode Klien {{ $row->kode_klien }} sudah Deadline',
+                            message: 'Tim {{ $row->user->name }} - Kode Klien {{ $row->kode_klien }} sudah Deadline',
                             position: 'topRight'
                         });
                     @endif
                 @else
                     iziToast.warning({
                         title: 'Warning',
-                        message: 'Order dengan judul {{ $row->judul }} dan Kode Klien {{ $row->kode_klien }} sudah Deadline',
+                        message: 'Tim {{ $row->user->name }} - Kode Klien {{ $row->kode_klien }} sudah Deadline',
                         position: 'topRight'
                     });
                 @endif
@@ -87,14 +87,14 @@
                     @if ($row->activity->status <> 1)
                         iziToast.warning({
                             title: 'Warning',
-                            message: 'Order dengan judul {{ $row->judul }} dan Kode Klien {{ $row->kode_klien }} sisa 1 hari lagi',
+                            message: 'Tim {{ $row->user->name }} - Kode Klien {{ $row->kode_klien }} sisa 1 hari lagi',
                             position: 'topRight'
                         });
                     @endif
                 @else
                     iziToast.warning({
                         title: 'Warning',
-                        message: 'Order dengan judul {{ $row->judul }} dan Kode Klien {{ $row->kode_klien }} sisa 1 hari lagi',
+                        message: 'Tim {{ $row->user->name }} - Kode Klien {{ $row->kode_klien }} sisa 1 hari lagi',
                         position: 'topRight'
                     });
                 @endif
