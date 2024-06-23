@@ -32,10 +32,23 @@
                     <div class="form-group row mb-4">
                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Nama Lengkap</label>
                         <div class="col-sm-12 col-md-7">
-                            <input type="text" name="nama_lengkap" class="form-control" value="{{ $user->name }}">
+                            @if(Auth::user()->role == 'penjoki')
+                                <input type="text" name="nama_lengkap" class="form-control" value="{{ $user->name }}" readonly>
+                            @else
+                                <input type="text" name="nama_lengkap" class="form-control" value="{{ $user->name }}">
+                            @endif
                             <i class="text-danger">{{ $errors->first('nama_lengkap') }}</i>
                         </div>
                     </div>
+                    @if(Auth::user()->role == 'penjoki')
+                        <div class="form-group row mb-4">
+                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Nama Panggilan</label>
+                            <div class="col-sm-12 col-md-7">
+                                <input type="text" name="nama_panggilan" class="form-control" value="{{ $user->username }}">
+                                <i class="text-danger">{{ $errors->first('nama_panggilan') }}</i>
+                            </div>
+                        </div>
+                    @endif
                     <div class="form-group row mb-4">
                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">No Telp</label>
                         <div class="col-sm-12 col-md-7">

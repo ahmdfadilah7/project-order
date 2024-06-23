@@ -33,6 +33,7 @@ class ProfileController extends Controller
     public function update(Request $request, $id) {
         $validator = Validator::make($request->all(), [
             'nama_lengkap' => 'required',
+            'nama_panggilan' => 'required',
             'email' => 'required|email',
             'no_telp' => 'required|numeric',
             'tempat_lahir' => 'required',
@@ -48,6 +49,7 @@ class ProfileController extends Controller
 
         $user = User::find($id);
         $user->name = $request->get('nama_lengkap');
+        $user->username = $request->get('nama_panggilan');
         $user->email = $request->get('email');
         if ($request->password <> '') {
             $user->password = Hash::make($request->get('password'));

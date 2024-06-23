@@ -72,9 +72,15 @@ class OrderController extends Controller
             })
             ->addColumn('progress', function($row) {
                 if ($row->activity <> '') {
-                    $btn = '<a href="'.route('admin.order.activities', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2">
-                            <i class="fas fa-eye"></i> '.$row->activity->judul_aktivitas.'
-                        </a>';
+                    if ($row->activity->status <> 1) {
+                        $btn = '<a href="'.route('admin.order.activities', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2">
+                                <i class="fas fa-eye"></i> '.$row->activity->judul_aktivitas.'
+                            </a>';
+                    } else {
+                        $btn = '<a href="'.route('admin.order.activities', $row->id).'" class="btn btn-success btn-sm mr-2 mb-2">
+                                <i class="fas fa-eye"></i> '.$row->activity->judul_aktivitas.'
+                            </a>';
+                    }
                 } else {
                     $btn = '<span class="badge badge-danger"><i class="fas fa-exclamation-triangle"></i> Belum ada progress</span>';
                 }
@@ -88,7 +94,7 @@ class OrderController extends Controller
                                 <i class="fas fa-eye"></i> DP
                             </a>';
                     } elseif ($row->payment->status == 2) {
-                        $btn = '<a href="'.route('admin.order.detailPayment', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2">
+                        $btn = '<a href="'.route('admin.order.detailPayment', $row->id).'" class="btn btn-success btn-sm mr-2 mb-2">
                                 <i class="fas fa-eye"></i> LUNAS
                             </a>';
                     } else {
@@ -213,9 +219,15 @@ class OrderController extends Controller
             })
             ->addColumn('progress', function($row) {
                 if ($row->activity <> '') {
-                    $btn = '<a href="'.route('admin.order.activities', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2">
-                            <i class="fas fa-eye"></i> '.$row->activity->judul_aktivitas.'
-                        </a>';
+                    if ($row->activity->status <> 1) {
+                        $btn = '<a href="'.route('admin.order.activities', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2">
+                                <i class="fas fa-eye"></i> '.$row->activity->judul_aktivitas.'
+                            </a>';
+                    } else {
+                        $btn = '<a href="'.route('admin.order.activities', $row->id).'" class="btn btn-success btn-sm mr-2 mb-2">
+                                <i class="fas fa-eye"></i> '.$row->activity->judul_aktivitas.'
+                            </a>';
+                    }
                 } else {
                     $btn = '<span class="badge badge-danger"><i class="fas fa-exclamation-triangle"></i> Belum ada progress</span>';
                 }
@@ -229,7 +241,7 @@ class OrderController extends Controller
                                 <i class="fas fa-eye"></i> DP 50%
                             </a>';
                     } elseif ($row->payment->status == 2) {
-                        $btn = '<a href="'.route('admin.order.detailPayment', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2">
+                        $btn = '<a href="'.route('admin.order.detailPayment', $row->id).'" class="btn btn-success btn-sm mr-2 mb-2">
                                 <i class="fas fa-eye"></i> LUNAS
                             </a>';
                     } else {

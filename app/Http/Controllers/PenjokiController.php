@@ -71,6 +71,7 @@ class PenjokiController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nama_lengkap' => 'required',
+            'nama_panggilan' => 'required',
             'email' => 'required|email|unique:users,email',
             'no_telp' => 'required|numeric|unique:profiles,no_telp',
             'jenis_kelamin' => 'required',
@@ -85,6 +86,7 @@ class PenjokiController extends Controller
 
         $user = new User;
         $user->name = $request->get('nama_lengkap');
+        $user->username = $request->get('nama_panggilan');
         $user->email = $request->get('email');
         $user->role = 'penjoki';
         $user->password = Hash::make($request->get('password'));
@@ -129,6 +131,7 @@ class PenjokiController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nama_lengkap' => 'required',
+            'nama_panggilan' => 'required',
             'email' => 'required|email',
             'no_telp' => 'required|numeric',
             'foto' => 'mimes:jpg,jpeg,png,webp,svg'
@@ -141,6 +144,7 @@ class PenjokiController extends Controller
 
         $user = User::find($id);
         $user->name = $request->get('nama_lengkap');
+        $user->username = $request->get('nama_panggilan');
         $user->email = $request->get('email');
         if ($request->password <> '') {
             $user->password = Hash::make($request->get('password'));
