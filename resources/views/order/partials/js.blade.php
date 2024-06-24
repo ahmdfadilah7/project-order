@@ -56,6 +56,7 @@
         @endforeach
     @endif
 
+    @if(Auth::user()->role <> 'admin')
     function deadline() {
         @foreach ($dataDeadline as $key => $row)
             @if ($row->status <> 2)
@@ -103,6 +104,7 @@
     }
     deadline2();
     setInterval(deadline2, 60000);
+    @endif
 
     // Inside your Javascript file
     function startTime() {

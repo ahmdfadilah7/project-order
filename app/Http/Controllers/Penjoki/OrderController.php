@@ -34,7 +34,7 @@ class OrderController extends Controller
 
     // Proses menampilkan data order dengan datatables
     public function listData() {
-        $data = Order::where('user_id', Auth::guard('penjoki')->user()->id)->where('status', '<>', 2)->orderBy('deadline', 'asc')->get();
+        $data = Order::where('user_id', Auth::guard('penjoki')->user()->id)->where('status', '<>', 2)->where('status', '<>', 3)->orderBy('deadline', 'asc')->get();
         $datatables = DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('project', function($row) {

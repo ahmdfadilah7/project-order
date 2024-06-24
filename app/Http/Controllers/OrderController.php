@@ -31,17 +31,115 @@ class OrderController extends Controller
         
         $status = array('DP', 'LUNAS');
 
-        $status_order = array('Belum dibayar', 'Sedang diproses', 'Order Selesai');
+        $status_order = array(
+            0 => 'Belum ada pembayaran', 
+            1 => 'Sedang diproses', 
+            4 => 'Menunggu Pelunasan', 
+            5 => 'Menunggu Konfirmasi',
+            2 => 'Order Selesai'
+        );
+
+        $status_order2 = array(
+            0 => 'Belum ada pembayaran', 
+            1 => 'Sedang diproses', 
+            4 => 'Menunggu Pelunasan', 
+            5 => 'Menunggu Konfirmasi'
+        );
+
+        $karyawan = User::where('role', 'penjoki')->orderBy('name', 'asc')->get();
+        $pelanggan = User::where('role', 'pelanggan')->orderBy('name', 'asc')->get();
+        $jenis = Jenis::orderBy('id', 'desc')->get();
+        $bobot = Bobot::orderBy('id', 'desc')->get();
 
         $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
         $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
 
-        return view('order.index', compact('setting', 'status', 'status_order', 'dataDeadline', 'dataDeadline2'));
+        return view('order.index', compact(
+            'setting', 
+            'status', 
+            'status_order', 
+            'status_order2', 
+            'dataDeadline', 
+            'dataDeadline2',
+            'karyawan',
+            'pelanggan',
+            'jenis',
+            'bobot'
+        ));
     }
 
     // Proses menampilkan data order dengan datatables
-    public function listData() {
-        $data = Order::where('status', '<>', 2)->orderBy('deadline', 'asc');
+    public function listData(Request $request) {
+
+        if ($request->karyawan <> '' && $request->pelanggan <> '' && $request->bobot <> '' && $request->status_order <> '') {
+            $data = Order::where('user_id', $request->karyawan)
+                ->where('pelanggan_id', $request->pelanggan)
+                ->where('bobot_id', $request->bobot)
+                ->where('status', $request->status_order)
+                ->orderBy('deadline', 'asc');
+        } elseif ($request->karyawan <> '' && $request->pelanggan <> '') {
+            $data = Order::where('status', '<>', 2)
+                ->where('status', '<>', 3)
+                ->where('user_id', $request->karyawan)
+                ->where('pelanggan_id', $request->pelanggan)
+                ->orderBy('deadline', 'asc');
+        } elseif ($request->karyawan <> '' && $request->pelanggan <> '' && $request->status_order <> '') {
+            $data = Order::where('status', $request->status_order)
+                ->where('user_id', $request->karyawan)
+                ->where('pelanggan_id', $request->pelanggan)
+                ->orderBy('deadline', 'asc');
+        } elseif ($request->karyawan <> '' && $request->pelanggan <> '' && $request->bobot <> '') {
+            $data = Order::where('status', '<>', 2)
+                ->where('status', '<>', 3)
+                ->where('user_id', $request->karyawan)
+                ->where('pelanggan_id', $request->pelanggan)
+                ->where('bobot_id', $request->bobot)
+                ->orderBy('deadline', 'asc');
+        } elseif ($request->pelanggan <> '' && $request->status_order <> '') {
+            $data = Order::where('pelanggan_id', $request->pelanggan)
+                ->where('status', $request->status_order)
+                ->orderBy('deadline', 'asc');
+        } elseif ($request->pelanggan <> '' && $request->bobot <> '') {
+            $data = Order::where('status', '<>', 2)
+                ->where('status', '<>', 3)
+                ->where('pelanggan_id', $request->pelanggan)
+                ->where('bobot_id', $request->bobot)
+                ->orderBy('deadline', 'asc');
+        } elseif ($request->karyawan <> '' && $request->status_order <> '') {
+            $data = Order::where('user_id', $request->karyawan)
+                ->where('status', $request->status_order)
+                ->orderBy('deadline', 'asc');
+        } elseif ($request->karyawan <> '' && $request->bobot <> '') {
+            $data = Order::where('status', '<>', 2)
+                ->where('status', '<>', 3)
+                ->where('user_id', $request->karyawan)
+                ->where('bobot_id', $request->bobot)
+                ->orderBy('deadline', 'asc');
+        } elseif ($request->bobot <> '' && $request->status_order <> '') {
+            $data = Order::where('bobot_id', $request->bobot)
+                ->where('status', $request->status_order)
+                ->orderBy('deadline', 'asc');
+        } elseif ($request->status_order <> '') {
+            $data = Order::where('status', $request->status_order)
+                ->orderBy('deadline', 'asc');
+        } elseif ($request->karyawan <> '') {
+            $data = Order::where('status', '<>', 2)
+                ->where('status', '<>', 3)
+                ->where('user_id', $request->karyawan)
+                ->orderBy('deadline', 'asc');
+        } elseif ($request->pelanggan <> '') {
+            $data = Order::where('status', '<>', 2)
+                ->where('status', '<>', 3)
+                ->where('pelanggan_id', $request->pelanggan)
+                ->orderBy('deadline', 'asc');
+        } elseif ($request->bobot <> '') {
+            $data = Order::where('status', '<>', 2)
+                ->where('status', '<>', 3)
+                ->where('bobot_id', $request->bobot)
+                ->orderBy('deadline', 'asc');
+        } else {
+            $data = Order::where('status', '<>', 2)->where('status', '<>', 3)->orderBy('deadline', 'asc');
+        }
         $datatables = DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('penjoki', function($row) {
@@ -110,13 +208,17 @@ class OrderController extends Controller
             })
             ->addColumn('status', function($row) {
                 if ($row->status == 0) {
-                    $status = '<span class="badge badge-warning"><i class="fas fa-exclamation-triangle"></i> Belum dibayar</span>';
+                    $status = '<span class="badge badge-danger"><i class="fas fa-exclamation-triangle"></i> Belum ada pembayaran</span>';
                 } elseif ($row->status == 1) {
                     $status = '<span class="badge badge-primary"><i class="ion ion-load-a"></i> Sedang diproses</span>';
                 } elseif ($row->status == 2) {
                     $status = '<span class="badge badge-success"><i class="fas fa-check"></i> Order Selesai</span>';
                 } elseif ($row->status == 3) {
                     $status = '<span class="badge badge-danger"><i class="fas ion-close"></i> Order Refund</span>';
+                } elseif ($row->status == 4) {
+                    $status = '<span class="badge badge-warning"><i class="fas fa-exclamation-triangle"></i> Menunggu Pelunasan</span>';
+                } elseif ($row->status == 5) {
+                    $status = '<span class="badge badge-primary"><i class="ion ion-load-a"></i> Menunggu Konfirmasi</span>';
                 }
                 return $status;
             })
@@ -145,14 +247,10 @@ class OrderController extends Controller
                         }
                     }
 
-                    if ($row->status == 1) {
-                        if ($row->payment <> '' &&  $row->activity <> '') {
-                            if ($row->payment->status == 2 && $row->activity->status == 1) {
-                                $btn .= '<a href="'.route('admin.order.selesai', $row->id).'" class="btn btn-success btn-sm mr-2 mb-2" title="Selesai">
-                                        <i class="fas fa-check"></i> Selesai
-                                    </a>';
-                            }
-                        }
+                    if ($row->status == 5) {
+                        $btn .= '<a href="'.route('admin.order.selesai', $row->id).'" class="btn btn-success btn-sm mr-2 mb-2" title="Selesai">
+                                <i class="fas fa-check"></i> Selesai
+                            </a>';
                     }
 
                     $btn .= '<a onClick="getOrder2('.$row->id.')" href="#" class="btn btn-danger btn-sm mr-2 mb-2" title="Refund">
@@ -274,27 +372,120 @@ class OrderController extends Controller
                 $btn .= '<a href="'.route('admin.order.invoice', $row->id).'" class="btn btn-warning btn-sm mr-2 mb-2" title="Invoice">
                         <i class="ion ion-document-text"></i> Invoice
                     </a>';
-                if ($row->payment == '') {
-                    $btn .= '<a onClick="getOrder('.$row->id.')" href="#" class="btn btn-success btn-sm mr-2 mb-2" title="Bayar">
-                            <i class="fas fa-money-bill"></i> Bayar
-                        </a>';
-                } else {
-                    if ($row->payment->status <> 2) {
-                        $btn .= '<a onClick="getOrder('.$row->id.')" href="#" class="btn btn-success btn-sm mr-2 mb-2" title="Pelunasan">
-                            <i class="fas fa-money-bill"></i> Bayar
-                        </a>';
+                $url = "'".route('admin.order.delete', $row->id)."'";
+                $btn .= '<a onclick="deleteModal('.$url.')" class="btn btn-danger btn-sm text-white mr-2 mb-2" title="Hapus">
+                        <i class="fas fa-trash"></i> Hapus
+                    </a>';
+
+                return $btn;
+            })
+            ->rawColumns(['action', 'progress', 'payment', 'total', 'status', 'deadline'])
+            ->make(true);
+
+        return $datatables;
+    }
+
+    // Menampilkan halaman order
+    public function data_refund()
+    {
+        $setting = Setting::first();
+        
+        $status = array('DP 50%', 'LUNAS');
+
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
+        return view('order.datarefund', compact('setting', 'status', 'dataDeadline', 'dataDeadline2'));
+    }
+
+    // Proses menampilkan data order dengan datatables
+    public function listDataRefund() {
+        $data = Order::where('status', 3)->orderBy('updated_at', 'desc');
+        $datatables = DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('penjoki', function($row) {
+                return $row->user->name;
+            })
+            ->addColumn('pelanggan', function($row) {
+                return $row->pelanggan->name;
+            })
+            ->addColumn('tanggal_order', function($row) {
+                return Carbon::parse($row->created_at)->format('d M Y');
+            })
+            ->addColumn('deadline', function($row) {
+                return Carbon::parse($row->deadline)->format('d M Y');
+            })
+            ->addColumn('jenisorder', function($row) {
+                $jenis = array();
+                foreach ($row->jenisorder as $value) {
+                    $jenis[] = $value->jenis->judul;
+                }
+                $jenisorder = implode(',', $jenis);
+                return $jenisorder;
+            })
+            ->addColumn('bobot', function($row) {
+                return strtoupper($row->bobot->bobot);
+            })
+            ->addColumn('total', function($row) {
+                return AllHelper::rupiah($row->total);
+            })
+            ->addColumn('progress', function($row) {
+                if ($row->activity <> '') {
+                    if ($row->activity->status <> 1) {
+                        $btn = '<a href="'.route('admin.order.activities', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2">
+                                <i class="fas fa-eye"></i> '.$row->activity->judul_aktivitas.'
+                            </a>';
+                    } else {
+                        $btn = '<a href="'.route('admin.order.activities', $row->id).'" class="btn btn-success btn-sm mr-2 mb-2">
+                                <i class="fas fa-eye"></i> '.$row->activity->judul_aktivitas.'
+                            </a>';
                     }
+                } else {
+                    $btn = '<span class="badge badge-danger"><i class="fas fa-exclamation-triangle"></i> Belum ada progress</span>';
                 }
 
-                if ($row->status == 1) {
-                    if ($row->payment <> '' &&  $row->activity <> '') {
-                        if ($row->payment->status == 2 && $row->activity->status == 1) {
-                            $btn .= '<a href="'.route('admin.order.selesai', $row->id).'" class="btn btn-success btn-sm mr-2 mb-2" title="Selesai">
-                                    <i class="fas fa-check"></i> Selesai
-                                </a>';
-                        }
+                return $btn;
+            })
+            ->addColumn('payment', function($row) {
+                if ($row->payment <> '') {
+                    if ($row->payment->status == 1) {
+                        $btn = '<a href="'.route('admin.order.detailPayment', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2">
+                                <i class="fas fa-eye"></i> DP 50%
+                            </a>';
+                    } elseif ($row->payment->status == 2) {
+                        $btn = '<a href="'.route('admin.order.detailPayment', $row->id).'" class="btn btn-success btn-sm mr-2 mb-2">
+                                <i class="fas fa-eye"></i> LUNAS
+                            </a>';
+                    } else {
+                        $btn = '<a href="'.route('admin.order.detailPayment', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2">
+                                <i class="fas fa-eye"></i> Menunggu Konfirmasi
+                            </a>';
                     }
+                } else {
+                    $btn = '<span class="badge badge-danger"><i class="fas fa-exclamation-triangle"></i> Belum ada pembayaran</span>';
                 }
+
+                return $btn;
+            })
+            ->addColumn('status', function($row) {
+                if ($row->status == 0) {
+                    $status = '<span class="badge badge-warning"><i class="fas fa-exclamation-triangle"></i> Belum dibayar</span>';
+                } elseif ($row->status == 1) {
+                    $status = '<span class="badge badge-primary"><i class="ion ion-load-a"></i> Sedang diproses</span>';
+                } elseif ($row->status == 2) {
+                    $status = '<span class="badge badge-success"><i class="fas fa-check"></i> Order Selesai</span>';
+                } elseif ($row->status == 3) {
+                    $status = '<span class="badge badge-danger"><i class="fas ion-close"></i> Order Refund</span>';
+                }
+                return $status;
+            })
+            ->addColumn('action', function($row) {
+                $btn = '<a href="'.route('admin.order.detailselesai', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2" title="Lihat">
+                        <i class="fas fa-eye"></i> Lihat
+                    </a>';
+                $btn .= '<a href="'.route('admin.order.invoice', $row->id).'" class="btn btn-warning btn-sm mr-2 mb-2" title="Invoice">
+                        <i class="ion ion-document-text"></i> Invoice
+                    </a>';
 
                 $url = "'".route('admin.order.delete', $row->id)."'";
                 $btn .= '<a onclick="deleteModal('.$url.')" class="btn btn-danger btn-sm text-white mr-2 mb-2" title="Hapus">
@@ -405,8 +596,22 @@ class OrderController extends Controller
         $countpayment = Payment::where('order_id', $request->order_id)->count();
         if ($countpayment > 0) {
             $order = Order::find($request->order_id);
-            $order->status = 1;
+            if ($order->activity <> '') {
+                if ($order->activity->status == 1) {
+                    $order->status = 5;
+                } else {
+                    $order->status = 1;
+                }
+            } else {
+                $order->status = 1;
+            }
             $order->save();
+        } else {
+            $order = Order::find($request->order_id);
+            if ($order->activity == '') {
+                $order->status = 1;
+                $order->save();
+            }
         }
 
         return redirect()->route('admin.order')->with('berhasil', 'Berhasil menambahkan pembayaran');

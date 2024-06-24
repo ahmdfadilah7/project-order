@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Penjoki;
 
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
+use App\Models\Order;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use League\CommonMark\Extension\SmartPunct\EllipsesParser;
 use Yajra\DataTables\Facades\DataTables;
 
 class ActivitiesController extends Controller
@@ -55,6 +57,24 @@ class ActivitiesController extends Controller
         $activities->judul_aktivitas = $request->judul_aktivitas;
         $activities->status = $request->status !== null ? $request->status : 0; 
         $activities->save();
+
+        $order = Order::find($request->order_id);
+        if ($order->payment <> '') {
+            if ($order->payment->status == 2) {
+                if ($request->status == 1) {
+                    $order->status = 5;
+                } else {
+                    $order->status = 1;
+                }
+            } else {
+                if ($request->status == 1) {
+                    $order->status = 4;
+                } else {
+                    $order->status = 1;
+                }
+            }
+        }
+        $order->save();
 
         return redirect()->route('penjoki.order.detail', $activities->order_id)->with('berhasil', $message);
     }

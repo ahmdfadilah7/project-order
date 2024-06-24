@@ -64,6 +64,52 @@
                     <a href="{{ route('admin.order.add') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Tambah</a>
                 </div>
                 <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-12">
+                            <div class="form-group">
+                                <label for="">Karyawan</label>
+                                <select name="karyawan" id="karyawan" class="form-control select2">
+                                    <option value="">- Semua -</option>
+                                    @foreach($karyawan as $key => $row)
+                                        <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-12">
+                            <div class="form-group">
+                                <label for="">Pelanggan</label>
+                                <select name="pelanggan" id="pelanggan" class="form-control select2">
+                                    <option value="">- Semua -</option>
+                                    @foreach($pelanggan as $key => $row)
+                                        <option value="{{ $row->id }}">{{ $row->name.' - '.$row->profile->kode_klien }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-12">
+                            <div class="form-group">
+                                <label for="">Bobot</label>
+                                <select name="bobot" id="bobot" class="form-control select2">
+                                    <option value="">- Semua -</option>
+                                    @foreach($bobot as $key => $row)
+                                        <option value="{{ $row->id }}">{{ $row->bobot }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-12">
+                            <div class="form-group">
+                                <label for="">Status Order</label>
+                                <select name="status" id="status_order" class="form-control select2">
+                                    <option value="">- Semua -</option>
+                                    @foreach($status_order2 as $key => $row)
+                                        <option value="{{ $key }}">{{ $row }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <table class="table table-striped" id="table-1">
                             <thead>
@@ -107,15 +153,21 @@
 @section('script')
 
     <script>
-        $(function() {
+        function tableData() {
             $('#table-1').dataTable({
                 processing: true,
                 serverSide: true,
                 'ordering': 'true',
                 ajax: {
                     url: "{{ route('admin.order.list') }}",
-                    data: function(d) {}
+                    data: {
+                        karyawan: $('#karyawan').val(),
+                        pelanggan: $('#pelanggan').val(),
+                        bobot: $('#bobot').val(),
+                        status_order: $('#status_order').val()
+                    }
                 },
+                bDestroy: true,
                 columns: [
                     {
                         data: 'DT_RowIndex',
@@ -183,6 +235,26 @@
                     }
                 ]
             });
+        };
+
+
+        tableData();
+
+        $('#karyawan').change(function() {
+            tableData()
+        });
+
+        $('#pelanggan').change(function() {
+            tableData()
+        });
+
+        $('#bobot').change(function() {
+            tableData()
+        });
+
+        $('#status_order').change(function() {
+            tableData();
+            console.log($('#status_order').val());
         });
 
         function getOrder(id) {

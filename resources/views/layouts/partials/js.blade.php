@@ -72,7 +72,7 @@
                 @endforeach
             @endif
 
-            @if (Auth::user()->role != 'pelanggan')
+            @if (Auth::user()->role != 'pelanggan' && Auth::user()->role <> 'admin')
 
                 function deadline() {
                     @foreach ($dataDeadline as $key => $row)
