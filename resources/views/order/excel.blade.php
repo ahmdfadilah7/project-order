@@ -15,7 +15,7 @@
             <th>Jenis</th>
             <th>Bobot</th>
             <th>Ket. Bobot</th>
-            <th>Tanggal Order</th>
+            <th>Tanggal Order</th>  
             <th>Deadline</th>
             <th>Progress</th>
             <th>Status</th>
@@ -58,6 +58,12 @@
                         Sedang diproses
                     @elseif($row->status == 2)
                         Order Selesai
+                    @elseif($row->status == 3)
+                        Order Refund
+                    @elseif($row->status == 4)
+                        Menunggu Pelunasan
+                    @elseif($row->status == 5)
+                        Menunggu Konfirmasi
                     @endif
                 </td>
             </tr>

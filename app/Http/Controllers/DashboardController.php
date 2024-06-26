@@ -19,8 +19,30 @@ class DashboardController extends Controller
         $totalpenjoki = User::where('role', 'penjoki')->count();
         $totalpelanggan = User::where('role', 'pelanggan')->count();
 
-        $totalpemasukan = Order::where('updated_at', Carbon::now())->get();
-        $totalbulan = Order::whereMonth('updated_at', Carbon::now()->format('m'))->get();
+        $totalpemasukan = Order::whereDate('updated_at', Carbon::now())
+            ->where('status', 2)
+            ->orWhere('status', 4)
+            ->orWhere('status', 5)
+            ->get();
+        $totalbulan = Order::whereMonth('updated_at', Carbon::now()->format('m'))
+            ->where('status', 2)
+            ->orWhere('status', 4)
+            ->orWhere('status', 5)
+            ->get();
+        $totaltahun = Order::whereYear('updated_at', Carbon::now()->format('Y'))
+            ->where('status', 2)
+            ->orWhere('status', 4)
+            ->orWhere('status', 5)
+            ->get();
+
+        $status_order = array(
+            0 => 'Belum ada pembayaran', 
+            1 => 'Sedang diproses', 
+            4 => 'Menunggu Pelunasan', 
+            5 => 'Menunggu Konfirmasi',
+            2 => 'Order Selesai',
+            3 => 'Order Refund'
+        );
 
         
         $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
@@ -34,7 +56,9 @@ class DashboardController extends Controller
             'totalpenjoki', 
             'totalpelanggan',
             'totalpemasukan',
-            'totalbulan'
+            'totalbulan',
+            'totaltahun',
+            'status_order'
         ));
     }
 }

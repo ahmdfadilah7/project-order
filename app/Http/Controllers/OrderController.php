@@ -224,7 +224,7 @@ class OrderController extends Controller
             })
             ->addColumn('action', function($row) {
                 $btn = '<a href="'.route('admin.order.detail', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2" title="Lihat">
-                        <i class="fas fa-eye"></i> Lihat
+                        <i class="fas fa-info-circle"></i> Lihat
                     </a>';
 
                 if ($row->status <> 3) {
@@ -367,7 +367,7 @@ class OrderController extends Controller
             })
             ->addColumn('action', function($row) {
                 $btn = '<a href="'.route('admin.order.detailselesai', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2" title="Lihat">
-                        <i class="fas fa-eye"></i> Lihat
+                        <i class="fas fa-info-circle"></i> Lihat
                     </a>';
                 $btn .= '<a href="'.route('admin.order.invoice', $row->id).'" class="btn btn-warning btn-sm mr-2 mb-2" title="Invoice">
                         <i class="ion ion-document-text"></i> Invoice
@@ -481,7 +481,7 @@ class OrderController extends Controller
             })
             ->addColumn('action', function($row) {
                 $btn = '<a href="'.route('admin.order.detailselesai', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2" title="Lihat">
-                        <i class="fas fa-eye"></i> Lihat
+                        <i class="fas fa-info-circle"></i> Lihat
                     </a>';
                 $btn .= '<a href="'.route('admin.order.invoice', $row->id).'" class="btn btn-warning btn-sm mr-2 mb-2" title="Invoice">
                         <i class="ion ion-document-text"></i> Invoice
