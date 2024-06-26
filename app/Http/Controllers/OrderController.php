@@ -146,7 +146,8 @@ class OrderController extends Controller
                 return $row->user->name;
             })
             ->addColumn('pelanggan', function($row) {
-                return $row->pelanggan->name;
+                $pelanggan = '<a href="'.route('admin.pelanggan.show', $row->pelanggan_id).'">'.$row->pelanggan->name.'</a>';
+                return $pelanggan;
             })
             ->addColumn('tanggal_order', function($row) {
                 return Carbon::parse($row->created_at)->format('d M Y');
@@ -265,7 +266,7 @@ class OrderController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action', 'progress', 'payment', 'total', 'status', 'deadline'])
+            ->rawColumns(['action', 'pelanggan', 'progress', 'payment', 'total', 'status', 'deadline'])
             ->make(true);
 
         return $datatables;

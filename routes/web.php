@@ -88,6 +88,7 @@ Route::group(['middleware' => ['auth:admin', 'role:admin']], function () {
     Route::get('admin/pelanggan/getListData', [PelangganController::class, 'listData'])->name('admin.pelanggan.list');
     Route::get('admin/pelanggan/add', [PelangganController::class, 'create'])->name('admin.pelanggan.add');
     Route::post('admin/pelanggan/store', [PelangganController::class, 'store'])->name('admin.pelanggan.store');
+    Route::get('admin/pelanggan/show/{id}', [PelangganController::class, 'show'])->name('admin.pelanggan.show');
     Route::get('admin/pelanggan/{id}', [PelangganController::class, 'edit'])->name('admin.pelanggan.edit');
     Route::put('admin/pelanggan/update/{id}', [PelangganController::class, 'update'])->name('admin.pelanggan.update');
     Route::get('admin/pelanggan/delete/{id}', [PelangganController::class, 'destroy'])->name('admin.pelanggan.delete');
@@ -104,6 +105,7 @@ Route::group(['middleware' => ['auth:admin', 'role:admin']], function () {
     Route::get('admin/penjoki/getListData', [PenjokiController::class, 'listData'])->name('admin.penjoki.list');
     Route::get('admin/penjoki/add', [PenjokiController::class, 'create'])->name('admin.penjoki.add');
     Route::post('admin/penjoki/store', [PenjokiController::class, 'store'])->name('admin.penjoki.store');
+    Route::get('admin/penjoki/show/{id}', [PenjokiController::class, 'show'])->name('admin.penjoki.show');
     Route::get('admin/penjoki/{id}', [PenjokiController::class, 'edit'])->name('admin.penjoki.edit');
     Route::put('admin/penjoki/update/{id}', [PenjokiController::class, 'update'])->name('admin.penjoki.update');
     Route::get('admin/penjoki/delete/{id}', [PenjokiController::class, 'destroy'])->name('admin.penjoki.delete');

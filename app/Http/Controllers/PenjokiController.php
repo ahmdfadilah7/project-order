@@ -38,7 +38,10 @@ class PenjokiController extends Controller
                 return $no_telp;
             })
             ->addColumn('action', function($row) {
-                $btn = '<a href="'.route('admin.penjoki.edit', $row->id).'" class="btn btn-primary btn-sm mr-2 mb-2">
+                $btn = '<a href="'.route('admin.penjoki.show', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2">
+                        <i class="fas fa-info-circle"></i> Lihat
+                    </a>';
+                $btn .= '<a href="'.route('admin.penjoki.edit', $row->id).'" class="btn btn-primary btn-sm mr-2 mb-2">
                         <i class="fas fa-edit"></i> Edit
                     </a>';
 
@@ -111,6 +114,20 @@ class PenjokiController extends Controller
         ]);
 
         return redirect()->route('admin.penjoki')->with('berhasil', 'Berhasil menambahkan karyawan.');
+    }
+
+    // Menampilkan halaman detail penjoki
+    public function show($id) {
+        $setting = Setting::first();
+
+        $dataDeadline = Order::whereDate('deadline', '=', Carbon::now())->get();
+        $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
+
+        $user = User::find($id);
+        $order = Order::where('user_id', $id)->orderBy('created_at', 'desc')->get();
+        $totalorder = Order::where('user_id', $id)->count();
+
+        return view('penjoki.detail', compact('setting', 'dataDeadline', 'dataDeadline2', 'user', 'order', 'totalorder'));
     }
 
     // Menampilkan halaman edit penjoki
