@@ -32,13 +32,13 @@ class OrderExport implements FromView, ShouldAutoSize
         
         if (Auth::user()->role == 'penjoki') {
             $order = Order::where('user_id', Auth::user()->id)
-                ->where('created_at', '>=', $this->dari)
-                ->where('created_at', '<=', $this->sampai)
+                ->whereDate('created_at', '>=', $this->dari)
+                ->whereDate('created_at', '<=', $this->sampai)
                 ->get();
 
             $ordercount = Order::where('user_id', Auth::user()->id)
-                ->where('created_at', '>=', $this->dari)
-                ->where('created_at', '<=', $this->sampai)
+                ->whereDate('created_at', '>=', $this->dari)
+                ->whereDate('created_at', '<=', $this->sampai)
                 ->count();
 
             $dari = $this->dari;
@@ -48,13 +48,13 @@ class OrderExport implements FromView, ShouldAutoSize
         } else {
 
             if ($this->status <> '') {
-                $order = Order::where('created_at', '>=', $this->dari)
-                    ->where('created_at', '<=', $this->sampai)
+                $order = Order::whereDate('created_at', '>=', $this->dari)
+                    ->whereDate('created_at', '<=', $this->sampai)
                     ->where('status', $this->status)
                     ->get();
             } else {
-                $order = Order::where('created_at', '>=', $this->dari)
-                    ->where('created_at', '<=', $this->sampai)
+                $order = Order::whereDate('created_at', '>=', $this->dari)
+                    ->whereDate('created_at', '<=', $this->sampai)
                     ->get();
             }
 
