@@ -44,6 +44,8 @@ Route::get('register', [AuthController::class, 'register'])->name('register');
 Route::post('prosesLogin', [AuthController::class, 'proses_login'])->name('prosesLogin');
 Route::post('prosesRegister', [AuthController::class, 'proses_register'])->name('prosesRegister');
 
+Route::get('print/{kode_order}', [OrderController::class, 'print2'])->name('print');
+
 Route::group(['middleware' => 'auth'], function () {
     Route::get('notif/group/chat/{id}', [NotificationController::class, 'group'])->name('notif.group');
 });
@@ -118,7 +120,9 @@ Route::group(['middleware' => ['auth:admin', 'role:admin']], function () {
     Route::put('admin/project/update/{id}', [ProjectController::class, 'update'])->name('admin.project.update');
     Route::get('admin/project/delete/{id}', [ProjectController::class, 'destroy'])->name('admin.project.delete');
 
-    Route::get('admin/fileproject/getListData/{id}', [FileProjectController::class, 'listData'])->name('admin.fileproject.list');
+    Route::get('admin/fileproject', [FileProjectController::class, 'index'])->name('admin.fileproject');
+    Route::get('admin/fileproject/getListData', [FileProjectController::class, 'listData'])->name('admin.fileproject.list');
+    Route::get('admin/fileproject/add', [FileProjectController::class, 'create'])->name('admin.fileproject.add');
     Route::post('admin/fileproject/store', [FileProjectController::class, 'store'])->name('admin.fileproject.store');
     Route::get('admin/fileproject/delete/{id}', [FileProjectController::class, 'destroy'])->name('admin.fileproject.delete');
 

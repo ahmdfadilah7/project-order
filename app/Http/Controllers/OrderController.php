@@ -248,6 +248,14 @@ class OrderController extends Controller
                         }
                     }
 
+                    if ($row->payment <> '' && $row->activity <> '') {
+                        if ($row->payment->status == 2 && $row->activity->status == 1) {
+                            $btn .= '<a href="'.route('admin.order.selesai', $row->id).'" class="btn btn-success btn-sm mr-2 mb-2" title="Selesai">
+                                <i class="fas fa-check"></i> Selesai
+                            </a>';
+                        }
+                    }
+
                     if ($row->status == 5) {
                         $btn .= '<a href="'.route('admin.order.selesai', $row->id).'" class="btn btn-success btn-sm mr-2 mb-2" title="Selesai">
                                 <i class="fas fa-check"></i> Selesai
@@ -550,6 +558,25 @@ class OrderController extends Controller
     {
         $setting = Setting::first();
         $order = Order::find($id);
+        
+        $formatname = 'Invoice-'.$order->kode_order;
+
+        $data = array(
+            'setting' => $setting,
+            'order' => $order
+        );
+
+        view()->share('order.print', $data);
+        $pdf = Pdf::loadView('order.print', $data);
+
+        return $pdf->stream(strtoupper($formatname).'.pdf');
+    }
+
+    // Proses print2
+    public function print2($kode_order)
+    {
+        $setting = Setting::first();
+        $order = Order::where('kode_order', $kode_order)->first();
         
         $formatname = 'Invoice-'.$order->kode_order;
 

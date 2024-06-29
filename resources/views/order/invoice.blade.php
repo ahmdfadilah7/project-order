@@ -136,7 +136,17 @@
                 <div class="float-lg-left mb-lg-0 mb-3">
                     <a href="{{ route('admin.order') }}" class="btn btn-primary btn-sm"><i class="fa fa-arrow-left"></i> Kembali</a>
                 </div>
-                <a href="{{ route('admin.order.print', $order->id) }}" class="btn btn-warning btn-icon icon-left"><i class="fas fa-print"></i> Print</a>
+                @php
+                    $nomor = $order->pelanggan->profile->no_telp;
+                    if (substr($nomor,0,1) == 0) {
+                        $no_telp = '62'.substr($nomor, 1);
+                    } else {
+                        $no_telp = $nomor;
+                    }
+                @endphp
+                <a href="https://web.whatsapp.com/send?phone={{ $no_telp }}&text=*Halo ka {{ $order->pelanggan->name }}!* %0a%0aBerikut admin berikan info pembayaran: %0aNomor Invoice *{{ $order->kode_order }}* %0a%0a {{ route('print', $order->kode_order) }} %0a%0a Silahkan klik link tersebut untuk melihat status orderan secara real time. %0a%0a Boleh dibantu check apakah invoice orderan dan totalannya sudah sesuai atau belum. %0a%0a Thanks for order with us @sip_solutionintanprima" 
+                    class="btn btn-info btn-icon btn-sm icon-left"><i class="fas fa-share"></i> Bagikan</a>
+                <a href="{{ route('admin.order.print', $order->id) }}" class="btn btn-warning btn-icon btn-sm icon-left"><i class="fas fa-print"></i> Print</a>
             </div>
         </div>
     </div>

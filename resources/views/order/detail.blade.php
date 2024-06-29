@@ -25,10 +25,17 @@
     @endif
 
     <div class="row">
-        <div class="col-md-6 col-sm-12">
+        <div class="col-md-12 col-sm-12">
             <div class="card">
                 <div class="card-header justify-content-between">
                     <h4>Detail Project</h4>
+                    @if(Request::segment(3)=='detailselesai')
+                        <a href="{{ route('admin.order.dataselesai') }}" class="btn btn-primary btn-sm"><i class="fa fa-arrow-left"></i>
+                            Kembali</a>
+                    @else
+                        <a href="{{ route('admin.order') }}" class="btn btn-primary btn-sm"><i class="fa fa-arrow-left"></i>
+                            Kembali</a>
+                    @endif
                 </div>
                 <div class="card-body">
                     <table class="table table-striped">
@@ -81,23 +88,14 @@
                             <td>{!! $order->deskripsi !!}</td>
                         </tr>
                     </table>
-                    
-                    @if(Request::segment(3)=='detailselesai')
-                        <a href="{{ route('admin.order.dataselesai') }}" class="btn btn-primary btn-sm"><i class="fa fa-arrow-left"></i>
-                            Kembali</a>
-                    @else
-                        <a href="{{ route('admin.order') }}" class="btn btn-primary btn-sm"><i class="fa fa-arrow-left"></i>
-                            Kembali</a>
-                    @endif
                 </div>
             </div>
         </div>
 
-        <div class="col-md-6 col-sm-12">
+        <div class="col-md-12 col-sm-12">
             <div class="card">
                 <div class="card-header justify-content-between">
                     <h4>File Project</h4>
-                    <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#staticBackdrop"><i class="fa fa-plus"></i> Tambah</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -110,11 +108,28 @@
                                     <th>File</th>
                                     <th>Keterangan</th>
                                     <th>Dikirim Oleh</th>
-                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-
+                                @foreach ($order->fileproject as $key => $row)
+                                    <tr>
+                                        <td>{{ ++$key }}</td>
+                                        <td>
+                                            @php
+                                                $ext = explode('.', $row->file);
+                                                $nama = explode('/', $row->file);
+                                                if ($ext[1] == 'jpg' || $ext[1] == 'jpeg' || $ext[1] == 'png' || $ext[1] == 'svg') {
+                                                    $file = '<img src="'.url($row->file).'" width="80">';
+                                                } else {
+                                                    $file = '<a href="'.url($row->file).'">'.$nama[1].'</a>';
+                                                }
+                                                echo $file;
+                                            @endphp
+                                        </td>
+                                        <td>{{ $row->keterangan }}</td>
+                                        <td>{{ $row->user->name }}</td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -123,52 +138,4 @@
         </div>
     </div>
     
-@endsection
-
-@section('modal')
-    @include('order.partials.fileproject')
-@endsection
-
-@section('script')
-
-    <script>
-        $(function() {
-            $('#table-1').dataTable({
-                processing: true,
-                serverSide: true,
-                'ordering': 'true',
-                ajax: {
-                    url: "{{ route('admin.fileproject.list', $order->id) }}",
-                    data: function(d) {}
-                },
-                columns: [
-                    {
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'file',
-                        name: 'file'
-                    },
-                    {
-                        data: 'keterangan',
-                        name: 'keterangan'
-                    },
-                    {
-                        data: 'user',
-                        name: 'user'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
-                    }
-                ]
-            });
-        });
-    </script>
-
 @endsection

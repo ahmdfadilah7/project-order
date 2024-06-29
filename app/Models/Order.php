@@ -43,6 +43,11 @@ class Order extends Model
     {
         return $this->hasMany(JenisOrder::class);
     }
+    
+    public function fileproject(): HasMany
+    {
+        return $this->hasMany(FileProject::class);
+    }
 
     public function payment(): HasOne
     {
