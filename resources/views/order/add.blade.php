@@ -93,6 +93,13 @@
                         </div>
                     </div>
                     <div class="form-group row mb-4">
+                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Tanggal Order</label>
+                        <div class="col-sm-12 col-md-7">
+                            <input type="date" name="tanggal_order" class="form-control" value="{{ old('tanggal_order') }}" autocomplete="off">
+                            <i class="text-danger">{{ $errors->first('tanggal_order') }}</i>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-4">
                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Deadline</label>
                         <div class="col-sm-12 col-md-7">
                             <input type="date" name="deadline" class="form-control" value="{{ old('deadline') }}" autocomplete="off">

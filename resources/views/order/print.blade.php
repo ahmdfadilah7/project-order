@@ -47,12 +47,10 @@
 
     .logo img {
         width: 200px;
-        padding-top: 30px;
     }
 
     .logo span {
         margin-left: 8px;
-        margin-top: 19px;
         position: absolute;
         font-weight: bold;
         text-transform: uppercase;
@@ -60,7 +58,6 @@
     }
 
     .text-kode-invoice {
-        margin-left: 8px;
         margin-top: 19px;
         font-weight: bold;
         text-transform: uppercase;
@@ -127,22 +124,24 @@
 </style>
 
 <body>
-    <div class="w-100 mt-10">
-        <table class="w-100 mt-10 no-border">
+    <div class="w-100">
+        <table class="w-100 no-border">
             <tr>
-                <td class="w-100">
-                    <div class="logo">
-                        <img src="data:image/svg+xml;base64,<?php echo base64_encode(file_get_contents(base_path('public/' . $setting->logo))); ?>">
-                        {{-- <span>{{ $setting->nama_website }}</span> --}}
+                <td class="w-50">
+                    <span class="text-kode-invoice" style="font-size: 24px;">
+                        {{ $setting->nama_website }}
+                    </span>
+                    <div class="box-text">
+                        <p>{{ $setting->email }}</p>
+                        {!! $setting->alamat !!}
+                        <p>{{ $setting->no_telp }}</p>
                     </div>
                 </td>
                 <td class="w-50 text-right">
-                    <span class="text-kode-invoice">
-                        {{ $order->kode_order }}
-                    </span><br>
-                    <span class="text-kode-invoice">
-                        {{ \Carbon\Carbon::parse($order->created_at)->format('d M Y') }}
-                    </span>
+                    <div class="logo">
+                        {{-- <img src="data:image/svg+xml;base64,<?php echo base64_encode(file_get_contents(base_path('../' . $setting->logo))); ?>"> --}}
+                        <img src="data:image/svg+xml;base64,<?php echo base64_encode(file_get_contents(base_path('public/' . $setting->logo))); ?>">
+                    </div>
                 </td>
             </tr>
         </table>
@@ -151,27 +150,39 @@
     <div class="table-section w-100 mt-10">
         <table class="table bill-tbl w-100 mt-10">
             <tr>
-                <th class="w-50">Kepada:</th>
-                <th class="w-50">Dari:</th>
+                <th class="w-100" style="font-size: 18px;"> INVOICE #{{ $order->kode_order }}</th>
+            </tr>
+        </table>
+        <table class="w-100 mt-10">
+            <tr>
+                <td class="w-15"><strong>Kode Klien</strong></td>
+                <td>{{ $order->pelanggan->profile->kode_klien }}</td>
             </tr>
             <tr>
-                <td>
-                    <div class="box-text">
-                        <p>Nama Lengkap : {{ $order->pelanggan->name }}</p>
-                        <p>Email : {{ $order->pelanggan->email }}</p>
-                        <p>No. Telepon : {{ $order->pelanggan->profile->no_telp }}</p>
-                        <p>Jurusan : {{ $order->pelanggan->profile->jurusan }}</p>
-                    </div>
-                </td>
-                <td>
-                    <div class="box-text">
-                        <p>Nama : {{ $setting->nama_website }}</p>
-                        <p>Email : {{ $setting->email }}</p>
-                        <p>No. Telepon : {{ $setting->no_telp }}</p>
-                        <p>Alamat : {!! $setting->alamat !!}</p>
-                    </div>
-                </td>
+                <td class="w-15"><strong>Nama</strong></td>
+                <td>{{ $order->pelanggan->name }}</td>
             </tr>
+            <tr>
+                <td class="w-15"><strong>Email</strong></td>
+                <td>{{ $order->pelanggan->email }}</td>
+            </tr>
+            <tr>
+                <td class="w-15"><strong>Universitas</strong></td>
+                <td>{{ $order->pelanggan->profile->univ }}</td>
+            </tr>
+            <tr>
+                <td class="w-15"><strong>Jurusan</strong></td>
+                <td>{{ $order->pelanggan->profile->jurusan }}</td>
+            </tr>
+            <tr>
+                <td class="w-15"><strong>No Telepon</strong></td>
+                <td>{{ $order->pelanggan->profile->no_telp }}</td>
+            </tr>
+            <tr>
+                <td class="w-15"><strong>Alamat</strong></td>
+                <td>{{ $order->pelanggan->profile->daerah }}</td>
+            </tr>
+            
         </table>
     </div>
     <div class="table-section bill-tbl w-100 mt-10">

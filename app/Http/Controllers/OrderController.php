@@ -778,6 +778,9 @@ class OrderController extends Controller
         $order->judul = $request->judul;
         $order->deskripsi = $request->deskripsi;
         $order->keterangan = $request->keterangan;
+        if ($request->tanggal_order <> '') {
+            $order->created_at = Carbon::parse($request->tanggal_order)->format('Y-m-d H:i:s');
+        }
         $order->deadline = $request->deadline;
         $order->total = str_replace(',', '', $request->get('total'));
         $order->status = 0;
@@ -839,6 +842,9 @@ class OrderController extends Controller
         $order->judul = $request->judul;
         $order->deskripsi = $request->deskripsi;
         $order->keterangan = $request->keterangan;
+        if ($request->tanggal_order <> '') {
+            $order->created_at = Carbon::parse($request->tanggal_order)->format('Y-m-d H:i:s');
+        }
         $order->deadline = $request->deadline;
         $order->total = str_replace(',', '', $request->get('total'));
         $order->save();
