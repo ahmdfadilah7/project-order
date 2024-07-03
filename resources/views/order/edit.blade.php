@@ -16,7 +16,7 @@
     </div>
 
     <div class="row">
-        <div class="col-12">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
                     <h4>Edit Order</h4>
@@ -34,6 +34,41 @@
                                 @endforeach
                             </select>
                             <i class="text-danger">{{ $errors->first('penjoki') }}</i>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-7">
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Jenis Order</th>
+                                    <th>Aksi</th>
+                                </tr>
+                                @foreach($order->jenisorder as $key => $row)
+                                    <tr>
+                                        <td>{{ ++$key }}</td>
+                                        <td>{{ $row->jenis->judul }}</td>
+                                        <td>
+                                            <a onclick="deleteModal('{{ route('admin.order.jenis.delete', $row->id) }}')" class="btn btn-danger btn-sm text-white mr-2 mb-2" title="Hapus">
+                                                <i class="fas fa-trash"></i> Hapus
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </table>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Jenis Order</label>
+                        <div class="col-sm-12 col-md-7">
+                            <select name="jenis[]" class="form-control select2" multiple>
+                                <option value="">- Pilih -</option>
+                                @foreach ($jenis as $row)
+                                    <option value="{{ $row->id }}">{{ $row->judul }}</option>
+                                @endforeach
+                            </select>
+                            <i class="text-danger">{{ $errors->first('jenis') }}</i>
                         </div>
                     </div>
                     <div class="form-group row mb-4">
@@ -121,6 +156,10 @@
         </div>
     </div>
 
+@endsection
+
+@section('modal')
+    @include('layouts.partials.deleteModal')
 @endsection
 
 @section('script')

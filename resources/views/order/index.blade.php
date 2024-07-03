@@ -65,7 +65,7 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-3 col-sm-12">
+                        <div class="col-md-6 col-sm-12">
                             <div class="form-group">
                                 <label for="">Karyawan</label>
                                 <select name="karyawan" id="karyawan" class="form-control select2">
@@ -76,7 +76,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-3 col-sm-12">
+                        <div class="col-md-6 col-sm-12">
                             <div class="form-group">
                                 <label for="">Pelanggan</label>
                                 <select name="pelanggan" id="pelanggan" class="form-control select2">
@@ -87,7 +87,18 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-3 col-sm-12">
+                        <div class="col-md-4 col-sm-12">
+                            <div class="form-group">
+                                <label for="">Bulan</label>
+                                <select name="bulan" id="bulan" class="form-control select2">
+                                    <option value="">- Semua -</option>
+                                    @foreach($bulan as $key => $row)
+                                        <option value="{{ $key }}">{{ $row }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label for="">Bobot</label>
                                 <select name="bobot" id="bobot" class="form-control select2">
@@ -98,7 +109,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-3 col-sm-12">
+                        <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label for="">Status Order</label>
                                 <select name="status" id="status_order" class="form-control select2">
@@ -163,6 +174,7 @@
                     data: {
                         karyawan: $('#karyawan').val(),
                         pelanggan: $('#pelanggan').val(),
+                        bulan: $('#bulan').val(),
                         bobot: $('#bobot').val(),
                         status_order: $('#status_order').val()
                     }
@@ -248,13 +260,16 @@
             tableData()
         });
 
+        $('#bulan').change(function() {
+            tableData()
+        });
+
         $('#bobot').change(function() {
             tableData()
         });
 
         $('#status_order').change(function() {
             tableData();
-            console.log($('#status_order').val());
         });
 
         function getOrder(id) {

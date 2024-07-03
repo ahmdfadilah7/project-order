@@ -84,6 +84,7 @@ Route::group(['middleware' => ['auth:admin', 'role:admin']], function () {
     Route::put('admin/order/update/{id}', [OrderController::class, 'update'])->name('admin.order.update');
     Route::get('admin/order/selesai/{id}', [OrderController::class, 'selesai'])->name('admin.order.selesai');
     Route::get('admin/order/print/{id}', [OrderController::class, 'print'])->name('admin.order.print');
+    Route::get('admin/order/jenis/delete/{id}', [OrderController::class, 'destroy_jenis'])->name('admin.order.jenis.delete');
     Route::get('admin/order/delete/{id}', [OrderController::class, 'destroy'])->name('admin.order.delete');
 
     Route::get('admin/pelanggan', [PelangganController::class, 'index'])->name('admin.pelanggan');

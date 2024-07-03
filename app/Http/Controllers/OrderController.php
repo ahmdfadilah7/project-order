@@ -28,6 +28,21 @@ class OrderController extends Controller
     public function index()
     {
         $setting = Setting::first();
+
+        $bulan = array(
+            1 => 'Januari',
+            2 => 'Februari',
+            3 => 'Maret',
+            4 => 'April',
+            5 => 'Mei',
+            6 => 'Juni',
+            7 => 'Juli',
+            8 => 'Agustus',
+            9 => 'September',
+            10 => 'Oktober',
+            11 => 'November',
+            12 => 'Desember',
+        );
         
         $status = array('DP', 'LUNAS');
 
@@ -56,6 +71,7 @@ class OrderController extends Controller
 
         return view('order.index', compact(
             'setting', 
+            'bulan', 
             'status', 
             'status_order', 
             'status_order2', 
@@ -71,53 +87,76 @@ class OrderController extends Controller
     // Proses menampilkan data order dengan datatables
     public function listData(Request $request) {
 
-        if ($request->karyawan <> '' && $request->pelanggan <> '' && $request->bobot <> '' && $request->status_order <> '') {
+        if ($request->karyawan <> '' && $request->pelanggan <> '' && $request->bulan <> '' && $request->bobot <> '' && $request->status_order <> '') {
             $data = Order::where('user_id', $request->karyawan)
                 ->where('pelanggan_id', $request->pelanggan)
+                ->whereMonth('created_at', $request->bulan)
                 ->where('bobot_id', $request->bobot)
                 ->where('status', $request->status_order)
                 ->orderBy('deadline', 'asc');
-        } elseif ($request->karyawan <> '' && $request->pelanggan <> '') {
+        } elseif ($request->karyawan <> '' && $request->pelanggan <> '' && $request->bulan <> '') {
             $data = Order::where('status', '<>', 2)
                 ->where('status', '<>', 3)
                 ->where('user_id', $request->karyawan)
                 ->where('pelanggan_id', $request->pelanggan)
+                ->whereMonth('created_at', $request->bulan)
                 ->orderBy('deadline', 'asc');
-        } elseif ($request->karyawan <> '' && $request->pelanggan <> '' && $request->status_order <> '') {
+        } elseif ($request->karyawan <> '' && $request->pelanggan <> '' && $request->bulan <> '' && $request->status_order <> '') {
             $data = Order::where('status', $request->status_order)
                 ->where('user_id', $request->karyawan)
                 ->where('pelanggan_id', $request->pelanggan)
+                ->whereMonth('created_at', $request->bulan)
                 ->orderBy('deadline', 'asc');
-        } elseif ($request->karyawan <> '' && $request->pelanggan <> '' && $request->bobot <> '') {
+        } elseif ($request->karyawan <> '' && $request->pelanggan <> '' && $request->bulan <> '' && $request->bobot <> '') {
             $data = Order::where('status', '<>', 2)
                 ->where('status', '<>', 3)
                 ->where('user_id', $request->karyawan)
                 ->where('pelanggan_id', $request->pelanggan)
+                ->whereMonth('created_at', $request->bulan)
                 ->where('bobot_id', $request->bobot)
                 ->orderBy('deadline', 'asc');
-        } elseif ($request->pelanggan <> '' && $request->status_order <> '') {
+        } elseif ($request->pelanggan <> '' && $request->status_order <> '' && $request->bulan <> '') {
             $data = Order::where('pelanggan_id', $request->pelanggan)
+                ->whereMonth('created_at', $request->bulan)
                 ->where('status', $request->status_order)
                 ->orderBy('deadline', 'asc');
-        } elseif ($request->pelanggan <> '' && $request->bobot <> '') {
+        } elseif ($request->pelanggan <> '' && $request->bobot <> '' && $request->bulan <> '') {
             $data = Order::where('status', '<>', 2)
                 ->where('status', '<>', 3)
                 ->where('pelanggan_id', $request->pelanggan)
+                ->whereMonth('created_at', $request->bulan)
                 ->where('bobot_id', $request->bobot)
                 ->orderBy('deadline', 'asc');
-        } elseif ($request->karyawan <> '' && $request->status_order <> '') {
+        } elseif ($request->karyawan <> '' && $request->status_order <> '' && $request->bulan <> '') {
             $data = Order::where('user_id', $request->karyawan)
+                ->whereMonth('created_at', $request->bulan)
                 ->where('status', $request->status_order)
                 ->orderBy('deadline', 'asc');
-        } elseif ($request->karyawan <> '' && $request->bobot <> '') {
+        } elseif ($request->karyawan <> '' && $request->bobot <> '' && $request->bulan <> '') {
             $data = Order::where('status', '<>', 2)
                 ->where('status', '<>', 3)
                 ->where('user_id', $request->karyawan)
+                ->whereMonth('created_at', $request->bulan)
                 ->where('bobot_id', $request->bobot)
                 ->orderBy('deadline', 'asc');
-        } elseif ($request->bobot <> '' && $request->status_order <> '') {
+        } elseif ($request->karyawan <> '' && $request->bulan <> '') {
+            $data = Order::where('status', '<>', 2)
+                ->where('status', '<>', 3)
+                ->where('user_id', $request->karyawan)
+                ->whereMonth('created_at', $request->bulan)
+                ->orderBy('deadline', 'asc');
+        } elseif ($request->bobot <> '' && $request->status_order <> '' && $request->bulan <> '') {
             $data = Order::where('bobot_id', $request->bobot)
+                ->whereMonth('created_at', $request->bulan)
                 ->where('status', $request->status_order)
+                ->orderBy('deadline', 'asc');
+        } elseif ($request->status_order <> '' && $request->bulan <> '') {
+            $data = Order::whereMonth('created_at', $request->bulan)
+                ->where('status', $request->status_order)
+                ->orderBy('deadline', 'asc');
+        } elseif ($request->bobot <> '' && $request->bulan <> '') {
+            $data = Order::where('bobot_id', $request->bobot)
+                ->whereMonth('created_at', $request->bulan)
                 ->orderBy('deadline', 'asc');
         } elseif ($request->status_order <> '') {
             $data = Order::where('status', $request->status_order)
@@ -136,6 +175,11 @@ class OrderController extends Controller
             $data = Order::where('status', '<>', 2)
                 ->where('status', '<>', 3)
                 ->where('bobot_id', $request->bobot)
+                ->orderBy('deadline', 'asc');
+        } elseif ($request->bulan <> '') {
+            $data = Order::where('status', '<>', 2)
+                ->where('status', '<>', 3)
+                ->whereMonth('created_at', $request->bulan)
                 ->orderBy('deadline', 'asc');
         } else {
             $data = Order::where('status', '<>', 2)->where('status', '<>', 3)->orderBy('deadline', 'asc');
@@ -806,10 +850,15 @@ class OrderController extends Controller
 
         $penjoki = User::where('role', 'penjoki')->orderBy('id', 'desc')->get();
         $user = User::where('role', 'pelanggan')->get();
-        $jenis = Jenis::orderBy('id', 'desc')->get();
         $bobot = Bobot::orderBy('id', 'desc')->get();
-
+        
         $order = Order::find($id);
+
+        $jenis_id = array();
+        foreach($order->jenisorder as $row) {
+            $jenis_id[] = $row->jenis_id;
+        }
+        $jenis = Jenis::whereNotIn('id', $jenis_id)->orderBy('id', 'desc')->get();
 
         return view('order.edit', compact('setting', 'dataDeadline', 'dataDeadline2', 'penjoki', 'jenis', 'bobot', 'user', 'order'));
     }
@@ -849,7 +898,14 @@ class OrderController extends Controller
         $order->total = str_replace(',', '', $request->get('total'));
         $order->save();
 
-        return redirect()->route('admin.order')->with('berhasil', 'Berhasil mengedit order baru.');
+        for ($i=0; $i < count($request->jenis); $i++) { 
+            $jenisorder = new JenisOrder;
+            $jenisorder->order_id = $id;
+            $jenisorder->jenis_id = $request->jenis[$i];
+            $jenisorder->save();
+        }
+
+        return redirect()->route('admin.order.edit', $id)->with('berhasil', 'Berhasil mengedit order baru.');
     }
 
     // Proses selesai order
@@ -860,6 +916,15 @@ class OrderController extends Controller
         $order->save();
 
         return redirect()->route('admin.order')->with('berhasil', 'Order diselesaikan.');
+    }
+
+    // Proses menghapus jenis order
+    public function destroy_jenis($id) 
+    {
+        $order = JenisOrder::find($id);
+        $order->delete();
+
+        return redirect()->back()->with('berhasil', 'Berhasil menghapus jenis order.');
     }
 
     // Proses menghapus order
