@@ -891,18 +891,20 @@ class OrderController extends Controller
         $order->judul = $request->judul;
         $order->deskripsi = $request->deskripsi;
         $order->keterangan = $request->keterangan;
-        if ($request->tanggal_order <> '') {
+        if ($request->tanggal_order <> $order->created_at) {
             $order->created_at = Carbon::parse($request->tanggal_order)->format('Y-m-d H:i:s');
         }
         $order->deadline = $request->deadline;
         $order->total = str_replace(',', '', $request->get('total'));
         $order->save();
 
-        for ($i=0; $i < count($request->jenis); $i++) { 
-            $jenisorder = new JenisOrder;
-            $jenisorder->order_id = $id;
-            $jenisorder->jenis_id = $request->jenis[$i];
-            $jenisorder->save();
+        if ($request->jenis <> '') {
+            for ($i=0; $i < count($request->jenis); $i++) { 
+                $jenisorder = new JenisOrder;
+                $jenisorder->order_id = $id;
+                $jenisorder->jenis_id = $request->jenis[$i];
+                $jenisorder->save();
+            }
         }
 
         return redirect()->route('admin.order.edit', $id)->with('berhasil', 'Berhasil mengedit order baru.');
