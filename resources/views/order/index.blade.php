@@ -245,7 +245,13 @@
                         orderable: false,
                         searchable: false
                     }
-                ]
+                ],
+                fixedColumns: {
+                    leftColumns: 2
+                },
+                scrollCollapse: true,
+                scroller: true,
+                scrollX: 200
             });
         };
 
