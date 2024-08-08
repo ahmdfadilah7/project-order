@@ -2,30 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\OrderExport;
-use App\Helpers\AllHelper;
-use App\Models\Activity;
+use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Bobot;
 use App\Models\Group;
 use App\Models\Jenis;
-use App\Models\JenisOrder;
 use App\Models\Order;
+use App\Models\Refund;
 use App\Models\Payment;
 use App\Models\Project;
-use App\Models\Refund;
 use App\Models\Setting;
-use App\Models\User;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Models\Activity;
+use App\Helpers\AllHelper;
+use App\Models\JenisOrder;
 use Illuminate\Support\Str;
+use App\Exports\OrderExport;
+use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Cookie;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
     // Menampilkan halaman order
-    public function index()
+    public function index(Request $request)
     {
         $setting = Setting::first();
 
@@ -320,6 +321,12 @@ class OrderController extends Controller
             })
             ->rawColumns(['action', 'pelanggan', 'progress', 'payment', 'total', 'status', 'deadline'])
             ->make(true);
+        
+        Cookie::queue('karyawan', $request->karyawan, 60);
+        Cookie::queue('pelanggan', $request->pelanggan, 60);
+        Cookie::queue('bulan', $request->bulan, 60);
+        Cookie::queue('bobot', $request->bobot, 60);
+        Cookie::queue('status', $request->status, 60);
 
         return $datatables;
     }

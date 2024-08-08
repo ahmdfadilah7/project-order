@@ -71,7 +71,7 @@
                                 <select name="karyawan" id="karyawan" class="form-control select2">
                                     <option value="">- Semua -</option>
                                     @foreach($karyawan as $key => $row)
-                                        <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                        <option value="{{ $row->id }}" @if(Request::cookie('karyawan')==$row->id) selected @endif>{{ $row->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -82,7 +82,7 @@
                                 <select name="pelanggan" id="pelanggan" class="form-control select2">
                                     <option value="">- Semua -</option>
                                     @foreach($pelanggan as $key => $row)
-                                        <option value="{{ $row->id }}">{{ $row->name.' - '.$row->profile->kode_klien }}</option>
+                                        <option value="{{ $row->id }}" @if(Request::cookie('pelanggan')==$row->id) selected @endif>{{ $row->name.' - '.$row->profile->kode_klien }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -93,7 +93,7 @@
                                 <select name="bulan" id="bulan" class="form-control select2">
                                     <option value="">- Semua -</option>
                                     @foreach($bulan as $key => $row)
-                                        <option value="{{ $key }}">{{ $row }}</option>
+                                        <option value="{{ $key }}" @if(Request::cookie('bulan')==$key) selected @endif>{{ $row }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -104,7 +104,7 @@
                                 <select name="bobot" id="bobot" class="form-control select2">
                                     <option value="">- Semua -</option>
                                     @foreach($bobot as $key => $row)
-                                        <option value="{{ $row->id }}">{{ $row->bobot }}</option>
+                                        <option value="{{ $row->id }}" @if(Request::cookie('bobot')==$row->id) selected @endif>{{ $row->bobot }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -115,7 +115,7 @@
                                 <select name="status" id="status_order" class="form-control select2">
                                     <option value="">- Semua -</option>
                                     @foreach($status_order2 as $key => $row)
-                                        <option value="{{ $key }}">{{ $row }}</option>
+                                        <option value="{{ $key }}" @if(Request::cookie('status')==$key) selected @endif>{{ $row }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -164,6 +164,9 @@
 @section('script')
 
     <script>
+        localStorage.setItem("accept_cookie_muridigital", true);
+        localStorage.setItem("accept_cookie_time", "{{ date('Y-m-d') }}");
+
         function tableData() {
             $('#table-1').dataTable({
                 processing: true,
