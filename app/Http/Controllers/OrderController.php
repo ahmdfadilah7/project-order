@@ -293,18 +293,14 @@ class OrderController extends Controller
                         }
                     }
 
-                    if ($row->payment <> '' && $row->activity <> '') {
-                        if ($row->payment->status == 2 && $row->activity->status == 1) {
-                            $btn .= '<a href="'.route('admin.order.selesai', $row->id).'" class="btn btn-success btn-sm mr-2 mb-2" title="Selesai">
-                                <i class="fas fa-check"></i> Selesai
-                            </a>';
-                        }
-                    }
-
                     if ($row->status == 5) {
                         $btn .= '<a href="'.route('admin.order.selesai', $row->id).'" class="btn btn-success btn-sm mr-2 mb-2" title="Selesai">
                                 <i class="fas fa-check"></i> Selesai
                             </a>';
+                    } elseif($row->payment <> '' && $row->activity <> '') {
+                        $btn .= '<a href="'.route('admin.order.selesai', $row->id).'" class="btn btn-success btn-sm mr-2 mb-2" title="Selesai">
+                            <i class="fas fa-check"></i> Selesai
+                        </a>';
                     }
 
                     $btn .= '<a onClick="getOrder2('.$row->id.')" href="#" class="btn btn-danger btn-sm mr-2 mb-2" title="Refund">
@@ -560,6 +556,20 @@ class OrderController extends Controller
         return $datatables;
     }
 
+    // get payment
+    public function getPayment($id)
+    {
+        $payment = Payment::find($id);
+
+        $data = array(
+            'id' => $payment->id,
+            'nominal' => $payment->nominal,
+            'kode_klien' => $payment->order->kode_klien,
+        );
+
+        return json_encode($data);
+    }
+
     // get order
     public function getOrder($id)
     {
@@ -696,6 +706,29 @@ class OrderController extends Controller
         return redirect()->route('admin.order')->with('berhasil', 'Berhasil menambahkan pembayaran');
     }
 
+    // Proses Payment update
+    public function payment_update(Request $request) 
+    {
+        $validator = Validator::make($request->all(), [
+            'nominal' => 'required'
+        ],
+        [
+            'required' => ':attribute wajib diisi!!!',
+            'mimes' => ':attribute harus berformat .png, .jpg, .jpeg'
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return back()->with('errors', $errors);
+        }
+
+        $payment = Payment::find($request->payment_id);
+        $payment->nominal = str_replace(',', '', $request->get('nominal'));
+        $payment->save();
+
+        return redirect()->back()->with('berhasil', 'Berhasil mengedit pembayaran');
+    }
+
     // Proses Payment
     public function refund(Request $request) 
     {
@@ -781,7 +814,9 @@ class OrderController extends Controller
 
         $order = Order::find($id);
 
-        return view('order.detailpayment', compact('setting', 'dataDeadline', 'dataDeadline2', 'order'));
+        $status = array('DP', 'LUNAS');
+
+        return view('order.detailpayment', compact('setting', 'dataDeadline', 'dataDeadline2', 'order', 'status'));
     }
 
     // Menampilkan halaman tambah order
@@ -934,6 +969,15 @@ class OrderController extends Controller
         $order->delete();
 
         return redirect()->back()->with('berhasil', 'Berhasil menghapus jenis order.');
+    }
+
+    // Proses menghapus payment order
+    public function destroy_payment($id) 
+    {
+        $order = Payment::find($id);
+        $order->delete();
+
+        return redirect()->back()->with('berhasil', 'Berhasil menghapus payment order.');
     }
 
     // Proses menghapus order

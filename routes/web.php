@@ -65,6 +65,7 @@ Route::group(['middleware' => ['auth:admin', 'role:admin']], function () {
     Route::get('admin/order', [OrderController::class, 'index'])->name('admin.order');
     Route::get('admin/order/dataselesai', [OrderController::class, 'data_selesai'])->name('admin.order.dataselesai');
     Route::get('admin/order/datarefund', [OrderController::class, 'data_refund'])->name('admin.order.datarefund');
+    Route::get('admin/order/get_payment/{id}', [OrderController::class, 'getPayment'])->name('admin.order.get_payment');
     Route::get('admin/order/get_order/{id}', [OrderController::class, 'getOrder'])->name('admin.order.get_order');
     Route::get('admin/order/get_order2/{id}', [OrderController::class, 'getOrder2'])->name('admin.order.get_order2');
     Route::get('admin/order/getListData', [OrderController::class, 'listData'])->name('admin.order.list');
@@ -79,12 +80,14 @@ Route::group(['middleware' => ['auth:admin', 'role:admin']], function () {
     Route::post('admin/order/store', [OrderController::class, 'store'])->name('admin.order.store');
     Route::post('admin/order/refund', [OrderController::class, 'refund'])->name('admin.order.refund');
     Route::post('admin/order/payment', [OrderController::class, 'payment'])->name('admin.order.payment');
+    Route::post('admin/order/payment/update', [OrderController::class, 'payment_update'])->name('admin.order.payment.update');
     Route::post('admin/order/export', [OrderController::class, 'export'])->name('admin.order.export');
     Route::get('admin/order/{id}', [OrderController::class, 'edit'])->name('admin.order.edit');
     Route::put('admin/order/update/{id}', [OrderController::class, 'update'])->name('admin.order.update');
     Route::get('admin/order/selesai/{id}', [OrderController::class, 'selesai'])->name('admin.order.selesai');
     Route::get('admin/order/print/{id}', [OrderController::class, 'print'])->name('admin.order.print');
     Route::get('admin/order/jenis/delete/{id}', [OrderController::class, 'destroy_jenis'])->name('admin.order.jenis.delete');
+    Route::get('admin/order/payment/delete/{id}', [OrderController::class, 'destroy_payment'])->name('admin.order.payment.delete');
     Route::get('admin/order/delete/{id}', [OrderController::class, 'destroy'])->name('admin.order.delete');
 
     Route::get('admin/pelanggan', [PelangganController::class, 'index'])->name('admin.pelanggan');

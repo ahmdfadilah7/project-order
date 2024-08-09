@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Setting;
 use App\Models\User;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -63,6 +64,11 @@ class AuthController extends Controller
     public function logout($slug)
     {
         if ($slug == 'admin') {
+            Cookie::forget('karyawan');
+            Cookie::forget('pelanggan');
+            Cookie::forget('bulan');
+            Cookie::forget('bobot');
+            Cookie::forget('status');
             Auth::guard('admin')->logout();
         } elseif ($slug == 'penjoki') {
             Auth::guard('penjoki')->logout();
