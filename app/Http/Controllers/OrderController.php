@@ -19,6 +19,7 @@ use Illuminate\Support\Str;
 use App\Exports\OrderExport;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
@@ -770,6 +771,8 @@ class OrderController extends Controller
         $dataDeadline2 = Order::whereDate('deadline', '=', Carbon::now()->addDay())->get();
 
         $order = Order::find($id);
+
+        Auth::user()->unreadNotifications->where('id', request('id'))->first()?->markAsRead();
 
         return view('order.detail', compact('setting', 'dataDeadline', 'dataDeadline2', 'order'));
     }

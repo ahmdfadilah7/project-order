@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Penjoki;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\Order;
+use App\Models\User;
+use App\Notifications\AllNotif;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 use League\CommonMark\Extension\SmartPunct\EllipsesParser;
 use Yajra\DataTables\Facades\DataTables;
@@ -75,6 +78,14 @@ class ActivitiesController extends Controller
             }
         }
         $order->save();
+
+        $dataNotif = [
+            'title' => 'Progress Project',
+            'messages' => $order->user->name.' - '.$order->kode_klien.' - '.$request->judul_aktivitas.'.',
+            'url' => route('admin.order.detail', $order->id),
+        ];
+        $admin = User::where('role', 'admin')->get();
+        Notification::send($admin, new AllNotif($dataNotif));
 
         return redirect()->route('penjoki.order.detail', $activities->order_id)->with('berhasil', $message);
     }
