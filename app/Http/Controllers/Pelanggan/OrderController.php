@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Pelanggan;
 
+use App\Helpers\AllHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\Order;
@@ -23,7 +24,7 @@ class OrderController extends Controller
     {
         $setting = Setting::first();
 
-        $status = array('DP 50%', 'LUNAS');
+        $status = array('DP', 'LUNAS');
 
         return view('customer.order.index', compact('setting', 'status'));
     }
@@ -52,22 +53,37 @@ class OrderController extends Controller
             })
             ->addColumn('status', function($row) {
                 if ($row->status == 0) {
-                    $status = '<span class="badge badge-warning"><i class="fas fa-exclamation-triangle"></i> Belum dibayar</span>';
+                    $status = '<span class="badge badge-danger"><i class="fas fa-exclamation-triangle"></i> Belum ada pembayaran</span>';
                 } elseif ($row->status == 1) {
                     $status = '<span class="badge badge-primary"><i class="ion ion-load-a"></i> Sedang diproses</span>';
                 } elseif ($row->status == 2) {
                     $status = '<span class="badge badge-success"><i class="fas fa-check"></i> Order Selesai</span>';
+                } elseif ($row->status == 3) {
+                    $status = '<span class="badge badge-danger"><i class="fas ion-close"></i> Order Refund</span>';
+                } elseif ($row->status == 4) {
+                    $status = '<span class="badge badge-warning"><i class="fas fa-exclamation-triangle"></i> Menunggu Pelunasan</span>';
+                } elseif ($row->status == 5) {
+                    $status = '<span class="badge badge-primary"><i class="ion ion-load-a"></i> Menunggu Konfirmasi</span>';
                 }
                 return $status;
             })
+            ->addColumn('total', function($row) {
+                return AllHelper::rupiah($row->total);
+            })
             ->addColumn('progress', function($row) {
-                    if ($row->activity <> '') {
+                if ($row->activity <> '') {
+                    if ($row->activity->status <> 1) {
                         $btn = '<a href="'.route('pelanggan.order.activities', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2">
                                 <i class="fas fa-eye"></i> '.$row->activity->judul_aktivitas.'
                             </a>';
                     } else {
-                        $btn = '<span class="badge badge-danger"><i class="fas fa-exclamation-triangle"></i> Belum ada progress</span>';
+                        $btn = '<a href="'.route('pelanggan.order.activities', $row->id).'" class="btn btn-success btn-sm mr-2 mb-2">
+                                <i class="fas fa-eye"></i> '.$row->activity->judul_aktivitas.'
+                            </a>';
                     }
+                } else {
+                    $btn = '<span class="badge badge-danger"><i class="fas fa-exclamation-triangle"></i> Belum ada progress</span>';
+                }
 
                 return $btn;
             })
@@ -75,10 +91,10 @@ class OrderController extends Controller
                 if ($row->payment <> '') {
                     if ($row->payment->status == 1) {
                         $btn = '<a href="'.route('pelanggan.order.detailPayment', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2">
-                                <i class="fas fa-eye"></i> DP 50%
+                                <i class="fas fa-eye"></i> DP
                             </a>';
                     } elseif ($row->payment->status == 2) {
-                        $btn = '<a href="'.route('pelanggan.order.detailPayment', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2">
+                        $btn = '<a href="'.route('pelanggan.order.detailPayment', $row->id).'" class="btn btn-success btn-sm mr-2 mb-2">
                                 <i class="fas fa-eye"></i> LUNAS
                             </a>';
                     } else {
@@ -154,7 +170,8 @@ class OrderController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'file' => 'required|mimes:png,jpg,jpeg,svg',
-            'status' => 'required'
+            'status' => 'required',
+            'nominal' => 'required'
         ],
         [
             'required' => ':attribute wajib diisi!!!',
@@ -174,14 +191,29 @@ class OrderController extends Controller
         $payment = new Payment;
         $payment->order_id = $request->order_id;
         $payment->file = $fileNama;
+        $payment->nominal = str_replace(',', '', $request->get('nominal'));
         $payment->status = $request->status;
         $payment->save();
 
         $countpayment = Payment::where('order_id', $request->order_id)->count();
         if ($countpayment > 0) {
             $order = Order::find($request->order_id);
-            $order->status = 1;
+            if ($order->activity <> '') {
+                if ($order->activity->status == 1) {
+                    $order->status = 5;
+                } else {
+                    $order->status = 1;
+                }
+            } else {
+                $order->status = 1;
+            }
             $order->save();
+        } else {
+            $order = Order::find($request->order_id);
+            if ($order->activity == '') {
+                $order->status = 1;
+                $order->save();
+            }
         }
 
         return redirect()->route('pelanggan.order')->with('berhasil', 'Berhasil menambahkan pembayaran');

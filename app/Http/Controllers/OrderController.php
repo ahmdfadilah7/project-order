@@ -323,7 +323,7 @@ class OrderController extends Controller
         Cookie::queue('pelanggan', $request->pelanggan, 60);
         Cookie::queue('bulan', $request->bulan, 60);
         Cookie::queue('bobot', $request->bobot, 60);
-        Cookie::queue('status', $request->status, 60);
+        Cookie::queue('status', $request->status_order, 60);
 
         return $datatables;
     }

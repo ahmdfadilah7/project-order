@@ -38,7 +38,11 @@ class GroupController extends Controller
             } elseif ($row->user->role == 'penjoki') {
                 $name = $row->user->name." - Tim";
             } elseif ($row->user->role == 'admin') {
-                $name = $row->user->name.' - '.$row->user->access->access;
+                if ($row->user->access->access <> 'Super Admin') {
+                    $name = $row->user->name.' - '.$row->user->access->access;
+                } else {
+                    $name = $row->user->name.' - Admin';
+                }
             }
             $time = Carbon::parse($row->created_at)->diffForHumans();
 
