@@ -208,7 +208,9 @@ Route::group(['middleware' => ['xss', 'auth:pelanggan', 'role:pelanggan']], func
     Route::get('pelanggan/group/receive/{id}', [PelangganGroupController::class, 'receive'])->name('pelanggan.group.receive');
     Route::post('pelanggan/group/chatadd', [PelangganGroupController::class, 'store'])->name('pelanggan.group.chatadd');
 
-    Route::get('pelanggan/fileproject/getListData/{id}', [PelangganFileProjectController::class, 'listData'])->name('pelanggan.fileproject.list');
+    Route::get('pelanggan/fileproject', [PelangganFileProjectController::class, 'index'])->name('pelanggan.fileproject');
+    Route::get('pelanggan/fileproject/getListData', [PelangganFileProjectController::class, 'listData'])->name('pelanggan.fileproject.list');
+    Route::get('pelanggan/fileproject/add', [PelangganFileProjectController::class, 'create'])->name('pelanggan.fileproject.add');
     Route::post('pelanggan/fileproject/store', [PelangganFileProjectController::class, 'store'])->name('pelanggan.fileproject.store');
     Route::get('pelanggan/fileproject/delete/{id}', [PelangganFileProjectController::class, 'destroy'])->name('pelanggan.fileproject.delete');
 });

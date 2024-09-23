@@ -87,6 +87,14 @@ class ActivitiesController extends Controller
         $admin = User::where('role', 'admin')->get();
         Notification::send($admin, new AllNotif($dataNotif));
 
+        $dataNotif2 = [
+            'title' => 'Progress Project',
+            'messages' => $order->kode_klien.' - '.$request->judul_aktivitas.'.',
+            'url' => route('pelanggan.order.detail', $order->id),
+        ];
+        $pelanggan = User::where('id', $order->pelanggan_id)->get();
+        Notification::send($pelanggan, new AllNotif($dataNotif2));
+
         return redirect()->route('penjoki.order.detail', $activities->order_id)->with('berhasil', $message);
     }
 }

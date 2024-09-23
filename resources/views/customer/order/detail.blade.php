@@ -64,8 +64,8 @@
             <div class="card">
                 <div class="card-header justify-content-between">
                     <h4>File Project</h4>
-                    <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#staticBackdrop"><i
-                        class="fa fa-plus"></i> Tambah</a>
+                    {{-- <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#staticBackdrop"><i
+                        class="fa fa-plus"></i> Tambah</a> --}}
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

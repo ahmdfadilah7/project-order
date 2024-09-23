@@ -76,6 +76,10 @@
         border: 1px solid black;
     }
 
+    .text-danger {
+        color: #fc544b !important;
+    }
+
     .bill-tbl tr,
     .bill-tbl th,
     .bill-tbl td {
@@ -214,57 +218,106 @@
     <div class="table-section w-100 mt-10">
         <table class="table bill-tbl w-100 mt-10">
             <tr>
+                <th class="w-100">Keterangan</th>
+                <th class="w-100">Jumlah</th>
+            </tr>
+            @php
+                $total_pembayaran = array();
+            @endphp
+            @if($order->payment <> '')
+                @foreach($order->payment->where('order_id', $order->id)->get() as $key => $value)
+                    @php
+                        $total_pembayaran[] = $value->nominal;
+                    @endphp
+                    @if($value->status == 1)
+                        <tr>
+                            <th>DP {{ ++$key }}</th>
+                            <td>{{ AllHelper::rupiah($value->nominal) }}</td>
+                        </tr>
+                    @else
+                        <tr>
+                            <th>Pembayaran Terakhir</th>
+                            <td>{{ AllHelper::rupiah($value->nominal) }}</td>
+                        </tr>
+                    @endif
+                @endforeach
+
+                @if($order->payment->status == 2)
+                    {{-- <tr>
+                        <th>Total Pembayaran</th>
+                        <td>
+                            {{ AllHelper::rupiah(array_sum($total_pembayaran)); }}
+                        </td>
+                    </tr> --}}
+                @elseif($order->payment->status == 1)
+                    {{-- <tr>
+                        <th>Sisa Pembayaran</th>
+                        <td>
+                            {{ AllHelper::rupiah($order->total-array_sum($total_pembayaran)); }}
+                        </td>
+                    </tr> --}}
+                @endif
+            @else
+                <tr>
+                    <td colspan="2" class="text-center">
+                        <i class="text-danger">Belum ada pembayaran</i>
+                    </td>
+                </tr>
+            @endif
+        </table>
+    </div>
+    
+    <div class="table-section w-100 mt-10">
+        <table class="table bill-tbl w-100 mt-10">
+            @if($order->payment <> '')
+                
+                @if($order->payment->status == 2)
+                    <tr>
+                        <th class="w-100">Total Pembayaran</th>
+                    </tr>
+                    <tr class="text-center">
+                        <td>
+                            <div class="box-text">
+                                {{ AllHelper::rupiah($order->total) }}
+                            </div>
+                        </td>
+                    </tr>
+                @else
+                    <tr>
+                        <th class="w-100">Sisa Pembayaran</th>
+                    </tr>
+                    <tr class="text-center">
+                        <td>
+                            <div class="box-text">
+                                {{ AllHelper::rupiah($order->total-array_sum($total_pembayaran)) }}
+                            </div>
+                        </td>
+                    </tr>
+                @endif
+
+            @endif
+        </table>
+    </div>
+
+    <div class="table-section w-100 mt-10">
+        <table class="table bill-tbl w-100 mt-10">
+            <tr>
                 <th class="w-100">Status Pembayaran</th>
             </tr>
             <tr class="text-center">
                 <td>
                     <div class="box-text">
                         @if($order->payment <> '')
-                            @if($order->payment->status == 1)
-                                DP
-                            @elseif($order->payment->status == 2)
-                                LUNAS
+                            @if($order->payment->status == 2)
+                            LUNAS
+                            @else
+                            BELUM LUNAS
                             @endif
                         @else
-                            <i class="text-danger">Belum ada pembayaran</i>                                        
+                            <i class="text-danger">Belum ada pembayaran</i>
                         @endif
                     </div>
                 </td>
-            </tr>
-        </table>
-    </div>
-    
-    <div class="table-section w-100 mt-10">
-        <table class="table bill-tbl w-100 mt-10">
-            <tr>
-                <th class="w-100">Total Pembayaran</th>
-                @if($order->payment <> '')
-                    @if($order->payment->status == 1)
-                        <th class="w-100">Total DP</th>
-                        <th class="w-100">Sisa Pembayaran</th>
-                    @endif
-                @endif
-            </tr>
-            <tr class="text-center">
-                <td>
-                    <div class="box-text">
-                        {{ AllHelper::rupiah($order->total) }}
-                    </div>
-                </td>
-                @if($order->payment <> '')
-                    @if($order->payment->status == 1)
-                    <td>
-                        <div class="box-text">
-                            {{ AllHelper::rupiah($order->payment->nominal) }}
-                        </div>
-                    </td>
-                    <td>
-                        <div class="box-text">
-                            {{ AllHelper::rupiah($order->total-$order->payment->nominal) }}
-                        </div>
-                    </td>
-                    @endif
-                @endif
             </tr>
         </table>
     </div>

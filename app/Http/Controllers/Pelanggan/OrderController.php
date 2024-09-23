@@ -112,17 +112,17 @@ class OrderController extends Controller
                 $btn = '<a href="'.route('pelanggan.order.detail', $row->id).'" class="btn btn-info btn-sm mr-2 mb-2" title="Lihat">
                         <i class="fas fa-eye"></i> Lihat
                     </a>';
-                if ($row->payment == '') {
-                    $btn .= '<a onClick="getOrder('.$row->id.')" href="#" class="btn btn-success btn-sm mr-2 mb-2" title="Bayar">
-                            <i class="fas fa-money-bill"></i> Bayar
-                        </a>';
-                } else {
-                    if ($row->payment->status <> 2) {
-                        $btn .= '<a onClick="getOrder('.$row->id.')" href="#" class="btn btn-success btn-sm mr-2 mb-2" title="Pelunasan">
-                            <i class="fas fa-money-bill"></i> Bayar
-                        </a>';
-                    }
-                }
+                // if ($row->payment == '') {
+                //     $btn .= '<a onClick="getOrder('.$row->id.')" href="#" class="btn btn-success btn-sm mr-2 mb-2" title="Bayar">
+                //             <i class="fas fa-money-bill"></i> Bayar
+                //         </a>';
+                // } else {
+                //     if ($row->payment->status <> 2) {
+                //         $btn .= '<a onClick="getOrder('.$row->id.')" href="#" class="btn btn-success btn-sm mr-2 mb-2" title="Pelunasan">
+                //             <i class="fas fa-money-bill"></i> Bayar
+                //         </a>';
+                //     }
+                // }
 
                 if ($row->status == 2) {
                     $btn .= '<a href="'.route('pelanggan.order.invoice', $row->id).'" class="btn btn-warning btn-sm mr-2 mb-2" title="Invoice">
@@ -235,6 +235,8 @@ class OrderController extends Controller
         $setting = Setting::first();
 
         $order = Order::find($id);
+
+        Auth::user()->unreadNotifications->where('id', request('id'))->first()?->markAsRead();
 
         return view('customer.order.detail', compact('setting', 'order'));
     }

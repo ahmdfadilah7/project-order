@@ -67,6 +67,9 @@
                 <li class="menu-header">Transaksi</li>
                 <li @if(Request::segment(2)=='order') class="active" @endif><a class="nav-link" href="{{ route('pelanggan.order') }}"><i class="fas fa-clipboard"></i> <span>Order</span></a></li>
 
+                <li class="menu-header">Project</li>
+                <li @if(Request::segment(2)=='fileproject') class="active" @endif><a class="nav-link" href="{{ route('pelanggan.fileproject') }}"><i class="fas fa-file"></i> <span>File Project</span></a></li>
+
                 <li class="menu-header">Chatting</li>
                 <li @if(Request::segment(2)=='group') class="active" @endif><a class="nav-link" href="{{ route('pelanggan.group') }}"><i class="ion ion-chatbubbles"></i> <span>Group</span></a></li>
 

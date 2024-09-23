@@ -100,14 +100,58 @@
                                 </div>
                             </div>
                             <div class="col-lg-4 text-right">
-                                <div class="invoice-detail-item">
+                                @if($order->payment <> '')
+                                    @php
+                                        $total_pembayaran = array();
+                                    @endphp
+                                    @foreach($order->payment->where('order_id', $order->id)->get() as $key => $value)
+                                        @php
+                                            $total_pembayaran[] = $value->nominal;
+                                        @endphp
+                                        @if($value->status == 1)
+                                            <div class="invoice-detail-item">
+                                                <div class="invoice-detail-name">DP {{ ++$key }}</div>
+                                                <div class="invoice-detail-value invoice-detail-value-lg">
+                                                    {{ AllHelper::rupiah($value->nominal) }}
+                                                </div>
+                                            </div>
+                                        @else
+                                            <div class="invoice-detail-item">
+                                                <div class="invoice-detail-name">Pembayaran Terakhir</div>
+                                                <div class="invoice-detail-value invoice-detail-value-lg">
+                                                    {{ AllHelper::rupiah($value->nominal) }}
+                                                </div>
+                                            </div>
+                                        @endif
+                                    @endforeach
+
+                                    @if($order->payment->status == 2)
+                                        <div class="invoice-detail-item">
+                                            <div class="invoice-detail-name">Total Pembayaran</div>
+                                            <div class="invoice-detail-value invoice-detail-value-lg">
+                                                {{ AllHelper::rupiah(array_sum($total_pembayaran)) }}
+                                            </div>
+                                        </div>
+                                    @elseif($order->payment->status == 1)
+                                        <div class="invoice-detail-item">
+                                            <div class="invoice-detail-name">Sisa Pembayaran</div>
+                                            <div class="invoice-detail-value invoice-detail-value-lg">
+                                                {{ AllHelper::rupiah($order->total-array_sum($total_pembayaran)) }}
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                @endif
+
+                                {{-- <div class="invoice-detail-item">
                                     <div class="invoice-detail-name">Total</div>
                                     <div class="invoice-detail-value invoice-detail-value-lg">
                                         {{ AllHelper::rupiah($order->total) }}
                                     </div>
-                                </div>
+                                </div> --}}
                                 
-                                @if($order->payment <> '')
+                                {{-- @if($order->payment <> '')
+
                                     @if($order->payment->status == 1)
 
                                         <div class="invoice-detail-item">
@@ -124,7 +168,7 @@
                                             </div>
                                         </div>
                                     @endif
-                                @endif
+                                @endif --}}
 
                             </div>
                         </div>
